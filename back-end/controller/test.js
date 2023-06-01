@@ -13,17 +13,3 @@ exports.getAll = async (req, res) => {
   console.log("pass3")
   res.send(users);
 };
-
-
-async function createPost(postData) {
-  console.log("psst");
-  const newPost = await prisma.posts.create({
-    data: postData,
-  });
-  return newPost;
-}
-exports.createPost = async (req, res) => {
-  const postData = req.body; 
-  const newPost = await createPost(postData);
-  res.send(newPost);
-};
