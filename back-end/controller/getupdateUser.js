@@ -26,7 +26,9 @@ async function updateUser(req, res) {
         password,
         profilePic,
         lastName,
-        firstName
+        firstName,
+        followers,
+        posts,
 
       },
     });

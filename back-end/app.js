@@ -6,7 +6,7 @@ var logger = require('morgan');
 var user = require("./controller/test")
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var us=require('./controller/getupdateUser')
+// var us=require('./controller/getupdateUser')
 
 var app = express();
 var Port=9001 
