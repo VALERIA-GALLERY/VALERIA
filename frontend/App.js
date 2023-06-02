@@ -1,25 +1,52 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, Button, Alert } from 'react-native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React from 'react';
+import Login from './screens/login/login';
+import SignUp from './screens/signUp';
 
-
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <>
-    <View style={styles.container}>
-      <Text colo>hello world!</Text>
-      <StatusBar style="auto" />
-      <Image source={require('./assets/qq.png')}/>
-    </View>
-   
-    </>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Welcome' }} />
+        <Stack.Screen name="Signup" component={SignUp} options={{ title: 'Signup' }} />
+        <Stack.Screen name="login" component={Login} options={{ title: 'Login' }} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
+
+const HomeScreen = () => {
+  const navigation = useNavigation();
+
+  return (
+    <View style={styles.container}>
+      <Text color="black">Hello, world!</Text>
+      <StatusBar style="auto" />
+      <Image source={require('./assets/qq.png')} />
+      <Button title="get started" onPress={() => navigation.navigate('login')} />
+    </View>
+  );
+};
+
+const SignupScreen = () => {
+  return (
+    <View style={styles.container}>
+      <Text color="black">Signup Screen</Text>
+      <StatusBar style="auto" />
+      {/* Signup form and other components */}
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#F0EDE4',
     alignItems: 'center',
     justifyContent: 'center',
   },
