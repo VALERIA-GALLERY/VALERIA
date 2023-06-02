@@ -16,7 +16,9 @@ async function updateUser(userId, data) {
         password: data.password,
         profilePic: data.profilePic,
         lastName:data.lastName,
-        firstName:data.firstName
+        firstName:data.firstName,
+        followers:data.followers,
+        posts:data.posts
       },
     });
     return updatedUser;

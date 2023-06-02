@@ -7,7 +7,7 @@ export default function App() {
   return (
     <>
     <View style={styles.container}>
-      <Text colo>hello world!</Text>
+      <Text colo>welcome </Text>
       <StatusBar style="auto" />
       <Image source={require('./assets/qq.png')}/>
     </View>

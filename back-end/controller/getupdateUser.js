@@ -16,7 +16,7 @@ async function getUser(req, res) {
 
 async function updateUser(req, res) {
   const userId = req.params.id;
-  const { username, password, profilePic,firstName,lastName } = req.body;
+  const { username, password, profilePic,firstName,lastName,followers,posts } = req.body;
 
   try {
     const updatedUser = await prisma.users.update({
