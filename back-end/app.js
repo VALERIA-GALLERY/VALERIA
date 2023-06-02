@@ -6,9 +6,10 @@ var logger = require('morgan');
 var user = require("./controller/test")
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var us=require('./controller/getupdateUser')
 
 var app = express();
-var Port=8001 
+var Port=9001 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -21,6 +22,8 @@ app.use(express.json({ limit: "100mb" }));
 
 app.use('/', indexRouter);
 app.use('/users', user.getAll);
+
+
 
 app.listen(Port,()=> console.log(`Server is listening to port ${Port}`))
 
