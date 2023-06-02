@@ -8,4 +8,16 @@ async function getUser(userId) {
   return user;
 }
 
-module.exports = getUser;
+async function updateUser(userId, data) {
+    const updatedUser = await prisma.users.update({
+      where: { id: userId },
+      data: {
+        username: data.username,
+        password: data.password,
+        profilePic: data.profilePic,
+      },
+    });
+    return updatedUser;
+  }
+
+module.exports = getUser,updateUser;
