@@ -1,17 +1,18 @@
 import React from 'react';
-import {  useNavigation } from '@react-navigation/native';
 import { StyleSheet, Text, View, Image, TouchableOpacity, Alert, TextInput } from 'react-native';
 import { CheckBox } from 'react-native-elements';
 import { SocialIcon } from 'react-native-elements'
 import { ButtonGroup } from '@rneui/themed'
+import {  useNavigation } from '@react-navigation/native';
 import { firebase } from '../../fireBase';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
-
-export default function Login() {
+export default function SignUp() {
     const navigation = useNavigation();
   const [email, setEmail] = React.useState('');
   const [pass, setPass] = React.useState('');
+  const [name, setName]= React.useState('');
+  const [lastname, setLastname]= React.useState('');
   const [isSelected, setSelection] = React.useState(false);
 
   const auth = getAuth();
@@ -20,49 +21,50 @@ export default function Login() {
     setSelection(!isSelected);
   };
 
+  
+  const handleSignUp=()=>{
+    createUserWithEmailAndPassword(auth, email, pass)
+    .then((userCredential) => {
+      const user = userCredential.user;
+      console.log(user);
+     
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log(errorCode, errorMessage);
 
-  const loginHandler = () => {
-    signInWithEmailAndPassword(auth, email, pass)
-    .then(userCredentials => {
-      const user = userCredentials.user
-      console.log(user)
-    })
-    .catch(error => {
-      const errorCode = error.code
-      const errorMessage = error.message
-      console.log(errorCode, errorMessage)
-    })
+      if(errorCode==="auth/weak-password"){
+        Alert.alert('weak-password')
+      }
+      if(errorCode==="auth/invalid-email"){
+        Alert.alert('invalid-email')
+      }
+      
+    });
   }
-
-
 
   return (
     <View style={styles.container}>
       <ButtonGroup
         buttons={['LOG IN', 'SIGN UP']}
-        selectedIndex={0}
-        onPress={() => navigation.navigate('Signup')}
+        selectedIndex={1}
+        onPress={() => navigation.navigate('login')}
         containerStyle={styles.buttonGroupContainer}
-        selectedButtonStyle={styles.selectedButton} // Set the selected button color
+        selectedButtonStyle={styles.selectedButton} 
       />
+      <TextInput style={styles.input} onChangeText={setName} placeholder="First name" keyboardType="email-address" />
+      <TextInput style={styles.input} onChangeText={setLastname} placeholder="Last name" keyboardType="email-address" />
       <TextInput style={styles.input} onChangeText={setEmail} placeholder="email-address" keyboardType="email-address" />
       <TextInput style={styles.input} onChangeText={setPass} placeholder="password" keyboardType="visible-password" />
-      <TouchableOpacity style={styles.checkboxContainer} onPress={toggleCheckbox}>
-        <CheckBox
-          checked={isSelected}
-          onPress={toggleCheckbox}
-          checkedColor="#A47E53"
-          containerStyle={styles.checkbox}
-        />
-        <Text style={styles.checkboxText}>Remember me</Text>
-      </TouchableOpacity>
+      
 
-      <TouchableOpacity style={styles.button} onPress={loginHandler}>
-        <Text style={styles.buttonText}>SIGN IN</Text>
+      <TouchableOpacity style={styles.button} onPress={handleSignUp}>
+        <Text style={styles.buttonText}>SIGN UP</Text>
       </TouchableOpacity>
-      <Text style={styles.forgotPassword}>Forgot password?</Text>
+      
       <TouchableOpacity style={styles.button2} onPress={() => Alert.alert('Login pressed')}>
-        <Text style={styles.buttonText2}>SIGN IN WITH GOOGLE</Text>
+        <Text style={styles.buttonText2}>SIGN UP WITH GOOGLE</Text>
       </TouchableOpacity>
 
       <Image
@@ -93,7 +95,7 @@ const styles = StyleSheet.create({
     top:100
   },
   selectedButton: {
-    backgroundColor: '#B4966A', // Set the selected button color
+    backgroundColor: '#B4966A',
   },
   button: {
     backgroundColor: '#B4966A',
@@ -111,7 +113,7 @@ const styles = StyleSheet.create({
     marginTop: 50,
     width: 327,
     height: 55,
-    top: 200,
+    top: 110,
   },
   buttonText: {
     fontSize: 16,
@@ -163,13 +165,13 @@ const styles = StyleSheet.create({
   googleLogo: {
     width: 20,
     height: 20,
-    top: 62,
+    top: -25,
     left: -130,
   },
   footer: {
     
     fontSize: 10,
     color: '#A47E53',
-    top: 150,
+    top: 10,
   },
 });
