@@ -8,26 +8,26 @@ datasource db {
 }
 
 model admin {
-  id    Int     @id @default(autoincrement())
+  id    BigInt @id @default(autoincrement())
   name  String
   email String
   pass  String
 }
 
 model posts {
-  id          Int      @id @default(autoincrement())
+  id          BigInt   @id @default(autoincrement())
   description String
   date_time   String   @map("date&time")
   pic         String
   likes       Int[]
   comments    String[]
   premiem     Boolean
-  userID      Int
+  userID      BigInt  
   users       users    @relation(fields: [userID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "userID")
 }
 
 model users {
-  id         Int     @id @default(autoincrement())
+  id         BigInt  @id @default(autoincrement())
   username   String
   firstName  String
   lastName   String
@@ -36,5 +36,6 @@ model users {
   artist     Boolean
   followers  Int[]
   birthday   String
+  follows    Int[]
   posts      posts[]
 }

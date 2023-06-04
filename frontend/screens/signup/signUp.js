@@ -1,4 +1,4 @@
-import React from 'react';
+import {useState} from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, Alert, TextInput } from 'react-native';
 import { CheckBox } from 'react-native-elements';
 import { SocialIcon } from 'react-native-elements'
@@ -6,16 +6,29 @@ import { ButtonGroup } from '@rneui/themed'
 import {  useNavigation } from '@react-navigation/native';
 import { firebase } from '../../fireBase';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import Spinner from 'react-native-loading-spinner-overlay';
+
 
 export default function SignUp() {
     const navigation = useNavigation();
-  const [email, setEmail] = React.useState('');
-  const [pass, setPass] = React.useState('');
-  const [name, setName]= React.useState('');
-  const [lastname, setLastname]= React.useState('');
-  const [isSelected, setSelection] = React.useState(false);
+  const [email, setEmail] = useState('');
+  const [pass, setPass] = useState('');
+  const [name, setName]= useState('');
+  const [lastname, setLastname]= useState('');
+  const [isSelected, setSelection] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+
+
 
   const auth = getAuth();
+
+  const startLoading = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 3000);
+  };
 
   const toggleCheckbox = () => {
     setSelection(!isSelected);
@@ -23,11 +36,13 @@ export default function SignUp() {
 
   
   const handleSignUp=()=>{
+    setLoading(true)
     createUserWithEmailAndPassword(auth, email, pass)
     .then((userCredential) => {
       const user = userCredential.user;
       console.log(user);
-     
+      setLoading(false)
+      navigation.navigate('SignUp2',{user : user, name : name, lastname : lastname , email:email, pass:pass});
     })
     .catch((error) => {
       const errorCode = error.code;
@@ -35,10 +50,16 @@ export default function SignUp() {
       console.log(errorCode, errorMessage);
 
       if(errorCode==="auth/weak-password"){
+        setLoading(false)
         Alert.alert('weak-password')
       }
       if(errorCode==="auth/invalid-email"){
+        setLoading(false)
         Alert.alert('invalid-email')
+      }
+      if(errorCode==="auth/email-already-in-use"){
+        setLoading(false)
+        Alert.alert('email-already-in-use')
       }
       
     });
@@ -46,6 +67,16 @@ export default function SignUp() {
 
   return (
     <View style={styles.container}>
+
+<Spinner
+      
+          visible={loading}
+      
+          textContent={'Loading...'}
+        
+          textStyle={styles.spinnerTextStyle}
+        />
+
       <ButtonGroup
         buttons={['LOG IN', 'SIGN UP']}
         selectedIndex={1}
@@ -173,5 +204,8 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: '#A47E53',
     top: 10,
+  },
+  spinnerTextStyle: {
+    color: '#FFF',
   },
 });
