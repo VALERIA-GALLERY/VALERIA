@@ -1,3 +1,5 @@
+//!\\ Do not edit without the scrum's permission
+
 const cloudinary = require('cloudinary').v2;
 
 // Configure Cloudinary with your credentials

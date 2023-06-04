@@ -6,6 +6,7 @@ import { SocialIcon } from 'react-native-elements'
 import { ButtonGroup } from '@rneui/themed'
 import { firebase } from '../../fireBase';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import axios from 'axios';
 
 
 export default function Login() {
@@ -21,11 +22,18 @@ export default function Login() {
   };
 
 
+  const userlogin=(id)=>{
+axios.get(`http://192.168.1.11:9001/users/login/${id}`) //check the ip address run cmd ipconfig or contact yassin
+.then(res=>console.log(res.data))
+.catch(err=>console.log(err))
+
+  }
+
   const loginHandler = () => {
     signInWithEmailAndPassword(auth, email, pass)
     .then(userCredentials => {
       const user = userCredentials.user
-      console.log(user)
+      userlogin(user.uid)
     })
     .catch(error => {
       const errorCode = error.code

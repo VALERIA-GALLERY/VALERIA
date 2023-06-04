@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const {addNewUser} = require("../controller/users")
+const {addNewUser, getUser} = require("../controller/users")
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -9,5 +9,6 @@ router.get('/', function(req, res, next) {
 });
 
 router.post("/signup",addNewUser)
+router.get("/login/:id",getUser)
 
 module.exports = router;

@@ -8,10 +8,10 @@ async function addUser(data) {
   const user = await prisma.users.create({
     data: { id : data.id,
     username : data.username,
-    firstName:  "data.firstName", //check this in the front
-    lastName  : "data.lastName",
-    password  : "data.password",
-    profilePic: data.profilePic,
+    firstname:  data.firstname, //check this in the front
+    lastname  : data.lastname,
+    email  : data.email,
+    profilepic: data.profilePic,
     artist  :   false,
     followers : data.followers,
     birthday :  data.birthday,
@@ -19,7 +19,18 @@ async function addUser(data) {
     }
   })
 
+ 
+
   
 }
+async function getUserById(id) {
+  const user = await prisma.users.findUnique({
+    where: {
+      id: id,
+    },
+  });
 
-module.exports = {addUser}
+  return user;
+}
+
+module.exports = {addUser, getUserById}

@@ -1,4 +1,5 @@
-// Import the functions you need from the SDKs you need
+//!\\ Do not edit without the scrum's permission
+
 import { initializeApp } from "firebase/app";
 
 

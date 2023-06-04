@@ -22,11 +22,11 @@ export default function SignUp2(){
 
 
     const userCredential={
-        id: 444,
+        id: user.uid,
         username: username,
-        firstName: name,
-        lastName: lastname,
-        password: email,
+        firstname: name,
+        lastname: lastname,
+        email: email,
         profilePic:image ,
         artist: false,
         followers: [],
@@ -41,7 +41,7 @@ export default function SignUp2(){
       
     const createAccount= async()=>{
         console.log("pass")
-        axios.post("http://192.168.1.11:9001/users/signup",userCredential)
+        axios.post("http://192.168.1.11:9001/users/signup",userCredential) //check the ip address run cmd ipconfig or contact yassin
        
         .then(res=>console.log(res,"data"))
         .catch(err=>console.log(err))
