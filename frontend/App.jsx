@@ -1,18 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image } from 'react-native';
-
-
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
+import PhotoUpload from './components/addPost/CreatePost';
 
 export default function App() {
   return (
-    <>
     <View style={styles.container}>
-      <Text colo>hello world!</Text>
+      <PhotoUpload />
       <StatusBar style="auto" />
-      <Image source={require('./assets/qq.png')}/>
     </View>
-   
-    </>
   );
 }
 
