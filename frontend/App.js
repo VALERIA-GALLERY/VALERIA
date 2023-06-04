@@ -1,25 +1,24 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import React from 'react';
+import { StyleSheet, Text, View, Image, Button } from 'react-native';
+import ProfileComponent from './components/profile/profile';
 
 
 
 export default function App() {
   return (
-    <>
     <View style={styles.container}>
-      <Text colo>welcome </Text>
-      <StatusBar style="auto" />
-      <Image source={require('./assets/qq.png')}/>
-    </View>
-   
-    </>
+    <Text color="black">profile Screen</Text>
+<ProfileComponent/>
+  </View>
   );
 }
+
+
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#F0EDE4',
     alignItems: 'center',
     justifyContent: 'center',
   },
