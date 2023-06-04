@@ -7,12 +7,12 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 // Import your components
  import Acceuil from '../component1/Acceuil';
  import Chat from '../component1/Chat';
- import Create from '../component1/create';
+ import Create from '../component1/Create';
 import Search from '../component1/Search';
  import Profile from '../component1/profile';
 
 const Tab = createBottomTabNavigator();
-
+ 
 // Define your colors
 const COLORS = {
   primary: '#A47E53', // replace with your primary color
