@@ -37,6 +37,8 @@ const Profile = () => {
             </View>
             
             <Text style={styles.username}>{userData.username}</Text>
+
+            
             <View style={styles.infoContainer}>
             <View style={styles.infoItem}>
                 <Text style={styles.infoLabel}> Posts </Text>
