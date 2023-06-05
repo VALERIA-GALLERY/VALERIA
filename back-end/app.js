@@ -8,6 +8,8 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 const post = require('./routes/post');
 
+
+
 var app = express();
 var Port=9001 
 
@@ -27,6 +29,7 @@ app.use('/', indexRouter);
 app.use('/userss', user.getAll);
 
 app.use('/users',usersRouter);
+
 
 app.use('/post', post);
 
