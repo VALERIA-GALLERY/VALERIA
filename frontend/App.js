@@ -1,7 +1,10 @@
+import React from 'react';
+import ProfileComponent from './screens/profile/profile';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, Button, Alert } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
 import React from 'react';
 import Login from './screens/login/login';
 import SignUp from './screens/signup/signUp';
@@ -10,9 +13,11 @@ import  Acceuil from './screens/Acceuil'
 import TabNav from './navigation/TabNav'
 const Stack = createNativeStackNavigator();
 
+
 export default function App() {
   
   return (
+
     <>
       {/* <Text colo>hello world!</Text> */}
       {/* <StatusBar style="auto" />
@@ -28,6 +33,7 @@ export default function App() {
      
    
     </>
+
   );
 }
 const HomeScreen = () => {
@@ -42,6 +48,8 @@ const HomeScreen = () => {
     </View>
   );
 };
+
+
 
 const styles = StyleSheet.create({
   container: {
