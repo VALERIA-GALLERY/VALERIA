@@ -74,7 +74,7 @@ const Tabs = () => {
                 borderWidth:4
               }}
             >
-              <Feather name="plus" size={45} color={COLORS.white} />
+              <Feather name="plusclear" size={45} color={COLORS.white} />
             </LinearGradient>
           ),
         }}
