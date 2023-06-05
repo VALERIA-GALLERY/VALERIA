@@ -5,18 +5,18 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 // Import your components
- import Acceuil from '../component1/Acceuil';
- import Chat from '../component1/Chat';
- import Create from '../component1/Create';
-import Search from '../component1/Search';
- import Profile from '../component1/profile';
+ import Acceuil from '../screens/Acceuil';
+ import Chat from '../screens/Chat';
+ import Create from '../screens/Create';
+import Search from '../screens/Search';
+ import Profile from '../screens/profile1';
 
 const Tab = createBottomTabNavigator();
  
 // Define your colors
 const COLORS = {
   primary: '#A47E53', // replace with your primary color
-  black: '#A47E53', // replace with your black color
+  brown: '#A47E53', // replace with your brown color
   white: '#ffffff' // replace with your white color
 };
 
@@ -44,7 +44,7 @@ const Tabs = () => {
         component={Acceuil} 
         options={{
           tabBarIcon: ({focused}) => (
-            <Feather name='home' size={24} color={focused ? COLORS.primary : COLORS.black}/>
+            <Feather name='home' size={24} color={focused ? COLORS.primary : COLORS.brown}/>
           ),
         }}
       />
@@ -53,7 +53,7 @@ const Tabs = () => {
         component={Chat} 
         options={{
           tabBarIcon: ({focused}) => (
-            <Ionicons name='chatbox-outline' size={24} color={focused ? COLORS.primary : COLORS.black}/>
+            <Ionicons name='chatbox-outline' size={24} color={focused ? COLORS.primary : COLORS.brown}/>
           ),
         }}
       />
@@ -74,7 +74,7 @@ const Tabs = () => {
                 borderWidth:4
               }}
             >
-              <Feather name="plus-circle" size={45} color={COLORS.white} />
+              <Feather name="plus" size={45} color={COLORS.white} />
             </LinearGradient>
           ),
         }}
@@ -84,7 +84,7 @@ const Tabs = () => {
         component={Search} 
         options={{
           tabBarIcon: ({focused}) => (
-            <FontAwesome5 name='search' size={24} color={focused ? COLORS.primary : COLORS.black}/>
+            <FontAwesome5 name='search' size={24} color={focused ? COLORS.primary : COLORS.brown}/>
           ),
         }}
       />
@@ -93,7 +93,7 @@ const Tabs = () => {
         component={Profile} 
         options={{
           tabBarIcon: ({focused}) => (
-            <FontAwesome name='user-circle' size={24} color={focused ? COLORS.primary : COLORS.black}/>
+            <FontAwesome name='user-circle' size={24} color={focused ? COLORS.primary : COLORS.brown}/>
           ),
         }}
       />

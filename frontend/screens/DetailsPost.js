@@ -18,51 +18,37 @@ export default function DetailsPost({ data, index }) {
             </View>
             <ScrollView>
                 <View key={index} style={styles.post} >
-                    <ImageBackground source={{ uri: data.pic }} style={styles.image} resizeMode="cover">
+                    <ImageBackground source={{ uri: data.pic }} style={styles.image}   resizeMode={ 'stretch'}>
                         <View style={styles.postHeader}>
 
                             <Icon name="person-circle-outline" size={30} color={'#fff'} />
                             <View style={styles.user} >
-                                <Text >{data.name}</Text>
-                                <Text >{data.date_time} </Text>
+                                <Text style={styles.name} >{data.name}</Text>
+                                <Text style={styles.date}>{data.date_time} </Text>
                             </View>
-
-                        </View>
+                            <Icon name=""  size={30} color={'#fff'} />
+                        </View> 
                         {/* <Image style={styles.image} source={{ uri: data.pic }} /> */}
                         <View style={styles.postFooter}>
-                            <Text >{data.description}</Text>
+                            <Text  style={styles.desc}>{data.description}</Text>
                             <View style={styles.likecom}>
-                                <View>
+                                <View style={styles.like}>
                                     <Icon name="heart-outline" size={30} color={'#fff'} />
-                                    <Text >{data.likes} likes</Text>
+                                    <Text  style={styles.desc}>{data.likes} {'    '}</Text>
                                 </View>
 
 
-                                <View>
+                                <View style={styles.com}>
 
-                                    {/* <Icon
+                                    <Icon
                                         name="chatbox-outline"
 
                                         size={30}
                                         color={'#fff'}
-                                        onPress={() => navigation.navigate({ Component: { comments } })}
-                                    /> */}
-                                    {/* <Text >{data.comments} </Text> */}
-                                    <Tab.Screen
-                                        name="Chat"
-                                        component={comments}
-                                        options={{
-                                            tabBarIcon: () => (
-                                                <Ionicons
-                                                    name="chatbox-outline"
-                                                    size={30}
-                                                    color={'#fff'}
-                                                />
-                                            ),
-                                        }}
                                     />
-
-                                </View>
+                                    <Text  style={styles.desc}>{data.comments} </Text>
+                                   
+                                </View> 
 
                             </View>
                         </View>
@@ -80,8 +66,9 @@ const styles = StyleSheet.create({
         flex_grow: 0,
         flex_direction: 'column',
         align_items: 'flex - start',
-        left: 24,
+        left: 35,
         top: 57.91,
+        top: -37.91,
 
     },
     header: {
@@ -101,10 +88,26 @@ const styles = StyleSheet.create({
         height: 70.94,
         left: 13.12,
         top: 13.58,
-
+    },
+    name:{
+        color:'#fff'
+    },
+    date:{
+        color:'#fff'
+    },
+    desc:{
+        color:'#fff'
     },
     post: {
         marginBottom: 20,
+    },
+    like: {
+        backgroundColor: 'rgba(255, 255, 255,0.4)',
+       
+    },
+    com: {
+        backgroundColor: 'rgba(255, 255, 255, 0.4)',
+       
     },
     postHeader: {
         flexDirection: 'row',
@@ -116,7 +119,8 @@ const styles = StyleSheet.create({
         height: 288.09,
         // width: '100%',
         // height: 300,
-
+        borderRadius: 20, // You can change this value as per your need
+        overflow: 'hidden',
     },
     postFooter: {
         padding: 9,

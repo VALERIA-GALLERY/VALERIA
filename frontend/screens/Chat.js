@@ -8,10 +8,10 @@ import {ImageBackground,
         Image,
          View,
          TouchableOpacity} from 'react-native';
-function Profil() {
+function Chat() {
   return (
    <View style={styles.container}>
-    <Text>hello ras lambout </Text>
+    <Text>chat </Text>
    </View>
   )
 }
@@ -23,4 +23,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 })
-export default Profil
+export default Chat

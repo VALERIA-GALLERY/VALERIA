@@ -3,7 +3,10 @@ import { StyleSheet, Text, View, Image, Button, Alert } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
-import  Acceuil from './component1/Acceuil'
+import Login from './screens/login/login';
+import SignUp from './screens/signup/signUp';
+import SignUp2 from './screens/signup/signup2';
+import  Acceuil from './screens/Acceuil'
 import TabNav from './navigation/TabNav'
 const Stack = createNativeStackNavigator();
 
