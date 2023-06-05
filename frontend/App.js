@@ -9,33 +9,47 @@ import React from 'react';
 import Login from './screens/login/login';
 import SignUp from './screens/signup/signUp';
 import SignUp2 from './screens/signup/signup2';
+
 import  Acceuil from './screens/Acceuil'
 import TabNav from './navigation/TabNav'
-const Stack = createNativeStackNavigator();
 
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   
   return (
 
-    <>
-      {/* <Text colo>hello world!</Text> */}
-      {/* <StatusBar style="auto" />
-      <Image source={require('./assets/qq.png')}/> */}
-      <NavigationContainer>
+    
+    <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Welcome' }} />
+        <Stack.Screen name="Signup" component={SignUp} options={{ title: 'SignUp',headerShown: false  }} />
+        <Stack.Screen name="login" component={Login} options={{ title: 'Login',headerShown: false }} />
+        <Stack.Screen name="SignUp2" component={SignUp2} options={{ title: 'SignUp2',headerShown: false }} />
+  <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Welcome' }} />
         <Stack.Screen name="Acceuil" component={Acceuil} options={{ title: 'Acceuil',headerShown: false  }} />
         <Stack.Screen name="TabNav" component={TabNav} options={{ headerShown: false  }} />
-
       </Stack.Navigator>
     </NavigationContainer>
-     
-   
-    </>
-
   );
 }
+
+const HomeScreen = () => {
+  const navigation = useNavigation();
+
+  return (
+    <View style={styles.container}>
+      <Text color="black">Hello, world!</Text>
+      <StatusBar style="auto" />
+      <Image source={require('./assets/qq.png')} />
+      <Button title="get started" onPress={() => navigation.navigate('Signup')} />
+    </View>
+  );
+};
+
+
+
 const HomeScreen = () => {
   const navigation = useNavigation();
 
@@ -48,6 +62,7 @@ const HomeScreen = () => {
     </View>
   );
 };
+
 
 
 
