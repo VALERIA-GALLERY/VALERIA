@@ -48,7 +48,7 @@ export default function CreatePost() {
     });
     axios
       .post(
-        "http://192.168.43.100:9001/post",
+        "http://192.168.1.12:9001/post/post",
         {
           description: "Description",
           pic: photo,
