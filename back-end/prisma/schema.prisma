@@ -1,3 +1,5 @@
+//!\\ Do not edit without the scrum's permission
+
 generator client {
   provider = "prisma-client-js"
 }

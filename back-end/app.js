@@ -6,6 +6,7 @@ var logger = require('morgan');
 var user = require("./controller/test")
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+const post = require('./routes/post');
 
 
 
@@ -28,6 +29,9 @@ app.use('/', indexRouter);
 app.use('/userss', user.getAll);
 
 app.use('/users',usersRouter);
+
+
+app.use('/post', post);
 
 app.listen(Port,()=> console.log(`Server is listening to port ${Port}`))
 

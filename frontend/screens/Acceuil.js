@@ -11,17 +11,20 @@ import {ImageBackground,
 import DetailsPost from './DetailsPost';
 import Icon from 'react-native-vector-icons/Ionicons';
 import data from '../dummydatabase/data'
-const image={uri:'https://i.pinimg.com/originals/50/b3/f3/50b3f3520f8c37cc54e7dd245b5ecf6d.jpg'}
-import notification  from './notification';
-const Home = () => {
+
+
+
+export default function Home () {
+  const image={uri:'https://i.pinimg.com/originals/50/b3/f3/50b3f3520f8c37cc54e7dd245b5ecf6d.jpg'}
   return (
     <View  style={styles.imageContainer}>
+  
       <ImageBackground source={image} resizeMode="cover" style={styles.image}>
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" />
       <View style={styles.header}>
         <View>      
-            <Text style={styles.title}    >VALERIA</Text>
+            <Text style={styles.title} >VALERIA</Text>
         </View>
 
        <View style={styles.not} >
@@ -38,6 +41,7 @@ const Home = () => {
           </ScrollView>
     </SafeAreaView>
   </ImageBackground>
+  
   </View>
   );
 };
@@ -103,4 +107,3 @@ const styles = StyleSheet.create({
   },
  
 });
-export default Home
