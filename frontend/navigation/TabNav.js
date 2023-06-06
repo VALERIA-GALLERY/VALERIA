@@ -3,6 +3,7 @@ import { View, Text } from 'react-native';
 import { Feather, Ionicons, FontAwesome, FontAwesome5 } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useRoute } from '@react-navigation/native';
 
 // Import your components
  import Acceuil from '../screens/Acceuil';
@@ -12,7 +13,7 @@ import Search from '../screens/Search';
 import Profile from '../screens/profile1';
 
 const Tab = createBottomTabNavigator();
- 
+
 // Define your colors
 const COLORS = {
   primary: '#A47E53', // replace with your primary color
@@ -37,6 +38,9 @@ const screenOptions = {
 };
 
 const Tabs = () => {
+   
+const route = useRoute();
+const {user } = route.params;
   return (
     <Tab.Navigator screenOptions={screenOptions}>
       <Tab.Screen
@@ -90,6 +94,7 @@ const Tabs = () => {
       />
       <Tab.Screen
         name="Profile"
+        initialParams={{ user: user }}
         component={Profile} 
         options={{
           tabBarIcon: ({focused}) => (

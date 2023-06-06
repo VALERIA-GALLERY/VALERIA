@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState} from 'react';
 import {  useNavigation } from '@react-navigation/native';
 import { StyleSheet, Text, View, Image, TouchableOpacity, Alert, TextInput } from 'react-native';
 import { CheckBox } from 'react-native-elements';
@@ -7,14 +7,15 @@ import { ButtonGroup } from '@rneui/themed'
 import { firebase } from '../../fireBase';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import axios from 'axios';
-
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default function Login() {
     const navigation = useNavigation();
   const [email, setEmail] = React.useState('');
   const [pass, setPass] = React.useState('');
   const [isSelected, setSelection] = React.useState(false);
-
+  const [loading, setLoading] = useState(false);
+  const [userData, setUserData]=useState({})
   const auth = getAuth();
 
   const toggleCheckbox = () => {
@@ -23,13 +24,21 @@ export default function Login() {
 
 
   const userlogin=(id)=>{
-axios.get(`http://192.168.1.11:9001/users/login/${id}`) //check the ip address run cmd ipconfig or contact yassin
-.then(res=>console.log(res.data))
-.catch(err=>console.log(err))
+
+axios.get(`http://192.168.1.12:9001/users/login/${id}`) //check the ip address run cmd ipconfig or contact yassin
+.then(res=>{
+  setLoading(false)
+  console.log(res.data)
+  navigation.navigate('TabNav',{user : res.data})
+  setUserData(res.data)})
+.catch(err=>{
+  setLoading(false)
+  Alert.alert(err)})
 
   }
 
   const loginHandler = () => {
+    setLoading(true)
     signInWithEmailAndPassword(auth, email, pass)
     .then(userCredentials => {
       const user = userCredentials.user
@@ -46,6 +55,14 @@ axios.get(`http://192.168.1.11:9001/users/login/${id}`) //check the ip address r
 
   return (
     <View style={styles.container}>
+      <Spinner
+      
+      visible={loading}
+  
+      textContent={'Loading...'}
+    
+      textStyle={styles.spinnerTextStyle}
+    />
       <ButtonGroup
         buttons={['LOG IN', 'SIGN UP']}
         selectedIndex={0}
@@ -179,5 +196,8 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: '#A47E53',
     top: 150,
+  },
+  spinnerTextStyle: {
+    color: '#FFF',
   },
 });
