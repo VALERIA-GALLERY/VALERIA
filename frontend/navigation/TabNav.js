@@ -66,15 +66,15 @@ const Tabs = () => {
               style={{
                 alignItems:'center',
                 justifyContent:'center',
-                width: 50,
-                height: 50,
-                top:-10,
-                borderRadius:15,
+                width: 60.26,     // In React Native, dimensions are unitless, they are represented in density-independent pixels.
+                height: 61.97,    // In React Native, dimensions are unitless, they are represented in density-independent pixels.
+                marginTop: 42.61, // In React Native, dimensions are unitless, they are represented in density-independent pixels.
+                marginLeft: 143.68, // In React Native, dimensions are unitless, they are represented in density-independent pixels.
+                borderRadius: 23,
                 borderColor:'#fff',
-                borderWidth:4
               }}
             >
-              <Feather name="plusclear" size={45} color={COLORS.white} />
+              <Feather name="plus" size={45} color={COLORS.white} />
             </LinearGradient>
           ),
         }}

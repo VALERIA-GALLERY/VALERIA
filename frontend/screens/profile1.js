@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Alert, PixelRatio } from 'react-native';
+import { Feather, Ionicons, FontAwesome, FontAwesome5 } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const Profile = () => {
   const userData = {
@@ -9,19 +11,19 @@ const Profile = () => {
     posts: "pic"
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
 
-  const fetchData = async (id) => {
-    try {
-      const response = await fetch(`http://192.168.75.4:9001/user/${id}`);
-      const jsonData = await response.json();
-      setUserData(jsonData);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // const fetchData = async (id) => {
+  //   try {
+  //     const response = await fetch(`http://192.168.75.4:9001/user/${id}`);
+  //     const jsonData = await response.json();
+  //     setUserData(jsonData);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   const handlePress = () => {
     Alert.alert('Button Pressed!');
@@ -53,20 +55,26 @@ const Profile = () => {
               <View style={styles.infoItem}>
                 <Text style={styles.infoLabel}>Follows </Text>
                 <Text style={styles.infoText}>{userData.follows.length}</Text>
-
               </View>
-             
             </View>
-            <TouchableOpacity onPress={handlePress} style={[styles.button, styles.galleryButton]}>
-              <Text style={styles.buttonText}>Gallery</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={handlePress} style={[styles.button, styles.favoritesButton]}>
-              <Text style={styles.buttonText}>Add to Favorites</Text>
-            </TouchableOpacity>
+
+       <View style={styles.form}>
+              <View style={styles.gallery}>
+                   <TouchableOpacity onPress={handlePress} style={[styles.button, styles.galleryButton]}>
+                   <Text style={styles.buttonText}>Gallery</Text>
+                   </TouchableOpacity>
+            </View>
+               <View style={styles.save}>
+                   <TouchableOpacity onPress={handlePress} style={[styles.button, styles.favoritesButton]}>
+                   <Text style={styles.buttonText}>Add to Favorites</Text>
+                   </TouchableOpacity>
+            </View>
+            </View>
+
           </React.Fragment>
         )}
       </View>
-      <Text style={styles.title}>Profile</Text>
+      {/* <Text style={styles.title}>Profile</Text> */}
     </View>
   );
 };
@@ -79,7 +87,7 @@ const styles = StyleSheet.create({
   },
   profileContainer: {
     alignItems: 'center',
-    marginTop: 50,
+    marginTop: 60,
     marginBottom: 30,
   },
   profileImageContainer: {
@@ -91,6 +99,20 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     marginBottom: 10,
   },
+form:{
+ top:95,
+},
+gallery:{
+  right:110,
+},
+save:{
+ top:-49,
+ left:110,
+},
+
+
+
+
   profileImage: {
     width: '100%',
     height: '100%',
@@ -107,6 +129,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     marginBottom: 20,
     paddingHorizontal: 40,
+    right:25,
   },
   infoItem: {
     marginHorizontal: 80,
