@@ -1,5 +1,4 @@
 import React from 'react';
-import ProfileComponent from './screens/profile/profile';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, Button, Alert } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
@@ -9,7 +8,7 @@ import Profile from "./screens/profile1"
 import Login from './screens/login/login';
 import SignUp from './screens/signup/signUp';
 import SignUp2 from './screens/signup/signup2';
-import Tabs from './navigation/TabNav';
+// import Tabs from './navigation/TabNav';
 import  Home from './screens/Acceuil'
 import TabNav from './navigation/TabNav'
 
@@ -61,4 +60,6 @@ const styles = StyleSheet.create({
   button:{
     color:'#5B3D00'
   }
-})
+
+});
+
