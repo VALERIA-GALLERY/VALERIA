@@ -1,10 +1,24 @@
-import React from 'react';
-import { ImageBackground, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, Image, View } from 'react-native';
+import React, { useState } from 'react';
+import { ImageBackground, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, Image, View, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
+import Comments from './Comments';
+
 
 export default function DetailsPost({ data, index }) {
   const navigation = useNavigation();
+  const [likes, setLikes] = useState(data.likes);
+  const [comments, setComments] = useState(data.comments);
+
+  const handleLike = () => {
+    // Increment the number of likes by 1
+    setLikes(likes + 1);
+  };
+
+  const handleComment = () => {
+    // You can navigate to the comment section or implement your own logic for handling comments
+    navigation.navigate('Comment', { postId: data.id });
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -23,14 +37,14 @@ export default function DetailsPost({ data, index }) {
             <View style={styles.postFooter}>
               <Text style={styles.desc}>{data.description}</Text>
               <View style={styles.likecom}>
-                <View style={styles.like}>
+                <TouchableOpacity style={styles.like} onPress={handleLike}>
                   <Icon name="heart-outline" size={30} color="#fff" />
-                  <Text style={styles.desc}>{data.likes}</Text>
-                </View>
-                <View style={styles.com}>
+                  <Text style={styles.desc}>{likes}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.com} onPress={handleComment}>
                   <Icon name="chatbox-outline" size={30} color="#fff" />
-                  <Text style={styles.desc}>{data.comments}</Text>
-                </View>
+                  <Text style={styles.desc}>{comments}</Text>
+                </TouchableOpacity>
               </View>
             </View>
           </ImageBackground>
@@ -89,8 +103,17 @@ const styles = StyleSheet.create({
   },
   like: {
     backgroundColor: 'rgba(255, 255, 255, 0.4)',
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginRight: 10,
+    padding: 5,
+    borderRadius: 10,
   },
   com: {
     backgroundColor: 'rgba(255, 255, 255, 0.4)',
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 5,
+    borderRadius: 10,
   },
 });

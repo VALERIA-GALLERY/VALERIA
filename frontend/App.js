@@ -12,6 +12,7 @@ import SignUp2 from './screens/signup/signup2';
 import Tabs from './navigation/TabNav';
 import  Home from './screens/Acceuil'
 import TabNav from './navigation/TabNav'
+import Comments from './screens/Comments';
 
 
 const Stack = createNativeStackNavigator();
@@ -31,6 +32,7 @@ export default function App() {
   
         <Stack.Screen name="Acceuil" component={Home} options={{ title: 'Acceuil',headerShown: false  }} />
         <Stack.Screen name="TabNav" component={TabNav} options={{ headerShown: false  }} />
+        <Stack.Screen name="Comments" component={Comments} />
       </Stack.Navigator>
     </NavigationContainer>
   );
