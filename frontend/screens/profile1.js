@@ -1,27 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Alert, PixelRatio } from 'react-native';
 
-const Profile = () => {
-  const userData = {
-    username: "ahmed",
-    followers: ["sami", "samir"],
-    follows: ["sami", "samir"],
-    posts: "pic"
-  };
+const Profile = ({ route }) => {
+  const { user } = route.params;
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  // const user = {
+  //   username: "ahmed",
+  //   followers: ["sami", "samir"],
+  //   follows: ["sami", "samir"],
+  //   posts: "pic"
+  // };
 
-  const fetchData = async (id) => {
-    try {
-      const response = await fetch(`http://192.168.75.4:9001/user/${id}`);
-      const jsonData = await response.json();
-      setUserData(jsonData);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
+
+  // const fetchData = async (id) => {
+  //   try {
+  //     const response = await fetch(`http://192.168.75.4:9001/user/${id}`);
+  //     const jsonData = await response.json();
+  //     setuser(jsonData);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   const handlePress = () => {
     Alert.alert('Button Pressed!');
@@ -30,29 +32,29 @@ const Profile = () => {
   return (
     <View style={styles.container}>
       <View style={styles.profileContainer}>
-        {userData && (
+        {user && (
           <React.Fragment>
             <View style={styles.profileImageContainer}>
-              <Image source={{ uri: userData.profilePic }} style={styles.profileImage} />
+              <Image source={{ uri: user.profilePic }} style={styles.profileImage} />
             </View>
             
-            <Text style={styles.username}>{userData.username}</Text>
+            <Text style={styles.username}>{user.username}</Text>
 
             
             <View style={styles.infoContainer}>
             <View style={styles.infoItem}>
                 <Text style={styles.infoLabel}> Posts </Text>
-                <Text style={styles.infoText}>{userData.posts.length}</Text>
+                <Text style={styles.infoText}>{0}</Text>
 
               </View>
               <View style={styles.infoItem}>
                 <Text style={styles.infoLabel}> Followers </Text>
-                <Text style={styles.infoText}>{userData.followers.length}</Text>
+                <Text style={styles.infoText}>{user.followers.length}</Text>
 
               </View>
               <View style={styles.infoItem}>
                 <Text style={styles.infoLabel}>Follows </Text>
-                <Text style={styles.infoText}>{userData.follows.length}</Text>
+                <Text style={styles.infoText}>{user.follows.length}</Text>
 
               </View>
              

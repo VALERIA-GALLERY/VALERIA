@@ -6,16 +6,17 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import * as ImagePicker from 'expo-image-picker';
 import { useRoute } from '@react-navigation/native';
 import client from '../../client';
-
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default function SignUp2(){
+  const navigation=useNavigation()
     const [isPickerShow, setIsPickerShow] = useState(false);
     const [date, setDate] = useState(new Date(Date.now()));
     const [username, setUsername] = useState("")
-
+    const [loading, setLoading] = useState(false);
     const [image, setImage] = useState(null);
 
-
+   
     const route = useRoute();
     const {user, name, lastname, email, } = route.params;
 
@@ -40,12 +41,18 @@ export default function SignUp2(){
 
       
     const createAccount= async()=>{
+      setLoading(true)
         console.log("pass")
-        axios.post("http://192.168.1.11:9001/users/signup",userCredential) //check the ip address run cmd ipconfig or contact yassin
+        axios.post("http://192.168.1.12:9001/users/signup",userCredential) //check the ip address run cmd ipconfig or contact yassin
        
-        .then(res=>console.log(res,"data"))
-        .catch(err=>console.log(err))
-console.log( name, lastname)
+        .then(res=> {
+          setLoading(false)
+          navigation.navigate('login')
+        })
+        .catch(err=>{
+          setLoading(false)
+          Alert.alert("unexpected error please try again in a couple of minutes")})
+
 
     }
 
@@ -80,6 +87,15 @@ console.log( name, lastname)
   
     return (
       <View style={styles.container}>
+
+<Spinner
+      
+      visible={loading}
+  
+      textContent={'Loading...'}
+    
+      textStyle={styles.spinnerTextStyle}
+    />
 
 <Image
         source={require('../../assets/qq.png')}
@@ -198,5 +214,8 @@ top:30}}>please enter you date of birth</Text>
             paddingBottom: 5,
             borderBottomWidth: 0.5,
             borderBottomColor: '#A47E53',
+          },
+          spinnerTextStyle: {
+            color: '#FFF',
           },
       });
