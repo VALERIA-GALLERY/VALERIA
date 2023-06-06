@@ -40,6 +40,7 @@
 //       return;
 //     }
 
+
 //     let formData = new FormData();
 //     formData.append("file", {
 //       uri: photo,
@@ -79,6 +80,7 @@
 //         Alert.alert("Failed to create post.");
 //       });
 //   };
+
 
 //   const uploadButtonMargin = photo ? { marginTop: 20 } : {};
 
