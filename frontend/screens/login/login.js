@@ -25,7 +25,7 @@ export default function Login() {
 
   const userlogin=(id)=>{
 
-axios.get(`http://192.168.1.12:9001/users/login/${id}`) //check the ip address run cmd ipconfig or contact yassin
+axios.get(`http://192.168.104.6:9001/users/login/${id}`) //check the ip address run cmd ipconfig or contact yassin
 .then(res=>{
   setLoading(false)
   console.log(res.data)
