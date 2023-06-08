@@ -37,7 +37,7 @@
 //   const handleSubmit = () => {
 //     if (!description || !photo) {
 //       Alert.alert("Description and photo required.");
-//       return;
+      
 //     }
 
 //     let formData = new FormData();
@@ -48,7 +48,7 @@
 //     });
 //     axios
 //       .post(
-//         "http://192.168.43.100:9001/post",
+//         "http://192.168.1.12:9001/post/create",
 //         {
 //           description: "Description",
 //           pic: photo,
@@ -68,7 +68,8 @@
 //         Alert.alert("Post created successfully!");
 //       })
 //       .catch((error) => {
-//         console.error({
+//         console.log("err")
+//         console.log({
 //           description: "Description",
 //           pic: photo,
 //           likes: [],

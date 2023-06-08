@@ -6,16 +6,17 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import * as ImagePicker from 'expo-image-picker';
 import { useRoute } from '@react-navigation/native';
 import client from '../../client';
-
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default function SignUp2(){
+  const navigation=useNavigation()
     const [isPickerShow, setIsPickerShow] = useState(false);
     const [date, setDate] = useState(new Date(Date.now()));
     const [username, setUsername] = useState("")
-
+    const [loading, setLoading] = useState(false);
     const [image, setImage] = useState(null);
 
-
+   
     const route = useRoute();
     const {user, name, lastname, email, } = route.params;
 
@@ -40,12 +41,18 @@ export default function SignUp2(){
 
       
     const createAccount= async()=>{
+      setLoading(true)
         console.log("pass")
-        axios.post("http://192.168.1.11:9001/users/signup",userCredential) //check the ip address run cmd ipconfig or contact yassin
+        axios.post("http://192.168.100.6:9001/users/signup",userCredential) //check the ip address run cmd ipconfig or contact yassin
        
-        .then(res=>console.log(res,"data"))
-        .catch(err=>console.log(err))
-console.log( name, lastname)
+        .then(res=> {
+          setLoading(false)
+          navigation.navigate('login')
+        })
+        .catch(err=>{
+          setLoading(false)
+          Alert.alert("unexpected error please try again in a couple of minutes")})
+
 
     }
 
@@ -81,6 +88,15 @@ console.log( name, lastname)
     return (
       <View style={styles.container}>
 
+<Spinner
+      
+      visible={loading}
+  
+      textContent={'Loading...'}
+    
+      textStyle={styles.spinnerTextStyle}
+    />
+
 <Image
         source={require('../../assets/qq.png')}
         fadeDuration={0}
@@ -110,7 +126,7 @@ top:30}}>please enter you date of birth</Text>
             style={styles.datePicker}
           />
         )}
-<Text style={{color:"grey",top:80}} >select profile pic</Text>
+<Text style={{color:"grey",top:60}} >select profile pic</Text>
 <TouchableOpacity style={styles.button} onPress={pickImage}>
         <Text style={styles.buttonText}>+</Text>
       </TouchableOpacity>
@@ -129,7 +145,7 @@ top:30}}>please enter you date of birth</Text>
             fontSize: 16,
             color: '#FFFFFF',
             left: 80,
-            top: 5,
+            top: 2,
           },
         button2: {
             backgroundColor: '#B4966A',
@@ -138,7 +154,7 @@ top:30}}>please enter you date of birth</Text>
             marginTop: 50,
             width: 327,
             height: 55,
-            top: 130,
+            top: 110,
           },
         logo: {
             width: 160,
@@ -150,7 +166,7 @@ top:30}}>please enter you date of birth</Text>
             borderRadius: 100,
             width: 65,
             height: 65,
-            top: 110,
+            top: 70,
         },
         buttonText:{
             fontSize: 50,
@@ -198,5 +214,8 @@ top:30}}>please enter you date of birth</Text>
             paddingBottom: 5,
             borderBottomWidth: 0.5,
             borderBottomColor: '#A47E53',
+          },
+          spinnerTextStyle: {
+            color: '#FFF',
           },
       });

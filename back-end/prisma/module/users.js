@@ -32,5 +32,12 @@ async function getUserById(id) {
 
   return user;
 }
+async function getAlpost(idpost){
+  const post=await prisma.posts.findMany({
+    where:{
+      id:idpost,
+    }
+  })
+}
 
-module.exports = {addUser, getUserById}
+module.exports = {addUser, getUserById,getAlpost}
