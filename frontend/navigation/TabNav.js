@@ -40,7 +40,7 @@ const screenOptions = {
 const Tabs = () => {
    
 const route = useRoute();
-// const {user } = route.params;
+const {user } = route.params;
   return (
     <Tab.Navigator screenOptions={screenOptions}>
       <Tab.Screen
@@ -64,6 +64,7 @@ const route = useRoute();
       <Tab.Screen
         name="Create"
         component={Create}
+        initialParams={{ user: user }}
         options={{
           tabBarIcon: ({focused}) => (
             <LinearGradient colors={['#A47E53','#c5af81']} 

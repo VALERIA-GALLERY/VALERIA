@@ -8,6 +8,8 @@ import { firebase } from '../../fireBase';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import axios from 'axios';
 import Spinner from 'react-native-loading-spinner-overlay';
+import url from '../../link'
+
 
 export default function Login() {
     const navigation = useNavigation();
@@ -25,7 +27,7 @@ export default function Login() {
 
   const userlogin=(id)=>{
 
-axios.get(`http://192.168.100.6:9001/users/login/${id}`) //check the ip address run cmd ipconfig or contact yassin
+axios.get(`http://${url}:9001/users/login/${id}`) //check the ip address run cmd ipconfig or contact yassin
 .then(res=>{
   setLoading(false)
   console.log(res.data)
