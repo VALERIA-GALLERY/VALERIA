@@ -5,7 +5,7 @@ import { NavigationContainer, useNavigation } from '@react-navigation/native';
 
 export default function W3(){
     const navigation=useNavigation()
-
+    
     return(
 
         <View style={styles.container}>

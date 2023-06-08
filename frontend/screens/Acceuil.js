@@ -11,7 +11,7 @@ import {ImageBackground,
 import DetailsPost from './DetailsPost';
 import Icon from 'react-native-vector-icons/Ionicons';
 import data from '../dummydatabase/data'
-
+ 
 
 
 export default function Home () {
@@ -45,7 +45,6 @@ export default function Home () {
           </ScrollView>
     </SafeAreaView>
   </ImageBackground>
-  {/* <Tabs/> */}
   </View>
   );
 };

@@ -43,7 +43,7 @@ export default function SignUp2(){
     const createAccount= async()=>{
       setLoading(true)
         console.log("pass")
-        axios.post("http://192.168.1.12:9001/users/signup",userCredential) //check the ip address run cmd ipconfig or contact yassin
+        axios.post("http://192.168.100.6:9001/users/signup",userCredential) //check the ip address run cmd ipconfig or contact yassin
        
         .then(res=> {
           setLoading(false)
@@ -126,7 +126,7 @@ top:30}}>please enter you date of birth</Text>
             style={styles.datePicker}
           />
         )}
-<Text style={{color:"grey",top:80}} >select profile pic</Text>
+<Text style={{color:"grey",top:60}} >select profile pic</Text>
 <TouchableOpacity style={styles.button} onPress={pickImage}>
         <Text style={styles.buttonText}>+</Text>
       </TouchableOpacity>
@@ -145,7 +145,7 @@ top:30}}>please enter you date of birth</Text>
             fontSize: 16,
             color: '#FFFFFF',
             left: 80,
-            top: 5,
+            top: 2,
           },
         button2: {
             backgroundColor: '#B4966A',
@@ -154,7 +154,7 @@ top:30}}>please enter you date of birth</Text>
             marginTop: 50,
             width: 327,
             height: 55,
-            top: 130,
+            top: 110,
           },
         logo: {
             width: 160,
@@ -166,7 +166,7 @@ top:30}}>please enter you date of birth</Text>
             borderRadius: 100,
             width: 65,
             height: 65,
-            top: 110,
+            top: 70,
         },
         buttonText:{
             fontSize: 50,

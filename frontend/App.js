@@ -1,15 +1,13 @@
 import React from 'react';
-import ProfileComponent from './screens/profile/profile';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, Button, Alert, TouchableOpacity } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Profile from "./screens/profile1"
-import CreatePost from './screens/addPost/CreatePost';
+// import Profile from "./screens/profile1"
+import CreatePost from './screens/Create';
 import Login from './screens/login/login';
 import SignUp from './screens/signup/signUp';
 import SignUp2 from './screens/signup/signup2';
-import Tabs from './navigation/TabNav';
 import  Home from './screens/Acceuil'
 import TabNav from './navigation/TabNav'
 import Comments from './screens/Comments';
@@ -34,8 +32,8 @@ export default function App() {
         <Stack.Screen name="SignUp2" component={SignUp2} options={{ title: 'SignUp2',headerShown: false }} />
         <Stack.Screen name="CreatePost" component={CreatePost} options={{ title: 'ProfileComponent',headerShown: false }} />
   
-        <Stack.Screen name="Acceuil" component={Home} options={{ title: 'Acceuil',headerShown: false  }} />
         <Stack.Screen name="TabNav" component={TabNav} options={{ headerShown: false  }} />
+        <Stack.Screen name="Acceuil" component={Home} options={{ title: 'Acceuil',headerShown: false  }} />
         <Stack.Screen name="Comments" component={Comments} />
       </Stack.Navigator>
     </NavigationContainer>
