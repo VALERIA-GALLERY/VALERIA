@@ -7,7 +7,7 @@ var {getUser, updateUser}=require("../controller/getupdateUser")
 router.get('/',getUser)
 router.put('/',updateUser)
 
-router.get('/',getUser)
+
 router.put('/',updateUser)
 
 
