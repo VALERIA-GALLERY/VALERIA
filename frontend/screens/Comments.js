@@ -3,6 +3,7 @@ import { View, Text, TextInput, Button, FlatList } from 'react-native';
 
 export default function Comments({ route }) {
   const { postId } = route.params;
+  console.log(postId)
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
 
