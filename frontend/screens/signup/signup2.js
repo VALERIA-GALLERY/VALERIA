@@ -41,9 +41,11 @@ export default function SignUp2(){
       
     const createAccount= async()=>{
         console.log("pass")
-        axios.post("http://192.168.1.11:9001/users/signup",userCredential) //check the ip address run cmd ipconfig or contact yassin
+        axios.post("http://192.168.138.176:9001/users/signup",userCredential) //check the ip address run cmd ipconfig or contact yassin
        
-        .then(res=>console.log(res,"data"))
+        .then((res)=>{
+          Alert.alert('welcome to valeria')
+          console.log(res,"data")})
         .catch(err=>console.log(err))
 console.log( name, lastname)
 
