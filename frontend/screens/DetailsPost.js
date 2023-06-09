@@ -50,6 +50,8 @@ export default function DetailsPost({ data, index }) {
                 <TouchableOpacity style={styles.com} onPress={handleComment}>
                   <Icon name="chatbox-outline" size={30} color="#A47E53" />
                   <Text style={styles.desc}>{comments}</Text>
+                  <Icon name="bookmarks-outline" size={27} color={"#A47E53"} style={margin="5"}/>
+
                 </TouchableOpacity>
               </View>
         </View>
