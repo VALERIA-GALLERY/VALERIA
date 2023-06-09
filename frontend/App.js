@@ -1,26 +1,40 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, Button, Alert, TouchableOpacity } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-// import Profile from "./screens/profile1"
+import * as ScreenshotDetector from 'react-native-screenshot-detect';
+
+
+// Your other imports and screen components
 import CreatePost from './screens/Create';
 import Login from './screens/login/login';
 import SignUp from './screens/signup/signUp';
 import SignUp2 from './screens/signup/signup2';
-import  Home from './screens/Acceuil'
-import TabNav from './navigation/TabNav'
+import Home from './screens/Acceuil';
+import TabNav from './navigation/TabNav';
 import Comments from './screens/Comments';
 import W1 from './screens/welcomeScreens/Welcome1';
 import W2 from './screens/welcomeScreens/Welcome2';
 import W3 from './screens/welcomeScreens/Welcome3';
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  
-  return (
+  useEffect(() => {
+    ScreenshotDetector.addListener(onScreenshotTaken);
 
-    
+    return () => {
+      ScreenshotDetector.removeListener(onScreenshotTaken);
+    };
+  }, []);
+
+  const onScreenshotTaken = () => {
+    Alert.alert('Screenshot detected', 'Taking screenshots is not allowed in this app.');
+    // Add any custom logic you want to execute when a screenshot is taken
+  };
+
+  return (
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Welcome', headerShown: false }} />
@@ -31,7 +45,6 @@ export default function App() {
         <Stack.Screen name="login" component={Login} options={{ title: 'Login',headerShown: false }} />
         <Stack.Screen name="SignUp2" component={SignUp2} options={{ title: 'SignUp2',headerShown: false }} />
         <Stack.Screen name="CreatePost" component={CreatePost} options={{ title: 'ProfileComponent',headerShown: false }} />
-  
         <Stack.Screen name="TabNav" component={TabNav} options={{ headerShown: false  }} />
         <Stack.Screen name="Acceuil" component={Home} options={{ title: 'Acceuil',headerShown: false  }} />
         <Stack.Screen name="Comments" component={Comments} />
@@ -39,6 +52,7 @@ export default function App() {
     </NavigationContainer>
   );
 }
+
 const HomeScreen = () => {
   const navigation = useNavigation();
 
@@ -52,7 +66,7 @@ const HomeScreen = () => {
       <TouchableOpacity style={styles.button2} onPress={() => navigation.navigate('W1')} >
         <Text style={styles.buttonText2}>Welcome</Text>
       </TouchableOpacity>
-      <Text style={styles.footer}>© Valeria 2023</Text>
+      <Text style={styles.footer}>Â© Valeria 2023</Text>
     </View>
   );
 };
