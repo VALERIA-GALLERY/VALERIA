@@ -14,6 +14,7 @@ import Comments from './screens/Comments';
 import W1 from './screens/welcomeScreens/Welcome1';
 import W2 from './screens/welcomeScreens/Welcome2';
 import W3 from './screens/welcomeScreens/Welcome3';
+import Profile from './screens/profile1';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -23,7 +24,7 @@ export default function App() {
     
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Welcome', headerShown: false }} />
+        {/* <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Welcome', headerShown: false }} />
         <Stack.Screen name="Signup" component={SignUp} options={{ title: 'SignUp',headerShown: false  }} />
         <Stack.Screen name="W1" component={W1} options={{ title: 'welcome',headerShown: false  }} />
         <Stack.Screen name="W2" component={W2} options={{ title: 'welcome',headerShown: false  }} />
@@ -33,8 +34,8 @@ export default function App() {
         <Stack.Screen name="CreatePost" component={CreatePost} options={{ title: 'ProfileComponent',headerShown: false }} />
   
         <Stack.Screen name="TabNav" component={TabNav} options={{ headerShown: false  }} />
-        <Stack.Screen name="Acceuil" component={Home} options={{ title: 'Acceuil',headerShown: false  }} />
-        <Stack.Screen name="Comments" component={Comments} />
+        <Stack.Screen name="Acceuil" component={Home} options={{ title: 'Acceuil',headerShown: false  }} /> */}
+        <Stack.Screen name="Profile" component={Profile} />
       </Stack.Navigator>
     </NavigationContainer>
   );
