@@ -1,4 +1,5 @@
-import React from 'react';
+import React , { useEffect, useState } from 'react';
+import axios from 'axios'
 import {ImageBackground,
   SafeAreaView,
    ScrollView,
@@ -17,6 +18,20 @@ import data from '../dummydatabase/data'
 export default function Home () {
   console.log('welcome to home');
   const image={uri:'https://i.pinimg.com/originals/50/b3/f3/50b3f3520f8c37cc54e7dd245b5ecf6d.jpg'}
+  const [data, setData] = useState([]);
+
+  const fetchData = () => {
+    axios.get('http://192.168.76.54:9001/post/')
+      .then((res) => {
+        setData(res.data);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <View  style={styles.imageContainer}>
   
@@ -36,8 +51,8 @@ export default function Home () {
            
         
       <ScrollView>
-            {data.map((item, index) => {
-              return (<DetailsPost data={item} index={index} key={index}/>);
+            {data.map((e) => {
+              return (<DetailsPost data={e} />);
             })}
           </ScrollView>
     </SafeAreaView>
@@ -46,12 +61,12 @@ export default function Home () {
   </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    
   },
-  header: {
+  header: {  
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',

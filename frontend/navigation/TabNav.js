@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text,Image } from 'react-native';
 import { Feather, Ionicons, FontAwesome, FontAwesome5 } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -58,8 +58,9 @@ const {user } = route.params;
         options={{
           tabBarIcon: ({focused}) => (
             <Ionicons name='chatbox-outline' size={24} color={focused ? COLORS.primary : COLORS.brown}/>
-          ),
-        }}
+            ),
+          }}
+          // <Image source={require("../assets/plus.JPG")} size={24} color={focused ? COLORS.primary : COLORS.brown}/>
       />
       <Tab.Screen
         name="Create"
@@ -82,7 +83,7 @@ const {user } = route.params;
               <Feather name="plus" size={45} color={COLORS.white} />
             </LinearGradient>
           ),
-        }}
+        }} 
       />
       <Tab.Screen
         name="Search"
