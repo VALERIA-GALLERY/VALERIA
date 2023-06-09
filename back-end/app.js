@@ -6,12 +6,14 @@ var logger = require('morgan');
 var user = require("./controller/test")
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var cors = require('cors')
+const post = require('./routes/post');
 
 
 
 var app = express();
 var Port=9001 
-
+app.use(cors())
 app.use(express.json({ limit: "100mb" }));
 app.use(express.urlencoded({ extended: true, limit: "100mb" }));
 // view engine setup
@@ -28,6 +30,9 @@ app.use('/', indexRouter);
 app.use('/userss', user.getAll);
 
 app.use('/users',usersRouter);
+
+
+app.use('/post', post);
 
 app.listen(Port,()=> console.log(`Server is listening to port ${Port}`))
 
