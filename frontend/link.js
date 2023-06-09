@@ -1,2 +1,2 @@
-const link="http://192.168.1.12:9001"
+const link="http://192.168.100.21:9001"
 export default link
