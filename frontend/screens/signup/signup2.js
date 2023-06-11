@@ -7,6 +7,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { useRoute } from '@react-navigation/native';
 import client from '../../client';
 import Spinner from 'react-native-loading-spinner-overlay';
+import link from '../../link';
 
 export default function SignUp2(){
   const navigation=useNavigation()
@@ -43,7 +44,7 @@ export default function SignUp2(){
     const createAccount= async()=>{
       setLoading(true)
         console.log("pass")
-        axios.post("http://192.168.100.6:9001/users/signup",userCredential) //check the ip address run cmd ipconfig or contact yassin
+        axios.post(`${link}/users/signup`,userCredential) //check the ip address run cmd ipconfig or contact yassin
        
         .then(res=> {
           setLoading(false)

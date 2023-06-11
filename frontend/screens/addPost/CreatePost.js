@@ -19,8 +19,8 @@ export default function CreatePost() {
   const [description, setDescription] = useState("");
   const [photo, setPhoto] = useState(null);
 
-  // const route = useRoute();
-  // const {user} = route.params;
+  const route = useRoute();
+  const {user} = route.params;
 
   const selectPhoto = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({

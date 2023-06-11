@@ -13,7 +13,13 @@ async function createPost(postData) {
     data: completePostData,
   });
 
-  return newPost;
+  return newPost; 
 }
 
-module.exports = createPost;
+async function getAllPosts(){
+ const posts =await prisma.posts.findMany()
+  return(posts) 
+ } 
+
+
+module.exports = {createPost,getAllPosts};

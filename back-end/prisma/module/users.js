@@ -8,7 +8,7 @@ async function addUser(data) {
   const user = await prisma.users.create({
     data: { id : data.id,
     username : data.username,
-    firstname:  data.firstname, //check this in the front
+    firstname:  data.firstname, 
     lastname  : data.lastname,
     email  : data.email,
     profilepic: data.profilePic,
@@ -32,12 +32,6 @@ async function getUserById(id) {
 
   return user;
 }
-async function getAlpost(idpost){
-  const post=await prisma.posts.findMany({
-    where:{
-      id:idpost,
-    }
-  })
-}
 
-module.exports = {addUser, getUserById,getAlpost}
+
+module.exports = {addUser, getUserById}
