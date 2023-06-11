@@ -1,2 +1,2 @@
-const link="192.168.43.100"
-module.exports=link
+const link="http://192.168.101.7:9001"
+export default link

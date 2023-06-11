@@ -95,7 +95,7 @@ const {user } = route.params;
       />
       <Tab.Screen
         name="Profile"
-        // initialParams={{ user: user }}
+        initialParams={{ user: user }}
         component={Profile} 
         options={{
           tabBarIcon: ({focused}) => (

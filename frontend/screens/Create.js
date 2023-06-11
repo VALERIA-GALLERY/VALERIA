@@ -12,10 +12,11 @@ import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
 import LOGO_PATH from "../assets/qq.png";
 import { LinearGradient } from "expo-linear-gradient";
-import url from "../link";
-import { useRoute } from "@react-navigation/native";
+import link from "../link";
 
-export default function CreatePost() {
+
+export default function CreatePost({ route }) {
+  const { user } = route.params;
   const [description, setDescription] = useState("");
   const [photo, setPhoto] = useState(null);
 
@@ -48,15 +49,16 @@ export default function CreatePost() {
     });
     axios
       .post(
-        `http://${url}:9001/post/create`,
+      `${link}/post/create`,
         {
-          description: "Description",
+          description: description,
           pic: photo,
           likes: [],
           comments: [],
           premiem: false,
-          // userid: user.id
-        },
+          userid: user.id
+        }
+        ,
         {
           headers: {
             "Content-Type": "application/json",
