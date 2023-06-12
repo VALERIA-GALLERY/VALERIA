@@ -7,6 +7,8 @@ import * as ImagePicker from 'expo-image-picker';
 import { useRoute } from '@react-navigation/native';
 import client from '../../client';
 import Spinner from 'react-native-loading-spinner-overlay';
+import url from '../../link'
+
 
 export default function SignUp2(){
   const navigation=useNavigation()
