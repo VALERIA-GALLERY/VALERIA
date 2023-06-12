@@ -25,11 +25,9 @@ export default function Login() {
 
 
   const userlogin=(id)=>{
-console.log("link",link)
 axios.get(`${link}/users/login/${id}`) //check the ip address run cmd ipconfig or contact yassin
 .then(res=>{
   setLoading(false)
-  console.log(res.data)
   navigation.navigate('TabNav',{user : res.data})
   setUserData(res.data)})
 .catch(err=>{

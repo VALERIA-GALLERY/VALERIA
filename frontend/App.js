@@ -84,7 +84,7 @@ button2: {
     width: 327,
     height: 55,
     top: 130,
-  },
+  },  
   footer: {
     
     fontSize: 13,

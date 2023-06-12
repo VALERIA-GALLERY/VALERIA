@@ -11,17 +11,23 @@ import {ImageBackground,
        TouchableOpacity} from 'react-native';
 import DetailsPost from './DetailsPost';
 import Icon from 'react-native-vector-icons/Ionicons';
-// import data from '../dummydatabase/data'
-import  link  from '../link';
 
 
-export default function Home () {
-  console.log('welcome to home');
+import data from '../dummydatabase/data'
+import link from '../link';
+
+
+
+export default function Home ({route}) {
+  const {user} = route.params;
+  console.log(user.userid, "log");
   const image={uri:'https://i.pinimg.com/originals/50/b3/f3/50b3f3520f8c37cc54e7dd245b5ecf6d.jpg'}
   const [data, setData] = useState([]);
 
   const fetchData = () => {
-    axios.get('http://192.168.1.133:9001/post/')
+
+    axios.get(`${link}/post/`)
+
       .then((res) => {
         setData(res.data);
       })
@@ -52,7 +58,9 @@ export default function Home () {
         
       <ScrollView>
             {data.map((e) => {
-              return (<DetailsPost data={e}  />);
+
+              return (<DetailsPost data={e} />);
+
             })}
           </ScrollView>
     </SafeAreaView>
