@@ -11,6 +11,7 @@ import { useRoute } from '@react-navigation/native';
  import Create from '../screens/Create';
 import Search from '../screens/Search';
 import Profile from '../screens/profile1';
+import Conversations from '../screens/conversations';
 
 const Tab = createBottomTabNavigator();
 
@@ -40,7 +41,9 @@ const screenOptions = {
 const Tabs = () => {
    
 const route = useRoute();
-const {user} = route.params;
+
+const {user } = route.params;
+
   return (
     <Tab.Navigator screenOptions={screenOptions}>
       <Tab.Screen
@@ -54,8 +57,9 @@ const {user} = route.params;
         }}
       />
       <Tab.Screen
-        name="Chat"
-        component={Chat} 
+        name="Conversations"
+        initialParams={{ user: user }}
+        component={Conversations} 
         options={{
           tabBarIcon: ({focused}) => (
             <Ionicons name='chatbox-outline' size={24} color={focused ? COLORS.primary : COLORS.brown}/>

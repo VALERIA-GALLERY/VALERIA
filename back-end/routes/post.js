@@ -11,4 +11,3 @@ router.get("/comments/:userId", post.getCommentsByUser);
 router.post("/comments/:postId", post.addComment);
 
 module.exports = router;
-

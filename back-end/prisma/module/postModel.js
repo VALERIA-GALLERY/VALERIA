@@ -78,4 +78,3 @@ async function addComment(postId, userId, comment) {
 
 
 module.exports = { createPost, getAllPosts, getCommentsByUser, addComment };
-
