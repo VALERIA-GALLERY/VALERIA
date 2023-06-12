@@ -27,40 +27,41 @@ model posts {
 }
 
 model users {
-  id                                                   String               @id @default(dbgenerated("gen_random_uuid()"))
-  username                                             String
-  firstname                                            String
-  lastname                                             String
-  email                                                String
-  profilepic                                           String
-  artist                                               Boolean
-  followers                                            String[]
-  birthday                                             String
-  follows                                              String[]
-  conversations_conversations_user1Tousers             conversations[]      @relation("conversations_user1Tousers")
-  conversations_conversations_user2Tousers             conversations[]      @relation("conversations_user2Tousers")
-  posts                                                posts[]
-  usersconversations_usersconversations_userid1Tousers usersconversations[] @relation("usersconversations_userid1Tousers")
-  usersconversations_usersconversations_userid2Tousers usersconversations[] @relation("usersconversations_userid2Tousers")
+  id         String   @id @default(dbgenerated("gen_random_uuid()"))
+  username   String
+  firstname  String
+  lastname   String
+  email      String
+  profilepic String
+  artist     Boolean
+  followers  String[]
+  birthday   String
+  follows    String[]
+  posts      posts[]
 }
 
-model conversations {
-  id                               String               @id @default(dbgenerated("gen_random_uuid()"))
-  user1                            String?
-  user2                            String?
-  conversation                     Json[]
-  users_conversations_user1Tousers users?               @relation("conversations_user1Tousers", fields: [user1], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  users_conversations_user2Tousers users?               @relation("conversations_user2Tousers", fields: [user2], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  usersconversations               usersconversations[]
+model comments {
+  id      String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  comment String?
+  userid  String?
+  postid  String?
 }
 
-model usersconversations {
-  userid1                                 String
-  userid2                                 String
-  conversation_id                         String
-  conversations                           conversations @relation(fields: [conversation_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  users_usersconversations_userid1Tousers users         @relation("usersconversations_userid1Tousers", fields: [userid1], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  users_usersconversations_userid2Tousers users         @relation("usersconversations_userid2Tousers", fields: [userid2], references: [id], onDelete: NoAction, onUpdate: NoAction)
+model follows {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  following_ids String[] @db.Uuid
+  followers_ids String[] @db.Uuid
+}
 
-  @@id([userid1, userid2, conversation_id])
+model chat {
+  id            String   @id @default(dbgenerated("gen_random_uuid()"))
+  users         String[]
+  latestmessage String?
+}
+
+model messages {
+  id      String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  sender  String?
+  content String?
+  chat    String?
 }
