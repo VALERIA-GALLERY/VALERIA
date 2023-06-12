@@ -15,6 +15,7 @@ async function createPost(postData) {
   });
 
   return newPost; 
+
 }
 
 async function getAllPosts() {
@@ -77,3 +78,4 @@ async function addComment(postId, userId, comment) {
 
 
 module.exports = { createPost, getAllPosts, getCommentsByUser, addComment };
+

@@ -1,5 +1,11 @@
+
+
 const cloudinary = require("cloudinary").v2;
+
+
+
 const { createPost, getAllPosts, getCommentsByUser, addComment } = require("../prisma/module/postModel");
+
 
 cloudinary.config({
   cloud_name: "di9jvr1du",
@@ -61,3 +67,13 @@ exports.addComment = async (req, res) => {
     res.status(500).send('An error occurred');
   }
 };
+
+exports.getAll = async (req, res) => {
+  try {  const allPosts = await getAllPosts(); 
+
+    res.send(allPosts); 
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('we have an error');
+  }
+} 
