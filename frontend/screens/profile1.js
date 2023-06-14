@@ -156,28 +156,25 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Alert, PixelRatio } from 'react-native';
 import { Feather, Ionicons, FontAwesome, FontAwesome5 } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import link from '../link';
 
-const Profile = () => {
-  const userData = {
-    username: "rbk.tn", 
-    followers: ["sami", "samir"],
-    follows: ["sami", "samir"],
-    posts: "pic"
+const Profile = ({route}) => {
+  const {user}=route.params
+const [userData,setUserData]=useState({})
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async (id) => {
+    try {
+      const response = await fetch(`${link}/user/${user.id}`);
+   
+      setUserData(response.data);
+    } catch (error) {
+      console.error(error);
+    }
   };
-
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
-
-  // const fetchData = async (id) => {
-  //   try {
-  //     const response = await fetch(`http://192.168.75.4:9001/user/${id}`);
-  //     const jsonData = await response.json();
-  //     setUserData(jsonData);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
 
   const handlePress = () => {
     Alert.alert('Button Pressed!');
