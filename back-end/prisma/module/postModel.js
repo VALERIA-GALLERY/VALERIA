@@ -8,7 +8,7 @@ async function createPost(postData) {
   const completePostData = {
     ...postData,
     date_time,
-    pic: [postData.pic], // Wrap the single picture URL in an array
+    pic: [...postData.pic], // Wrap the single picture URL in an array
   };
 
   const newPost = await prisma.posts.create({
