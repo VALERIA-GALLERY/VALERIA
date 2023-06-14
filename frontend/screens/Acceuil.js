@@ -35,11 +35,15 @@ export default function Home () {
             <Text style={styles.feed} >Feed</Text>
            
         
-      <ScrollView>
+      {/* <ScrollView>
             {data.map((item, index) => {
               return (<DetailsPost data={item} index={index} key={index}/>);
             })}
-          </ScrollView>
+          </ScrollView> */}
+           <FlatList
+            data={data}
+            renderItem={({ item, index }) => <DetailsPost data={item} index={index}/>}
+          />
     </SafeAreaView>
   </ImageBackground>
   

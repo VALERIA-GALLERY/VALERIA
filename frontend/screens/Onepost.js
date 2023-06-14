@@ -149,7 +149,7 @@ import React, { useState } from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 
-export default function OnePost() {
+export default function OnePost({data}) {
   const data = {
     pic: "picture",
     likes: 22,
