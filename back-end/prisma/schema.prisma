@@ -18,7 +18,7 @@ model posts {
   id          String   @id @default(dbgenerated("gen_random_uuid()"))
   description String
   date_time   String
-  pic         String
+  pic         String[]
   likes       String[]
   comments    String[]
   premiem     Boolean

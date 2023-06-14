@@ -16,13 +16,38 @@ cloudinary.config({
 exports.createPost = async (req, res) => {
   const data = req.body;
   console.log(data);
-  await cloudinary.uploader.upload(data.pic, (err, result) => {
-    if (err) {
-      console.log(err);
-    } else {
+
+  if (Array.isArray(data.pic)) {
+    // Multiple pictures were uploaded
+    const picUrls = [];
+    try {
+      for (const pic of data.pic) {
+        try {
+          const result = await cloudinary.uploader.upload(pic);
+          picUrls.push(result.secure_url);
+        } catch (error) {
+          console.error(error);
+          res.status(500).send('An error occurred during picture upload');
+          return;
+        }
+      }
+      data.pic = picUrls;
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('An error occurred during picture upload');
+      return;
+    }
+  } else {
+    // Single picture was uploaded
+    try {
+      const result = await cloudinary.uploader.upload(data.pic);
       data.pic = result.secure_url;
-    } 
-  });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('An error occurred during picture upload');
+      return;
+    }
+  }
 
   try {
     const newPost = await createPost(data);
@@ -32,6 +57,8 @@ exports.createPost = async (req, res) => {
     res.status(500).send('An error occurred');
   }
 };
+
+
 
 exports.getAll = async (req, res) => {
   try {

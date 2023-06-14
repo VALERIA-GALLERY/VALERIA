@@ -43,7 +43,7 @@ export default function DetailsPost({ data, index }) {
       <ScrollView>
         <View key={index} style={styles.post}>
           <ImageBackground
-            source={{ uri: data.pic }}
+            source={{ uri:data.pic[0] }}
             style={styles.image}
             resizeMode='stretch'>
             <View style={styles.postHeader}>

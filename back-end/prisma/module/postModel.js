@@ -8,20 +8,28 @@ async function createPost(postData) {
   const completePostData = {
     ...postData,
     date_time,
+    pic: [postData.pic], // Wrap the single picture URL in an array
   };
 
   const newPost = await prisma.posts.create({
     data: completePostData,
   });
 
-  return newPost; 
-
+  return newPost;
 }
+
+
 
 async function getAllPosts() {
-  const posts = await prisma.posts.findMany();
+  const posts = await prisma.posts.findMany({
+    include: {
+      users: true,
+    },
+  });
+
   return posts;
 }
+
 
 async function getCommentsByUser(userId) {
   const comments = await prisma.comments.findMany({

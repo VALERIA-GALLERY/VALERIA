@@ -7,6 +7,7 @@ import {
   Alert,
   TouchableOpacity,
   Image,
+  ScrollView
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
@@ -18,10 +19,7 @@ import link from "../link";
 export default function CreatePost({ route }) {
   const { user } = route.params;
   const [description, setDescription] = useState("");
-  const [photo, setPhoto] = useState(null);
-
-  // const route = useRoute();
-  // const {user} = route.params;
+  const [photos, setPhotos] = useState([]);
 
   const selectPhoto = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -30,35 +28,40 @@ export default function CreatePost({ route }) {
       aspect: [3, 4],
       base64: true,
       quality: 1,
+      allowsMultipleSelection: true, // allow multiple selection
     });
 
-    setPhoto("data:image/jpeg;base64," + result.base64);
+    if (!result.canceled) {
+      setPhotos([...photos, "data:image/jpeg;base64," + result.base64]);
+    }
   };
 
   const handleSubmit = () => {
-    if (!description || !photo) {
-      Alert.alert("Description and photo required.");
+    if (!description || photos.length === 0) {
+      Alert.alert("Description and photos required.");
       return;
     }
 
     let formData = new FormData();
-    formData.append("file", {
-      uri: photo,
-      name: "image.jpg",
-      type: "image/jpg",
+    photos.forEach((photo, index) => {
+      formData.append(`file${index}`, {
+        uri: photo,
+        name: `image${index}.jpg`,
+        type: "image/jpg",
+      });
     });
+
     axios
       .post(
-      `${link}/post/create`,
+        `${link}/post/create`,
         {
           description: description,
-          pic: photo,
+          pics: photos,
           likes: [],
           comments: [],
           premiem: false,
           userid: user.id
-        }
-        ,
+        },
         {
           headers: {
             "Content-Type": "application/json",
@@ -83,13 +86,18 @@ export default function CreatePost({ route }) {
         onChangeText={(text) => setDescription(text)}
         style={styles.input}
       />
-      {photo && <Image source={{ uri: photo }} style={styles.photo} />}
-      <TouchableOpacity style={styles.button} onPress={selectPhoto}>
-        <Text style={styles.buttonText2}>+</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button2} onPress={handleSubmit}>
-        <Text style={styles.buttonText}>Post</Text>
-      </TouchableOpacity>
+      <ScrollView horizontal={true} style={{flexDirection:'row'}}>
+  {photos.map((photo, index) => (
+    <Image key={index} source={{ uri: photo }} style={styles.photo} />
+  ))}
+</ScrollView>
+
+    <TouchableOpacity style={styles.button} onPress={selectPhoto}>
+      <Text style={styles.buttonText2}>+</Text>
+    </TouchableOpacity>
+    <TouchableOpacity style={styles.button2} onPress={handleSubmit}>
+      <Text style={styles.buttonText}>Post</Text>
+    </TouchableOpacity>
     </View>
   );
 }
@@ -122,9 +130,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   photo: {
-    width: 130,
-    height: 130,
+    width: 70,
+    height: 70,
     borderRadius: 15,
+    margin: 10,
   },
   button: {
     backgroundColor: "#B4966A",
@@ -134,6 +143,7 @@ const styles = StyleSheet.create({
     marginTop: 130,
     justifyContent: "center",
     alignItems: "center",
+    marginBottom:10,
   },
   buttonText2: {
     bottom: 5,
@@ -146,7 +156,7 @@ const styles = StyleSheet.create({
     borderRadius: 55,
     width: 100,
     alignItems: "center",
-    margin: 5,
+    marginBottom: 100,
   },
   buttonText: {
     fontSize: 16,
