@@ -56,15 +56,16 @@ export default function Home ({route}) {
             <Text style={styles.feed} >Feed</Text>
            
         
-      {/* <ScrollView>
-            {data.map((item, index) => {
-              return (<DetailsPost data={item} index={index} key={index}/>);
+      <ScrollView>
+            {data.map((e) => {
+
+              return (<DetailsPost data={e} />);
+
             })}
-          </ScrollView> */}
-           <FlatList
+          </ScrollView>
+          {/* <FlatList
             data={data}
-            renderItem={({ item, index }) => <DetailsPost data={item} index={index}/>}
-          />
+             renderItem={({ item, index }) => <DetailsPost data={item} index={index}/>}           /> */}
     </SafeAreaView>
   </ImageBackground>
   

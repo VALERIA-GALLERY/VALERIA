@@ -5,7 +5,7 @@ async function getUser(req, res) {
   const userId = req.params.id;
 
   try {
-    const user = await prisma.users.findUnique({ where: { id: Number(userId) } });
+    const user = await prisma.users.findUnique({ where: { id: userId } });
     res.send(user);
   } catch (error) {
     console.error(error);

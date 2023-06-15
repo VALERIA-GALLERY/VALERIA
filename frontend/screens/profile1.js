@@ -224,7 +224,7 @@ import { useRoute } from '@react-navigation/native';
 import axios from 'axios';
 import link from "../link"
 
-const Profile = () => {
+export default Profile = () => {
   
   const route = useRoute();
   const { user } = route.params;
