@@ -16,7 +16,10 @@ import W2 from './screens/welcomeScreens/Welcome2';
 import W3 from './screens/welcomeScreens/Welcome3';
 import Conversations from './screens/conversations';
 import Chat from './screens/Chat';
+<<<<<<< HEAD
 import Onepost from './screens/Onepost';
+=======
+>>>>>>> a9cb1c920b348ccc32ff3f48fcda7987cb06b8cb
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -39,8 +42,11 @@ export default function App() {
         <Stack.Screen name="Acceuil" component={Home} options={{ title: 'Acceuil',headerShown: false  }} />
         <Stack.Screen name="Comments" component={Comments} />
         <Stack.Screen name="Chat" component={Chat} options={{ title: 'Acceuil',headerShown: false  }} />
+<<<<<<< HEAD
         <Stack.Screen name="OnePost" component={Onepost} options={{ title: '',headerShown: true , }} />
 
+=======
+>>>>>>> a9cb1c920b348ccc32ff3f48fcda7987cb06b8cb
       </Stack.Navigator>
     </NavigationContainer>
   );

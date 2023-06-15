@@ -43,10 +43,10 @@ export default function DetailsPost({ data, index }) {
       <Pressable
         key={index}
         style={styles.post}
-        onPress={() => navigation.navigate("OnePost", { data })}
+        onPress={() => navigation.navigate("New", { data })}
       >
         <ImageBackground
-          source={{ uri: data.pic }}
+          source={{ uri: data.pic[0] }}
           style={styles.image}
           resizeMode="stretch"
         >

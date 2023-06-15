@@ -40,12 +40,15 @@ model users {
   posts      posts[]
 }
 
+<<<<<<< HEAD
 model chat {
   id            String   @id @default(dbgenerated("gen_random_uuid()"))
   users         String[]
   latestmessage String?
 }
 
+=======
+>>>>>>> a9cb1c920b348ccc32ff3f48fcda7987cb06b8cb
 model comments {
   id      String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   comment String?
@@ -59,6 +62,15 @@ model follows {
   followers_ids String[] @db.Uuid
 }
 
+<<<<<<< HEAD
+=======
+model chat {
+  id            String   @id @default(dbgenerated("gen_random_uuid()"))
+  users         String[]
+  latestmessage String?
+}
+
+>>>>>>> a9cb1c920b348ccc32ff3f48fcda7987cb06b8cb
 model messages {
   id      String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   sender  String?

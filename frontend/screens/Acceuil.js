@@ -1,4 +1,5 @@
-import React from 'react';
+import React , { useEffect, useState } from 'react';
+import axios from 'axios'
 import {ImageBackground,
   SafeAreaView,
    ScrollView,
@@ -10,13 +11,33 @@ import {ImageBackground,
        TouchableOpacity} from 'react-native';
 import DetailsPost from './DetailsPost';
 import Icon from 'react-native-vector-icons/Ionicons';
+
+
 import data from '../dummydatabase/data'
+import link from '../link';
 
 
 
-export default function Home () {
-  console.log('welcome to home');
+export default function Home ({route}) {
+  const {user} = route.params;
+  console.log(user.userid, "log");
   const image={uri:'https://i.pinimg.com/originals/50/b3/f3/50b3f3520f8c37cc54e7dd245b5ecf6d.jpg'}
+  const [data, setData] = useState([]);
+
+  const fetchData = () => {
+
+    axios.get(`${link}/post/`)
+
+      .then((res) => {
+        setData(res.data);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <View  style={styles.imageContainer}>
   
@@ -50,12 +71,12 @@ export default function Home () {
   </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    
   },
-  header: {
+  header: {  
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',

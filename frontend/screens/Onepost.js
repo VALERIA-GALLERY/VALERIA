@@ -149,15 +149,17 @@ import React, { useState } from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 
-export default function OnePost({data}) {
-  const data = {
-    pic: "picture",
-    likes: 22,
-    name: "mohamed",
-    comments: ["hello", "hi"],
-    description: "helloworld",
-    date_time: "12.11.2022",
-  };
+export default function OnePost({route}) {
+  // const data = {
+  //   pic: "picture",
+  //   likes: 22,
+  //   name: "mohamed",
+  //   comments: ["hello", "hi"],
+  //   description: "helloworld",
+  //   date_time: "12.11.2022",
+  // };
+  const { data } = route.params;
+
 
   const [likes, setLikes] = useState(data.likes);
   const [isLiked, setIsLiked] = useState(false);
@@ -179,7 +181,7 @@ export default function OnePost({data}) {
 
   return (
     <View style={styles.container}>
-      <Image source={{ uri: data.pic }} style={styles.image} resizeMode="cover" />
+      <Image source={{ uri: data.pic[0] }} style={styles.image} resizeMode="cover" />
       <View style={styles.postHeader}>
         <Text style={styles.name}>{data.name}</Text>
         <Text style={styles.date}>{data.date_time}</Text>
