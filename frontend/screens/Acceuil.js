@@ -63,6 +63,9 @@ export default function Home ({route}) {
 
             })}
           </ScrollView>
+          {/* <FlatList
+            data={data}
+             renderItem={({ item, index }) => <DetailsPost data={item} index={index}/>}           /> */}
     </SafeAreaView>
   </ImageBackground>
   
