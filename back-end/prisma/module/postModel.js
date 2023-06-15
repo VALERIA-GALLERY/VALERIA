@@ -17,7 +17,6 @@ async function createPost(postData) {
   return newPost; 
 
 }
-
 async function getAllPosts() {
   const posts = await prisma.posts.findMany();
   return posts;
@@ -30,6 +29,7 @@ async function getCommentsByUser(userId) {
     },
   });
 
+
   const commentsWithPost = [];
 
   for (const comment of comments) {
@@ -41,7 +41,7 @@ async function getCommentsByUser(userId) {
         users: true,
       },
     });
-
+  
     commentsWithPost.push({
       ...comment,
       post,
@@ -50,7 +50,6 @@ async function getCommentsByUser(userId) {
 
   return commentsWithPost;
 }
-
 
 async function addComment(postId, userId, comment) {
   const newComment = await prisma.comments.create({

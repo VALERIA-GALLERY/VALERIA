@@ -13,7 +13,7 @@ const messages = require("./routes/messagesRoute")
 const cors = require('cors')
 const post = require('./routes/post');
 const { Socket } = require('socket.io');
-
+const userpostpostsRouter = require('./routes/userpost');
 
 
 
@@ -41,6 +41,8 @@ app.use('/users',usersRouter);
 
 
 app.use('/post', post);
+
+app.use('/userposts', userpostpostsRouter);
 
 io.on('connection', socket=> {
     console.log("socket connected  ")

@@ -74,7 +74,13 @@ console.log(user.followers.length)
             </View>
 
           </React.Fragment>
-        )}
+        )}{posts.map((e,i)=>{
+          return(
+            
+          )
+        })}
+
+
       </View>
       {/* <Text style={styles.title}>Profile</Text> */}
     </View>
