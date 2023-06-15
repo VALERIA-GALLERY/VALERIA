@@ -1,28 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Alert, PixelRatio } from 'react-native';
-import { Feather, Ionicons, FontAwesome, FontAwesome5 } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
+=import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import link from '../link';
+import axios from 'axios';
 
-const Profile = ({route}) => {
-  const {user}=route.params
-const [userData,setUserData]=useState({})
-const [posts,setposts]=useState({})
-console.log(user.followers.length)
+const Profile = ({ route }) => {
+  const { user } = route.params;
+
+  const [userData, setUserData] = useState({});
+  const [posts, setPosts] = useState([]);
+
   useEffect(() => {
-    fetchData();
+    axios
+      .get(`${link}/userposts/user/q5O9DkOzVqXXmurC9lWJCgfiPkH2`)
+      .then((res) => {
+        console.log(res.data, "res.data");
+        setPosts(res.data);
+      })
+      .catch((err) => console.log(err));
   }, []);
-
-  const fetchData = async (id) => {
-    try {
-      const response = await fetch(`${link}/user/${user.id}`);
-   
-      setUserData(response.data);
-      console.log(userData);
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   const handlePress = () => {
     Alert.alert('Button Pressed!');
@@ -32,57 +28,47 @@ console.log(user.followers.length)
     <View style={styles.container}>
       <View style={styles.profileContainer}>
         {user && (
-          <React.Fragment>
+          <>
             <View style={styles.profileImageContainer}>
               <Image source={{ uri: user.profilepic }} style={styles.profileImage} />
             </View>
-            
+
             <Text style={styles.username}>{user.username}</Text>
 
-            
             <View style={styles.infoContainer}>
-            <View style={styles.infoItem}>
-                <Text style={styles.infoLabel}> Posts </Text>
-                {/* <Text style={styles.infoText}>{posts.length}</Text> */}
-
+              <View style={styles.infoItem}>
+                <Text style={styles.infoLabel}>Posts</Text>
+                <Text style={styles.infoText}>{posts.length}</Text>
               </View>
               <View style={styles.infoItem}>
-                <Text style={styles.infoLabel}> Followers </Text>
+                <Text style={styles.infoLabel}>Followers</Text>
                 <Text style={styles.infoText}>{user.followers.length}</Text>
-
               </View>
               <View style={styles.infoItem}>
-                <Text style={styles.infoLabel}>Follows </Text>
+                <Text style={styles.infoLabel}>Follows</Text>
                 <Text style={styles.infoText}>{user.follows.length}</Text>
               </View>
             </View>
 
-       <View style={styles.form}>
-              <View style={styles.gallery}>
-                   {/* <TouchableOpacity onPress={handlePress} style={[styles.button, styles.galleryButton]}>
-                   <Text style={styles.buttonText}>Gallery</Text>
-                   </TouchableOpacity> */}
-                   <Feather name="image" size={35} color={"black"} />
-            </View>
-               <View style={styles.save}>
-                   {/* <TouchableOpacity onPress={handlePress} style={[styles.button, styles.favoritesButton]}>
-                   <Text style={styles.buttonText}>Add to Favorites</Text>
-                   </TouchableOpacity> */}
-                   <Feather name="bookmark" size={35} color={"black"} />
+            <View style={styles.form}>
+              <TouchableOpacity onPress={handlePress} style={[styles.button, styles.galleryButton]}>
+                <Text style={styles.buttonText}>Gallery</Text>
+              </TouchableOpacity>
 
+              <TouchableOpacity onPress={handlePress} style={[styles.button, styles.favoritesButton]}>
+                <Text style={styles.buttonText}>Add to Favorites</Text>
+              </TouchableOpacity>
             </View>
-            </View>
+          </>
+        )}
 
-          </React.Fragment>
-        )}{posts.map((e,i)=>{
+        {posts.map((post, index) =>{ 
+          console.log(post.pic[0])
           return(
-            
-          )
-        })}
-
-
+          
+          <Image key={index} source={{ uri: post.pic[0] }} style={styles.postImage} />
+        )})}
       </View>
-      {/* <Text style={styles.title}>Profile</Text> */}
     </View>
   );
 };
@@ -107,20 +93,9 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     marginBottom: 10,
   },
-form:{
- top:95,
-},
-gallery:{
-  right:110,
-},
-save:{
- top:-31,
- left:110,
-},
-
-
-
-
+  form: {
+    marginTop: 20,
+  },
   profileImage: {
     width: '100%',
     height: '100%',
@@ -137,17 +112,14 @@ save:{
     justifyContent: 'space-around',
     marginBottom: 20,
     paddingHorizontal: 40,
-    right:25,
   },
   infoItem: {
-    marginHorizontal: 80,
     alignItems: 'center',
   },
   infoText: {
     fontSize: 40,
     fontWeight: '600',
     marginTop: 10,
-
   },
   infoLabel: {
     fontSize: 16,
@@ -172,9 +144,11 @@ save:{
   favoritesButton: {
     backgroundColor: '#262626',
   },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
+  postImage: {
+    width: 200,
+    height: 200,
+    resizeMode: 'cover',
+    marginBottom: 10,
   },
 });
 
