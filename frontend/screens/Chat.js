@@ -27,7 +27,7 @@ function Chat() {
   const [checkSocket, setCheckSocket] = useState(false);
   const [messageReceived, setMessageReceived] = useState('');
   const [foreign, setForeign] = useState();
-  const socket = io('http://192.168.1.14:8001');
+  const socket = io('http://192.168.227.176:8001');
   const scrollViewRef = useRef();
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const navigation = useNavigation();
