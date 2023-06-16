@@ -4,16 +4,19 @@ var user = require("../controller/test")
 var us=require("../controller/getupdateUser")
 var post= require("../controller/getupdateUser")
 
-/* GET home page. */
-router.get('/', user.getAll);
-/*  get one user and update name and picture for user */
-router.get('/',us.getUser)
-router.put('/',us.updateUser)
 
-// get one user and update keys  of user
+router.get('/',getUser)
+router.put('/',updateUser)
 
-router.get('/user/:id',us.getUser);
-router.put('/user/update/:id',us.updateUser);
+
+router.put('/',updateUser)
+
+router.get('/user/post/:id',getUserPosts)
+
+router.get('/user/:id',getUser);
+router.put('/user/update/:id',updateUser);
+
+
 
 
 
