@@ -8,7 +8,7 @@ async function addUser(data) {
   const user = await prisma.users.create({
     data: { id : data.id,
     username : data.username,
-    firstname:  data.firstname, //check this in the front
+    firstname:  data.firstname, 
     lastname  : data.lastname,
     email  : data.email,
     profilepic: data.profilePic,

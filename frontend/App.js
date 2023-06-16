@@ -14,6 +14,8 @@ import Comments from './screens/Comments';
 import W1 from './screens/welcomeScreens/Welcome1';
 import W2 from './screens/welcomeScreens/Welcome2';
 import W3 from './screens/welcomeScreens/Welcome3';
+import Conversations from './screens/conversations';
+import Chat from './screens/Chat';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -31,10 +33,11 @@ export default function App() {
         <Stack.Screen name="login" component={Login} options={{ title: 'Login',headerShown: false }} />
         <Stack.Screen name="SignUp2" component={SignUp2} options={{ title: 'SignUp2',headerShown: false }} />
         <Stack.Screen name="CreatePost" component={CreatePost} options={{ title: 'ProfileComponent',headerShown: false }} />
-  
+        <Stack.Screen name="conversations" component={Conversations} options={{ title: 'conversations',headerShown: false  }} />
         <Stack.Screen name="TabNav" component={TabNav} options={{ headerShown: false  }} />
         <Stack.Screen name="Acceuil" component={Home} options={{ title: 'Acceuil',headerShown: false  }} />
         <Stack.Screen name="Comments" component={Comments} />
+        <Stack.Screen name="Chat" component={Chat} options={{ title: 'name',headerShown: true }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

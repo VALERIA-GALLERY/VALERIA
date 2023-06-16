@@ -18,7 +18,6 @@ async function createPost(postData) {
 
 async function getAllPosts(){
  const posts =await prisma.posts.findMany()
- console.log(posts)
   return(posts) 
  } 
 

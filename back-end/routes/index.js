@@ -4,7 +4,7 @@ var user = require("../controller/test")
 var {getUser, updateUser}=require("../controller/getupdateUser")
 
 
-router.get('/',getUser)
+
 router.put('/',updateUser)
 
 
