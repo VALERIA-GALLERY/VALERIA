@@ -36,20 +36,17 @@ const screenOptions = {
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
   }
-};
+};  
 
 const Tabs = () => {
    
 const route = useRoute();
-
 const {user } = route.params;
-
   return (
     <Tab.Navigator screenOptions={screenOptions}>
       <Tab.Screen
         name="Acceuil"
         component={Acceuil} 
-        initialParams={{ user: user }}
         options={{
           tabBarIcon: ({focused}) => (
             <Feather name='home' size={24} color={focused ? COLORS.primary : COLORS.brown}/>
