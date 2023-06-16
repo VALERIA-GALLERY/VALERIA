@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var user = require("../controller/test")
 var us=require("../controller/getupdateUser")
+var post= require("../controller/getupdateUser")
 
 /* GET home page. */
 router.get('/', user.getAll);
