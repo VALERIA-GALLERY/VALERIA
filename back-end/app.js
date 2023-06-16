@@ -17,8 +17,6 @@ const { Socket } = require('socket.io');
 
 
 
-const follow = require ('./routes/follows')
-const search =require('./routes/search')
 
 var app = express();
 var Port=9001 
@@ -48,7 +46,6 @@ app.use('/post', post);
 app.use('/follow',follow)
 app.use('/search',search)
 app.listen(Port,()=> console.log(`Server is listening to port ${Port}`))
-
 
 io.on('connection', socket=> {
     console.log("socket connected  ")
