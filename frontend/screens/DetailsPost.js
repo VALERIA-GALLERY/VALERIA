@@ -9,6 +9,7 @@ import {
   Image,
   View,
   TouchableOpacity,
+  Pressable,
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
@@ -22,7 +23,7 @@ export default function DetailsPost({ data, index }) {
 
   const handleLike = () => {
     if (isLiked) {
-        // If already liked, then decrement the likes and change isLiked state to false
+      // If already liked, then decrement the likes and change isLiked state to false
       setLikes(likes - 1);
       setIsLiked(false);
     } else {
@@ -38,49 +39,51 @@ export default function DetailsPost({ data, index }) {
     navigation.navigate("Comments", { postId: data.id });
   };
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle='dark-content' />
-      <ScrollView>
-        <View key={index} style={styles.post}>
-          <ImageBackground
-            source={{ uri: data.pic }}
-            style={styles.image}
-            resizeMode='stretch'>
-            <View style={styles.postHeader}>
-              <Icon name='person-circle-outline' size={30} color='#fff' />
-              <View style={styles.user}>
-                <Text style={styles.name}>{data.name}</Text>
-                <Text style={styles.date}>{data.date_time}</Text>
-              </View>
-              <Icon size={30} color='#fff' />
+    <View style={styles.container}>
+      <Pressable
+        key={index}
+        style={styles.post}
+        onPress={() => navigation.navigate("OnePost", { data })}
+      >
+        <ImageBackground
+          source={{ uri: data.pic[0] }}
+          style={styles.image}
+          resizeMode="stretch"
+        >
+          <View style={styles.postHeader}>
+            <Icon name="person-circle-outline" size={30} color="#fff" />
+            <View style={styles.user}>
+              <Text style={styles.name}>{data.name}</Text>
+              <Text style={styles.date}>{data.date_time}</Text>
             </View>
-            <View style={styles.postFooter}>
-              <Text style={styles.desc}>{data.description}</Text>
-            </View>
-          </ImageBackground>
-          <View style={styles.likecom}>
-            <TouchableOpacity style={styles.like} onPress={handleLike}>
-              <Icon
-                name={isLiked ? "heart" : "heart-outline"}
-                size={30}
-                color={isLiked ? "#A47E53" : "#A47E53"}
-              />
-              <Text style={styles.desc}>{likes}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.com} onPress={handleComment}>
-              <Icon name='chatbox-outline' size={30} color='#A47E53' />
-              <Text style={styles.desc}>{comments}</Text>
-              {/* <Icon
+            <Icon size={30} color="#fff" />
+          </View>
+          <View style={styles.postFooter}>
+            <Text style={styles.desc}>{data.description}</Text>
+          </View>
+        </ImageBackground>
+        <View style={styles.likecom}>
+          <TouchableOpacity style={styles.like} onPress={handleLike}>
+            <Icon
+              name={isLiked ? "heart" : "heart-outline"}
+              size={30}
+              color={isLiked ? "#A47E53" : "#A47E53"}
+            />
+            <Text style={styles.desc}>{likes}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.com} onPress={handleComment}>
+            <Icon name="chatbox-outline" size={30} color="#A47E53" />
+            <Text style={styles.desc}>{comments}</Text>
+            {/* <Icon
                 name='bookmarks-outline'
                 size={27}
                 color={"#A47E53"}
                 style={(margin = "5")}
               /> */}
-            </TouchableOpacity>
-          </View>
+          </TouchableOpacity>
         </View>
-      </ScrollView>
-    </SafeAreaView>
+      </Pressable>
+    </View>
   );
 }
 
@@ -88,6 +91,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+    marginVertical: "2%",
+    width: "95%",
+    alignSelf: "center",
+    borderRadius: 10,
   },
   post: {
     marginBottom: 10,

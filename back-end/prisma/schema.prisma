@@ -18,7 +18,7 @@ model posts {
   id          String   @id @default(dbgenerated("gen_random_uuid()"))
   description String
   date_time   String
-  pic         String
+  pic         String[]
   likes       String[]
   comments    String[]
   premiem     Boolean
@@ -40,6 +40,12 @@ model users {
   posts      posts[]
 }
 
+model chat {
+  id            String   @id @default(dbgenerated("gen_random_uuid()"))
+  users         String[]
+  latestmessage String?
+}
+
 model comments {
   id      String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   comment String?
@@ -48,15 +54,9 @@ model comments {
 }
 
 model follows {
-  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  following_ids String[] @db.Uuid
-  followers_ids String[] @db.Uuid
-}
-
-model chat {
-  id            String   @id @default(dbgenerated("gen_random_uuid()"))
-  users         String[]
-  latestmessage String?
+  id               String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  current_user_id  String? @db.Uuid
+  foreign_user_ids String? @db.Uuid
 }
 
 model messages {
