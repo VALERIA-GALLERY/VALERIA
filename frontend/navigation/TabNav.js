@@ -89,6 +89,7 @@ const {user } = route.params;
       <Tab.Screen
         name="Search"
         component={Search} 
+        initialParams={{ user: user }}
         options={{
           tabBarIcon: ({focused}) => (
             <FontAwesome5 name='search' size={24} color={focused ? COLORS.primary : COLORS.brown}/>
