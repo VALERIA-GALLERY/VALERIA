@@ -16,6 +16,7 @@ import W2 from './screens/welcomeScreens/Welcome2';
 import W3 from './screens/welcomeScreens/Welcome3';
 import Conversations from './screens/conversations';
 import Chat from './screens/Chat';
+import DetailsPost from './screens/DetailsPost';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -38,6 +39,7 @@ export default function App() {
         <Stack.Screen name="Acceuil" component={Home} options={{ title: 'Acceuil',headerShown: false  }} />
         <Stack.Screen name="Comments" component={Comments} />
         <Stack.Screen name="Chat" component={Chat} options={{ title: 'Acceuil',headerShown: false  }} />
+        <Stack.Screen name="Details" component={DetailsPost} options={{ title: 'Acceuil',headerShown: false  }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

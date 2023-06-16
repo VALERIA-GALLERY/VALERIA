@@ -13,7 +13,6 @@ import DetailsPost from './DetailsPost';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 
-import data from '../dummydatabase/data'
 import link from '../link';
 
 
@@ -23,7 +22,7 @@ export default function Home ({route}) {
   console.log(user.userid, "log");
   const image={uri:'https://i.pinimg.com/originals/50/b3/f3/50b3f3520f8c37cc54e7dd245b5ecf6d.jpg'}
   const [data, setData] = useState([]);
-
+console.log(data, "data")
   const fetchData = () => {
 
     axios.get(`${link}/post/`)

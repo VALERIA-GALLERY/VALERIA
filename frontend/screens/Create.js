@@ -7,19 +7,20 @@ import {
   Alert,
   TouchableOpacity,
   Image,
-  ScrollView
+  ScrollView,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
-import LOGO_PATH from "../assets/qq.png";
-import { LinearGradient } from "expo-linear-gradient";
 import link from "../link";
-
+import Spinner from "react-native-loading-spinner-overlay";
+import { useNavigation } from "@react-navigation/native";
 
 export default function CreatePost({ route }) {
   const { user } = route.params;
   const [description, setDescription] = useState("");
   const [photos, setPhotos] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const navigation = useNavigation();
 
   const selectPhoto = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -51,16 +52,17 @@ export default function CreatePost({ route }) {
       });
     });
 
+    setIsLoading(true);
     axios
       .post(
         `${link}/post/create`,
         {
           description: description,
-          pics: photos,
+          pic: photos,
           likes: [],
           comments: [],
           premiem: false,
-          userid: user.id
+          userid: user.id,
         },
         {
           headers: {
@@ -69,16 +71,24 @@ export default function CreatePost({ route }) {
         },
       )
       .then((response) => {
-        Alert.alert("Post created successfully!");
+        navigation.navigate("Acceuil");
+        setIsLoading(false);
       })
       .catch((error) => {
         console.error(error);
+
         Alert.alert("Failed to create post.");
+        setIsLoading(false);
       });
   };
 
   return (
     <View style={styles.container}>
+      <Spinner
+        visible={isLoading}
+        textContent={"Loading..."}
+        textStyle={styles.spinnerTextStyle}
+      />
       <Image source={require("../assets/qq.png")} style={styles.logo} />
       <TextInput
         placeholder='Description'
@@ -86,18 +96,18 @@ export default function CreatePost({ route }) {
         onChangeText={(text) => setDescription(text)}
         style={styles.input}
       />
-      <ScrollView horizontal={true} style={{flexDirection:'row'}}>
-  {photos.map((photo, index) => (
-    <Image key={index} source={{ uri: photo }} style={styles.photo} />
-  ))}
-</ScrollView>
+      <ScrollView horizontal={true} style={{ flexDirection: "row" }}>
+        {photos.map((photo, index) => (
+          <Image key={index} source={{ uri: photo }} style={styles.photo} />
+        ))}
+      </ScrollView>
 
-    <TouchableOpacity style={styles.button} onPress={selectPhoto}>
-      <Text style={styles.buttonText2}>+</Text>
-    </TouchableOpacity>
-    <TouchableOpacity style={styles.button2} onPress={handleSubmit}>
-      <Text style={styles.buttonText}>Post</Text>
-    </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={selectPhoto}>
+        <Text style={styles.buttonText2}>+</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button2} onPress={handleSubmit}>
+        <Text style={styles.buttonText}>Post</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -113,7 +123,7 @@ const styles = StyleSheet.create({
   logo: {
     width: 200,
     height: 70,
-    marginBottom: 110, 
+    marginBottom: 110,
   },
   content: {
     alignItems: "center",
@@ -143,7 +153,7 @@ const styles = StyleSheet.create({
     marginTop: 130,
     justifyContent: "center",
     alignItems: "center",
-    marginBottom:10,
+    marginBottom: 10,
   },
   buttonText2: {
     bottom: 5,
@@ -163,5 +173,7 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontWeight: "bold",
   },
+  spinnerTextStyle: {
+    color: "#FFF",
+  },
 });
-
