@@ -10,6 +10,7 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const conversation= require("./routes/conversations")
 const messages = require("./routes/messagesRoute")
+const userpostpostsRouter = require('./routes/userpost');
 const cors = require('cors')
 const post = require('./routes/post');
 const { Socket } = require('socket.io');
@@ -32,6 +33,8 @@ app.use(express.json());
 
 app.use(cookieParser());
 app.use('/api/messages', messages);
+
+app.use('/userposts', userpostpostsRouter);
 
 app.use('/conversation', conversation);
 app.use('/', indexRouter);
