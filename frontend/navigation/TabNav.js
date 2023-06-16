@@ -14,11 +14,10 @@ import Profile from '../screens/profile1';
 
 const Tab = createBottomTabNavigator();
 
-// Define your colors
 const COLORS = {
-  primary: '#A47E53', // replace with your primary color
-  brown: '#A47E53', // replace with your brown color
-  white: '#ffffff' // replace with your white color
+  primary: '#A47E53', 
+  brown: '#A47E53', 
+  white: '#ffffff' 
 };
 
 const screenOptions = {

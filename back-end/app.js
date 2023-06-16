@@ -8,8 +8,8 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var cors = require('cors')
 const post = require('./routes/post');
-
-
+const follow = require ('./routes/follows')
+const search =require('./routes/search')
 
 var app = express();
 var Port=9001 
@@ -31,9 +31,9 @@ app.use('/userss', user.getAll);
 
 app.use('/users',usersRouter);
 
-
 app.use('/post', post);
-
+app.use('/follow',follow)
+app.use('/search',search)
 app.listen(Port,()=> console.log(`Server is listening to port ${Port}`))
 
 

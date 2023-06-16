@@ -11,14 +11,14 @@ import {ImageBackground,
          TouchableOpacity} from 'react-native';
 
  import { Feather, Ionicons,AntDesign, FontAwesome5 } from '@expo/vector-icons';
-
+import link from '../link';
  function Search() {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [reload, setReload] = useState(Date.now()); // Add this line
 
   const fetchData = () => {
-    axios.get('http://192.168.1.133:9001/userss')
+    axios.get(`${link}:9001/userss`)
       .then((res) => {
         setSearchResults(res.data);
       })

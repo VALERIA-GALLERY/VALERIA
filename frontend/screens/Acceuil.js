@@ -21,7 +21,7 @@ export default function Home () {
   const [data, setData] = useState([]);
 
   const fetchData = () => {
-    axios.get('http://192.168.1.133:9001/post/')
+    axios.get('http://192.168.100.3:9001/post/')
       .then((res) => {
         setData(res.data);
       })
@@ -87,7 +87,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold', 
     lineHeight:24,
-    // right:127.3,
    left:25 ,
    
   },
@@ -102,7 +101,7 @@ const styles = StyleSheet.create({
  
   image: {
     flex: 1,
-    borderRadius: 20, // You can change this value as per your need
+    borderRadius: 20, 
   overflow: 'hidden',
     
   },
