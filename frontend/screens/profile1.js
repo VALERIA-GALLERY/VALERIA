@@ -3,22 +3,31 @@ import { View, Text, StyleSheet, Image, TouchableOpacity, Alert, ScrollView, Fla
 import { Feather } from '@expo/vector-icons';
 import link from '../link';
 import axios from 'axios';
+import Subscription from './Subscription';
+import { MaterialIcons } from '@expo/vector-icons';
+
 
 const Profile = ({ route }) => {
   const { user } = route.params;
 
   const [userData, setUserData] = useState({});
   const [posts, setPosts] = useState([]);
+const [premiem, setPremiem]= useState(0)
 
+const changePremium=()=>{
+  user.premium=true
+  setPremiem(Math.random() * 3)
+  console.log(user.premium,'pass')
+}
   useEffect(() => {
     axios
-      .get(`${link}/userposts/user/q5O9DkOzVqXXmurC9lWJCgfiPkH2`)
+      .get(`${link}/userposts/user/${user.id}`)
       .then((res) => {
         console.log(res.data, "res.data");
         setPosts(res.data);
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [premiem]);
 
   const handlePress = () => {
     Alert.alert('Button Pressed!');
@@ -37,6 +46,12 @@ const Profile = ({ route }) => {
 
         <Text style={styles.username}>{user.username}</Text>
 
+        {user.premium === false ? (
+          <Subscription premium={changePremium} id={user.id} />
+        ) : (
+          <MaterialIcons style={styles.icon} name="verified" size={24} color="#d4af37" />
+        )}
+
         <View style={styles.infoContainer}>
           <View style={styles.infoItem}>
             <Text style={styles.infoLabel}>Posts</Text>
@@ -53,7 +68,6 @@ const Profile = ({ route }) => {
         </View>
 
         <View style={styles.buttonContainer}>
-         
           <TouchableOpacity onPress={handlePress} style={styles.button}>
             <Feather name="menu" size={22} color="black" />
           </TouchableOpacity>
@@ -132,8 +146,8 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     alignItems: 'center',
     justifyContent: 'center',
-    top:-200,
-    left:330
+    top: -200,
+    left: 330,
   },
   editProfileButton: {
     backgroundColor: '#fff',
@@ -156,6 +170,10 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     margin: 1,
   },
+  icon:{
+left:180,
+top:-10
+  }
 });
 
 export default Profile;
