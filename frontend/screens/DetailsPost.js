@@ -33,10 +33,10 @@ export default function DetailsPost({ data, index }) {
   };
 
   const handleComment = () => {
-    // You can navigate to the comment section or implement your own logic for handling comments
-
-    navigation.navigate("Comments", { postId: data.id });
+    navigation.navigate("Comments", { postId: data.id, user: data.userid });
   };
+  
+  
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle='dark-content' />

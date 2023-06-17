@@ -29,60 +29,46 @@ async function getAllPosts() {
 
   return posts;
 }
-
-
-async function getCommentsByUser(userId) {
+async function getCommentsByPost(postId) {
   const comments = await prisma.comments.findMany({
-    where: {
-      userid: userId,
-    },
+    where: { postid: postId },
   });
 
-  const commentsWithPost = [];
+  const userIds = comments
+    .map((comment) => comment.userid)
+    .filter((userid) => userid !== null); // Filter out null values
 
-  for (const comment of comments) {
-    const post = await prisma.posts.findUnique({
-      where: {
-        id: comment.postid,
-      },
-      include: {
-        users: true,
-      },
-    });
+  const commentUsers = await prisma.users.findMany({
+    where: { id: { in: userIds } },
+  });
 
-    commentsWithPost.push({
-      ...comment,
-      post,
-    });
-  }
+  const commentsWithUsers = comments.map((comment) => {
+    if (comment.userid !== null) {
+      const user = commentUsers.find((user) => user.id === comment.userid);
+      return { ...comment, user };
+    } else {
+      return comment;
+    }
+  });
 
-  return commentsWithPost;
+  return commentsWithUsers;
 }
 
-
-async function addComment(postId, userId, comment) {
+async function addComment(commentData) {
   const newComment = await prisma.comments.create({
     data: {
-      comment,
-      userid: userId,
-      postid: postId,
+      userid: commentData.user,
+      postid: commentData.post,
+      comment: commentData.comment,
     },
   });
 
-  const post = await prisma.posts.findUnique({
-    where: {
-      id: postId,
-    },
-    include: {
-      users: true,
-    },
-  });
-
-  return {
-    ...newComment,
-    post,
-  };
+  return newComment;
 }
 
+module.exports = { createPost, getAllPosts, getCommentsByPost, addComment };
 
-module.exports = { createPost, getAllPosts, getCommentsByUser, addComment };
+
+module.exports = { createPost, getAllPosts, getCommentsByPost, addComment };
+
+
