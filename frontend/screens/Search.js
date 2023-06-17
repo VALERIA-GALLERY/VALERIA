@@ -11,16 +11,24 @@ import {ImageBackground,
          TouchableOpacity} from 'react-native';
 
  import { Feather, Ionicons,AntDesign, FontAwesome5 } from '@expo/vector-icons';
+import link from '../link';
+ function Search({route}) {
+  const { user } = route.params;
 
- function Search() {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [reload, setReload] = useState(Date.now()); // Add this line
 
   const fetchData = () => {
-    axios.get('http://192.168.1.133:9001/userss')
+    axios.get(`${link}/userss`)
       .then((res) => {
         setSearchResults(res.data);
+      })
+      .catch((err) => console.log(err));
+      axios.get(`${link}/search/getall`)
+      .then((res) => {
+        setSearchResults(res.data);
+        console.log("geted")
       })
       .catch((err) => console.log(err));
   };
@@ -30,15 +38,34 @@ import {ImageBackground,
   }, [reload]);
 
   const handleSearch = (text) => {
-    setSearchTerm(text);
-    const filteredUsers = searchResults.filter((user) =>
-      user.username.toLowerCase().includes(text.toLowerCase())
-    );
-    setSearchResults(filteredUsers);
+    // setSearchTerm(text);
+    // const filteredUsers = searchResults.filter((user) =>
+    //   user.username.toLowerCase().includes(text.toLowerCase())
+    // );
+    // setSearchResults(filteredUsers);
   };
   const forceReload = () => { // Add this function
     setReload(Date.now());
   };
+
+  const handlePost=()=>{
+   axios.post(`${link}/search/addsearch`,{
+    search_history_id:searchTerm,
+    user_id:user.id
+  }).then((res) => {
+    setSearchResults(res.data);
+    console.log("syee")
+  })
+  .catch((err) => console.log(err));
+  }
+  const handledelet=()=>{
+    axios.delete(`${link}/delete/${user.id}`)
+    .then((res) => {
+      setSearchResults(res.data);
+      console.log("fasakh nayek")
+    })
+    .catch((err) => console.log(err));
+  }
   return (
    <View style={styles.container}>
     {/* <Text>search here </Text> */}
@@ -48,9 +75,10 @@ import {ImageBackground,
         value={searchTerm}
         onChangeText={handleSearch}
       />
+      
    <TouchableOpacity onPress={() => handleSearch(searchTerm)}>
-        <View style={styles.search}>
-          <Feather name='search' size={33} color='#A47E53' />
+        <View style={styles.search} >
+          <Feather name='search' size={33} color='#A47E53' onPress={handlePost} />
         </View>
       </TouchableOpacity>
       <TouchableOpacity  onPress={forceReload}>
@@ -60,7 +88,7 @@ import {ImageBackground,
         <Text>Cancel</Text>
         </View>
         </TouchableOpacity>
-     <FlatList
+     {/* <FlatList
         data={searchResults}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
@@ -68,7 +96,16 @@ import {ImageBackground,
             <Text style={styles.username}>{item.username}</Text>
           </View>
         )}
-      />
+      /> */}
+         {/* <FlatList
+        data={searchResults}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <View >
+            <Text style={styles.hist}>{item.search_history_id}<Feather name='x-circle' size={30} onPress={handledelet}/></Text>
+          </View>
+        )}
+      /> */}
    </View>
   )
 }''
@@ -104,6 +141,13 @@ const styles = StyleSheet.create({
     top:130,
     color: '#A47E53',
   },
+  hist:{
+    fontSize: 16,
+    fontWeight: 'bold',
+    top:130,
+    color: '#A47E53',
+  },
+
 
   search:{
     top:95,

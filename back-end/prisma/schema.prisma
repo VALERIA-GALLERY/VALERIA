@@ -33,7 +33,7 @@ model users {
   lastname   String
   email      String
   profilepic String
-  artist     Boolean
+  premium    Boolean
   followers  String[]
   birthday   String
   follows    String[]
@@ -48,9 +48,9 @@ model comments {
 }
 
 model follows {
-  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  following_ids String[] @db.Uuid
-  followers_ids String[] @db.Uuid
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  current_user_ids String[]
+  foreign_user_ids String[]
 }
 
 model chat {
@@ -64,4 +64,10 @@ model messages {
   sender  String?
   content String?
   chat    String?
+}
+
+model search_history {
+  id                Int     @id @default(autoincrement())
+  search_history_id String? @db.VarChar(255)
+  user_id           String? @db.VarChar(255)
 }

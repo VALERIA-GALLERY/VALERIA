@@ -38,21 +38,18 @@ async function getCommentsByPost(postId) {
     .map((comment) => comment.userid)
     .filter((userid) => userid !== null); // Filter out null values
 
-  const commentUsers = await prisma.users.findMany({
+  const users = await prisma.users.findMany({
     where: { id: { in: userIds } },
   });
 
   const commentsWithUsers = comments.map((comment) => {
-    if (comment.userid !== null) {
-      const user = commentUsers.find((user) => user.id === comment.userid);
-      return { ...comment, user };
-    } else {
-      return comment;
-    }
+    const user = users.find((user) => user.id === comment.userid);
+    return { ...comment, user }; // Add user data to the comment
   });
 
   return commentsWithUsers;
 }
+
 
 async function addComment(commentData) {
   const newComment = await prisma.comments.create({
@@ -65,9 +62,6 @@ async function addComment(commentData) {
 
   return newComment;
 }
-
-module.exports = { createPost, getAllPosts, getCommentsByPost, addComment };
-
 
 module.exports = { createPost, getAllPosts, getCommentsByPost, addComment };
 

@@ -10,6 +10,9 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const conversation= require("./routes/conversations")
 const messages = require("./routes/messagesRoute")
+const follow=require("./routes/follow")
+const search=require("./routes/search")
+const userpostpostsRouter = require('./routes/userpost');
 const cors = require('cors')
 const post = require('./routes/post');
 const { Socket } = require('socket.io');
@@ -33,6 +36,8 @@ app.use(express.json());
 app.use(cookieParser());
 app.use('/api/messages', messages);
 
+app.use('/userposts', userpostpostsRouter);
+
 app.use('/conversation', conversation);
 app.use('/', indexRouter);
 app.use('/userss', user.getAll);
@@ -41,7 +46,8 @@ app.use('/users',usersRouter);
 
 
 app.use('/post', post);
-
+app.use('/follow',follow)
+app.use('/search',search)
 io.on('connection', socket=> {
     console.log("socket connected  ")
 
