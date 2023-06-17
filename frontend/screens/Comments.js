@@ -1,15 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons'; // Import the icon component
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  FlatList,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+} from "react-native";
+import Icon from "react-native-vector-icons/Ionicons"; // Import the icon component
 import axios from "axios";
-import link from '../link';
+import link from "../link";
 
 export default function Comments({ route }) {
   const { postId, user } = route.params;
 
-  const initialComments = [{ comment: 'Initial comment 1' }, { comment: 'Initial comment 2' }];
+  const initialComments = [
+    { comment: "Initial comment 1" },
+    { comment: "Initial comment 2" },
+  ];
   const [comments, setComments] = useState(initialComments);
-  const [newComment, setNewComment] = useState('');
+  const [newComment, setNewComment] = useState("");
 
   useEffect(() => {
     fetchComments();
@@ -18,7 +29,9 @@ export default function Comments({ route }) {
   const fetchComments = async () => {
     try {
       const timestamp = Date.now();
-      const response = await axios.get(`${link}/post/${postId}/comments/?timestamp=${timestamp}`);
+      const response = await axios.get(
+        `${link}/post/${postId}/comments/?timestamp=${timestamp}`,
+      );
       setComments(response.data);
     } catch (error) {
       console.error(error);
@@ -26,16 +39,19 @@ export default function Comments({ route }) {
   };
 
   const handleAddComment = async () => {
-    if (newComment.trim() === '') {
+    if (newComment.trim() === "") {
       return;
     }
 
     const addedComment = { user: user, post: postId, comment: newComment };
     try {
-      const response = await axios.post(`${link}/post/${postId}/comments/`, addedComment);
+      const response = await axios.post(
+        `${link}/post/${postId}/comments/`,
+        addedComment,
+      );
       const newCommentData = response.data;
       setComments((prevComments) => [...prevComments, newCommentData]);
-      setNewComment('');
+      setNewComment("");
     } catch (error) {
       console.error(error);
     }
@@ -48,12 +64,15 @@ export default function Comments({ route }) {
           data={comments}
           renderItem={({ item }) => (
             <View style={styles.singleCommentContainer}>
-              <Icon
-                name='person-circle-outline'
-                size={25}
-                color='#B4966A'
-                style={styles.commentIcon}
-              />
+            <View>
+                <Icon
+                  name='person-circle-outline'
+                  size={25}
+                  color='#B4966A'
+                  style={styles.commentIcon}
+                />
+                <Text style={styles.userName}>{item.user?.firstname}</Text>
+              </View>
               <Text style={styles.singleCommentText}>{item.comment}</Text>
             </View>
           )}
@@ -69,8 +88,7 @@ export default function Comments({ route }) {
           />
           <TouchableOpacity
             style={styles.commentButton}
-            onPress={handleAddComment}
-          >
+            onPress={handleAddComment}>
             <Text style={styles.commentText}>Add a comment</Text>
           </TouchableOpacity>
         </View>
@@ -88,14 +106,14 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-    width: '90%',
+    width: "90%",
     marginHorizontal: 20,
     marginTop: 20,
   },
   commentContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     marginTop: 16,
   },
   commentInput: {
@@ -134,17 +152,21 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    flexDirection: "row", 
-    alignItems: "center", 
+    flexDirection: "row",
+    alignItems: "center",
   },
   singleCommentText: {
-    marginLeft: 15, 
+    marginLeft: 15,
     fontSize: 15,
     color: "#000",
   },
   commentIcon: {
     position: "absolute",
-    top: -27, 
-    left: 10, 
+    top: -37,
+    left: 10,
+  },
+  userName: {
+    fontSize: 15,
+    color: '#000',
   },
 });
