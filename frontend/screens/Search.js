@@ -17,7 +17,7 @@ import link from '../link';
 
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  const [reload, setReload] = useState(Date.now()); // Add this line
+  const [reload, setReload] = useState(Date.now()); 
 
   const fetchData = () => {
     axios.get(`${link}/userss`)
@@ -44,7 +44,7 @@ import link from '../link';
     );
     setSearchResults(filteredUsers);
   };
-  const forceReload = () => { // Add this function
+  const forceReload = () => { 
     setReload(Date.now());
   };
 
@@ -68,7 +68,6 @@ import link from '../link';
   }
   return (
    <View style={styles.container}>
-    {/* <Text>search here </Text> */}
     <TextInput
         style={styles.input}
         placeholder='Search what do you want'
@@ -84,7 +83,6 @@ import link from '../link';
       <TouchableOpacity  onPress={forceReload}>
 
       <View style={styles.reload}>
-        {/* <AntDesign name='reload1' size={33} color='#A47E53'/> */}
         <Text>Cancel</Text>
         </View>
         </TouchableOpacity>
@@ -127,7 +125,7 @@ const styles = StyleSheet.create({
     borderBottomWidth:0.5,
     borderBottomColor:"#A47E53",
     backgroundColor:'#fff',
-    borderRadius: 20, // You can change this value as per your need
+    borderRadius: 20, 
      overflow: 'hidden',
   },
   listItem: {
