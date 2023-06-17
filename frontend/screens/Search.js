@@ -17,7 +17,7 @@ import link from '../link';
 
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  const [reload, setReload] = useState(Date.now()); 
+  const [reload, setReload] = useState(Date.now()); // Add this line
 
   const fetchData = () => {
     axios.get(`${link}/userss`)
@@ -38,13 +38,13 @@ import link from '../link';
   }, [reload]);
 
   const handleSearch = (text) => {
-    setSearchTerm(text);
-    const filteredUsers = searchResults.filter((user) =>
-      user.username.toLowerCase().includes(text.toLowerCase())
-    );
-    setSearchResults(filteredUsers);
+    // setSearchTerm(text);
+    // const filteredUsers = searchResults.filter((user) =>
+    //   user.username.toLowerCase().includes(text.toLowerCase())
+    // );
+    // setSearchResults(filteredUsers);
   };
-  const forceReload = () => { 
+  const forceReload = () => { // Add this function
     setReload(Date.now());
   };
 
@@ -68,6 +68,7 @@ import link from '../link';
   }
   return (
    <View style={styles.container}>
+    {/* <Text>search here </Text> */}
     <TextInput
         style={styles.input}
         placeholder='Search what do you want'
@@ -83,10 +84,11 @@ import link from '../link';
       <TouchableOpacity  onPress={forceReload}>
 
       <View style={styles.reload}>
+        {/* <AntDesign name='reload1' size={33} color='#A47E53'/> */}
         <Text>Cancel</Text>
         </View>
         </TouchableOpacity>
-     <FlatList
+     {/* <FlatList
         data={searchResults}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
@@ -94,8 +96,8 @@ import link from '../link';
             <Text style={styles.username}>{item.username}</Text>
           </View>
         )}
-      />
-         <FlatList
+      /> */}
+         {/* <FlatList
         data={searchResults}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
@@ -103,7 +105,7 @@ import link from '../link';
             <Text style={styles.hist}>{item.search_history_id}<Feather name='x-circle' size={30} onPress={handledelet}/></Text>
           </View>
         )}
-      />
+      /> */}
    </View>
   )
 }''
@@ -125,7 +127,7 @@ const styles = StyleSheet.create({
     borderBottomWidth:0.5,
     borderBottomColor:"#A47E53",
     backgroundColor:'#fff',
-    borderRadius: 20, 
+    borderRadius: 20, // You can change this value as per your need
      overflow: 'hidden',
   },
   listItem: {
