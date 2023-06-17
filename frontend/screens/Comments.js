@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 8,
     marginBottom: 10,
-    marginTop: 25, // half the icon's size
+    marginTop: 25,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
