@@ -33,7 +33,7 @@ model users {
   lastname   String
   email      String
   profilepic String
-  artist     Boolean
+  premium    Boolean
   followers  String[]
   birthday   String
   follows    String[]

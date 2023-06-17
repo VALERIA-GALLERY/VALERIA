@@ -12,7 +12,7 @@ async function addUser(data) {
     lastname  : data.lastname,
     email  : data.email,
     profilepic: data.profilePic,
-    artist  :   false,
+    premium  :   false,
     followers : data.followers,
     birthday :  data.birthday,
     follows    :data.follows,
