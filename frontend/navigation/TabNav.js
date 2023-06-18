@@ -100,11 +100,20 @@ const {user } = route.params;
         name="Profile"
         initialParams={{ user: user }}
         component={Profile} 
+        // options={{
+        //   tabBarIcon: ({focused}) => (
+        //     <FontAwesome name='user-circle' size={24} color={focused ? COLORS.primary : COLORS.brown}/>
+        //   ),
+        // }}
         options={{
-          tabBarIcon: ({focused}) => (
-            <FontAwesome name='user-circle' size={24} color={focused ? COLORS.primary : COLORS.brown}/>
+          tabBarIcon: ({ focused }) => (
+            <Image
+            source={{ uri: user.profilepic }}
+              style={{ width: 27, height: 27,   borderRadius: 50}}
+            />
           ),
         }}
+        
       />
     </Tab.Navigator>
   )
