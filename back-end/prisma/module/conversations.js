@@ -60,6 +60,35 @@ async function handleMessage(msg){
 return message
 }
 
+async function latestMessage(conv){
+  const latest = await prisma.chat.update({
+    where: {
+      id: conv.id
+    },
+    data: {
+      latestmessage: conv.msg
+    }
+  });
+return latest
+}
 
-  module.exports ={createConversation,findUsers, handleMessage}
+async function getConversation(uid) {
+  const conversations = await prisma.$queryRaw
+  `SELECT c.id, array_agg(json_build_object('id', u.id, 'username', u.username, 'firstname', u.firstname, 'lastname', u.lastname, 'email', u.email, 'profilepic', u.profilepic, '	premium', u.premium, 'followers', u.followers, 'birthday', u.birthday, 'follows', u.follows  )) as users, c.latestmessage
+  FROM chat AS c
+  JOIN users AS u ON c.users @> ARRAY[u.id]
+  WHERE c.users @> ARRAY[${uid}]
+  GROUP BY c.id;
+  `;
+
+  return conversations.map((conversation) => ({
+    id: conversation.id,
+    users: conversation.users,
+    latestmessage: conversation.latestmessage,
+  }));
+}
+
+
+
+  module.exports ={createConversation,findUsers, handleMessage, latestMessage, getConversation}
   

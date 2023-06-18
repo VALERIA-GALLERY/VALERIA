@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
         marginTop: 50,
         width: 327,
         height: 55,
-        // top: 700,
+        top: 700,
         left:50
       },
     footer: {

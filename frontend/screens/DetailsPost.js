@@ -95,8 +95,7 @@ const styles = StyleSheet.create({
     width: "95%",
     alignSelf: "center",
     borderRadius: 10,
-  },
-  post: {
+  },post: {
     marginBottom: 10,
   },
   image: {

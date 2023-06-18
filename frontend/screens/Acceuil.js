@@ -1,33 +1,28 @@
-import React , { useEffect, useState } from 'react';
-import axios from 'axios'
-import {ImageBackground,
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import {
+  ImageBackground,
   SafeAreaView,
-   ScrollView,
-    StatusBar,
-     StyleSheet, 
-     Text,
-      Image,
-       View,
-       TouchableOpacity} from 'react-native';
+  StatusBar,
+  StyleSheet,
+  Text,
+  Image,
+  View,
+  TouchableOpacity,
+  FlatList,
+} from 'react-native';
 import DetailsPost from './DetailsPost';
 import Icon from 'react-native-vector-icons/Ionicons';
-
-
-import data from '../dummydatabase/data'
 import link from '../link';
 
-
-
-export default function Home ({route}) {
-  const {user} = route.params;
-  console.log(user.userid, "log");
-  const image={uri:'https://i.pinimg.com/originals/50/b3/f3/50b3f3520f8c37cc54e7dd245b5ecf6d.jpg'}
+export default function Home() {
+  console.log('Welcome to home');
+  const image = { uri: 'https://i.pinimg.com/originals/50/b3/f3/50b3f3520f8c37cc54e7dd245b5ecf6d.jpg' };
   const [data, setData] = useState([]);
 
   const fetchData = () => {
-
-    axios.get(`${link}/post/`)
-
+    axios
+      .get(`${link}/post/`)
       .then((res) => {
         setData(res.data);
       })
@@ -38,99 +33,64 @@ export default function Home ({route}) {
     fetchData();
   }, []);
 
+  const renderItem = ({ item }) => <DetailsPost data={item} />;
+
   return (
-    <View  style={styles.imageContainer}>
-  
+    <View style={styles.container}>
       <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" />
-      <View style={styles.header}>
-        <View>      
-            <Text style={styles.title} >VALERIA</Text>
-        </View>
-
-       <View style={styles.not} >
-        <Icon name="notifications" size={30} color={'#A47E53'}  />
-        </View>
-      </View>
-            <Text style={styles.feed} >Feed</Text>
-           
-        
-      <ScrollView>
-            {data.map((e) => {
-
-              return (<DetailsPost data={e} />);
-
-            })}
-          </ScrollView>
-          {/* <FlatList
+        <SafeAreaView>
+          <StatusBar barStyle="dark-content" />
+          <View style={styles.header}>
+            <Text style={styles.title}>VALERIA</Text>
+            <TouchableOpacity style={styles.notificationIcon}>
+              <Icon name="notifications" size={30} color="#A47E53" />
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.feed}>Feed</Text>
+          <FlatList
             data={data}
-             renderItem={({ item, index }) => <DetailsPost data={item} index={index}/>}           /> */}
-    </SafeAreaView>
-  </ImageBackground>
-  
-  </View>
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id.toString()}
+          />
+        </SafeAreaView>
+      </ImageBackground>
+    </View>
   );
-};
+}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    
   },
-  header: {  
+  header: {
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',
     borderBottomColor: '#ddd',
     borderBottomWidth: 1,
     flexDirection: 'row',
-   },
-  title: {
-    color:'#A47E53',
-    fontSize: 20,
-    fontWeight: 'bold', 
-    lineHeight:24,
-    right:127.3,
- 
-},
-  feed: {
-    color:'#A47E53',
-    fontSize: 20,
-    fontWeight: 'bold', 
-    lineHeight:24,
-    // right:127.3,
-   left:25 ,
-   
   },
- not:{
-  position:'relative',
-  left: 127.3,
- },
-  imageContainer: {
-  flex: 1,
-  
-},
- 
+  title: {
+    color: '#A47E53',
+    fontSize: 20,
+    fontWeight: 'bold',
+    lineHeight: 24,
+    marginRight: 'auto',
+  },
+  feed: {
+    color: '#A47E53',
+    fontSize: 20,
+    fontWeight: 'bold',
+    lineHeight: 24,
+    marginLeft: 25,
+  },
+  notificationIcon: {
+    marginLeft: 'auto',
+    marginRight: 15,
+  },
   image: {
     flex: 1,
-    borderRadius: 20, // You can change this value as per your need
-  overflow: 'hidden',
-    
+    borderRadius: 20,
+    overflow: 'hidden',
   },
-  post: {
-    marginBottom: 20,
-  },
-  postHeader: {
-    flexDirection: 'row',
-    padding: 10,
-    alignItems: 'center',
-  },
-  pic: {
-    width: '100%',
-    height: 300,
-  },
-  postFooter: {
-    padding: 10,
-  },
- 
 });

@@ -1,19 +1,28 @@
 import React from 'react';
-import ProfileComponent from './screens/profile/profile';
-// import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, Button, Alert } from 'react-native';
-// import { NavigationContainer, useNavigation } from '@react-navigation/native';
-// import { createNativeStackNavigator } from '@react-navigation/native-stack';
-// import Login from './screens/login/login';
-// import SignUp from './screens/signup/signUp';
-// import SignUp2 from './screens/signup/signup2';
-
-
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, Text, View, Image, Button, Alert, TouchableOpacity } from 'react-native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+// import Profile from "./screens/profile1"
+import CreatePost from './screens/Create';
+import Login from './screens/login/login';
+import SignUp from './screens/signup/signUp';
+import SignUp2 from './screens/signup/signup2';
+import  Home from './screens/Acceuil'
+import TabNav from './navigation/TabNav'
+import Comments from './screens/Comments';
+import W1 from './screens/welcomeScreens/Welcome1';
+import W2 from './screens/welcomeScreens/Welcome2';
+import W3 from './screens/welcomeScreens/Welcome3';
+import Conversations from './screens/conversations';
+import Chat from './screens/Chat';
+import OnePost from './screens/Onepost';
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   
   return (
-// 
+
     
     <NavigationContainer>
       <Stack.Navigator>
@@ -28,10 +37,9 @@ export default function App() {
         <Stack.Screen name="conversations" component={Conversations} options={{ title: 'conversations',headerShown: false  }} />
         <Stack.Screen name="TabNav" component={TabNav} options={{ headerShown: false  }} />
         <Stack.Screen name="Acceuil" component={Home} options={{ title: 'Acceuil',headerShown: false  }} />
-        {/* <Stack.Screen name="Comments" component={Comments} /> */}
-        <Stack.Screen name="Chat" component={Chat} options={{ title: 'Acceuil',headerShown: false  }} />
-        <Stack.Screen name="OnePost" component={Onepost} options={{ title: '',headerShown: true , }} />
-
+        <Stack.Screen name="Comments" component={Comments} />
+        <Stack.Screen name="Chat" component={Chat} options={{ title: 'name',headerShown: true }} />
+        <Stack.Screen name="OnePost" component={OnePost} options={{ title: '',headerShown: true , }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -81,7 +89,7 @@ button2: {
     width: 327,
     height: 55,
     top: 130,
-  },  
+  },
   footer: {
     
     fontSize: 13,

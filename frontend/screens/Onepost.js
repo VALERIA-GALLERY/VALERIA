@@ -94,8 +94,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
-  },
-  image: {
+  },image: {
     width: "100%",
     height: 400,
     borderRadius: 20,
@@ -158,4 +157,3 @@ const styles = StyleSheet.create({
     color: "#555",
   },
 });
-

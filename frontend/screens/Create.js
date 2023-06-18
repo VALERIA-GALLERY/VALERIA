@@ -7,21 +7,26 @@ import {
   Alert,
   TouchableOpacity,
   Image,
+  ScrollView,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
-import LOGO_PATH from "../assets/qq.png";
-import { LinearGradient } from "expo-linear-gradient";
 import link from "../link";
-
-
+import Spinner from "react-native-loading-spinner-overlay";
+import { useNavigation } from "@react-navigation/native";
+import { CheckBox } from 'react-native-elements';
 export default function CreatePost({ route }) {
   const { user } = route.params;
   const [description, setDescription] = useState("");
-  const [photo, setPhoto] = useState(null);
+  const [photos, setPhotos] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSelected, setSelection] = useState(false);
+  const navigation = useNavigation();
 
-  // const route = useRoute();
-  // const {user} = route.params;
+
+  const toggleCheckbox = () => {
+    setSelection(!isSelected);
+  };
 
   const selectPhoto = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -30,35 +35,41 @@ export default function CreatePost({ route }) {
       aspect: [3, 4],
       base64: true,
       quality: 1,
+      allowsMultipleSelection: true, // allow multiple selection
     });
 
-    setPhoto("data:image/jpeg;base64," + result.base64);
+    if (!result.canceled) {
+      setPhotos([...photos, "data:image/jpeg;base64," + result.base64]);
+    }
   };
 
   const handleSubmit = () => {
-    if (!description || !photo) {
-      Alert.alert("Description and photo required.");
+    if (!description || photos.length === 0) {
+      Alert.alert("Description and photos required.");
       return;
     }
 
     let formData = new FormData();
-    formData.append("file", {
-      uri: photo,
-      name: "image.jpg",
-      type: "image/jpg",
+    photos.forEach((photo, index) => {
+      formData.append(`file${index}`, {
+        uri: photo,
+        name: `image${index}.jpg`,
+        type: "image/jpg",
+      });
     });
+
+    setIsLoading(true);
     axios
       .post(
-      `${link}/post/create`,
+        `${link}/post/create`,
         {
           description: description,
-          pic: photo,
+          pic: photos,
           likes: [],
           comments: [],
-          premiem: false,
-          userid: user.id
-        }
-        ,
+          premiem: isSelected,
+          userid: user.id,
+        },
         {
           headers: {
             "Content-Type": "application/json",
@@ -66,16 +77,24 @@ export default function CreatePost({ route }) {
         },
       )
       .then((response) => {
-        Alert.alert("Post created successfully!");
+        navigation.navigate("Acceuil");
+        setIsLoading(false);
       })
       .catch((error) => {
         console.error(error);
+
         Alert.alert("Failed to create post.");
+        setIsLoading(false);
       });
   };
 
   return (
     <View style={styles.container}>
+      <Spinner
+        visible={isLoading}
+        textContent={"Loading..."}
+        textStyle={styles.spinnerTextStyle}
+      />
       <Image source={require("../assets/qq.png")} style={styles.logo} />
       <TextInput
         placeholder='Description'
@@ -83,7 +102,22 @@ export default function CreatePost({ route }) {
         onChangeText={(text) => setDescription(text)}
         style={styles.input}
       />
-      {photo && <Image source={{ uri: photo }} style={styles.photo} />}
+      <ScrollView horizontal={true} style={{ flexDirection: "row" }}>
+        {photos.map((photo, index) => (
+          <Image key={index} source={{ uri: photo }} style={styles.photo} />
+        ))}
+      </ScrollView>
+
+      <TouchableOpacity style={styles.checkboxContainer} onPress={toggleCheckbox}>
+        <CheckBox
+          checked={isSelected}
+          onPress={toggleCheckbox}
+          checkedColor="#A47E53"
+          containerStyle={styles.checkbox}
+        />
+        <Text style={styles.checkboxText}>Premium</Text>
+      </TouchableOpacity>
+
       <TouchableOpacity style={styles.button} onPress={selectPhoto}>
         <Text style={styles.buttonText2}>+</Text>
       </TouchableOpacity>
@@ -105,7 +139,7 @@ const styles = StyleSheet.create({
   logo: {
     width: 200,
     height: 70,
-    marginBottom: 110, 
+    marginBottom: 110,
   },
   content: {
     alignItems: "center",
@@ -122,9 +156,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   photo: {
-    width: 130,
-    height: 130,
+    width: 70,
+    height: 70,
     borderRadius: 15,
+    margin: 10,
   },
   button: {
     backgroundColor: "#B4966A",
@@ -134,6 +169,7 @@ const styles = StyleSheet.create({
     marginTop: 130,
     justifyContent: "center",
     alignItems: "center",
+    marginBottom: 10,
   },
   buttonText2: {
     bottom: 5,
@@ -146,12 +182,31 @@ const styles = StyleSheet.create({
     borderRadius: 55,
     width: 100,
     alignItems: "center",
-    margin: 5,
+    marginBottom: 100,
   },
   buttonText: {
     fontSize: 16,
     color: "#FFFFFF",
     fontWeight: "bold",
   },
+  spinnerTextStyle: {
+    color: "#FFF",
+  },
+  checkboxContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 10,
+    top: 0,
+    // right: 10,
+  },
+  checkbox: {
+    backgroundColor: 'transparent',
+    borderWidth: 0,
+    padding: 0,
+    marginLeft: 0,
+    marginRight: 0,
+  },
+  checkboxText: {
+    marginLeft: 8,
+  },
 });
-

@@ -15,11 +15,10 @@ import Conversations from '../screens/conversations';
 
 const Tab = createBottomTabNavigator();
 
-// Define your colors
 const COLORS = {
-  primary: '#A47E53', // replace with your primary color
-  brown: '#A47E53', // replace with your brown color
-  white: '#ffffff' // replace with your white color
+  primary: '#A47E53', 
+  brown: '#A47E53', 
+  white: '#ffffff' 
 };
 
 const screenOptions = {
@@ -36,20 +35,17 @@ const screenOptions = {
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
   }
-};
+};  
 
 const Tabs = () => {
    
 const route = useRoute();
-
 const {user } = route.params;
-
   return (
     <Tab.Navigator screenOptions={screenOptions}>
       <Tab.Screen
         name="Acceuil"
         component={Acceuil} 
-        initialParams={{ user: user }}
         options={{
           tabBarIcon: ({focused}) => (
             <Feather name='home' size={24} color={focused ? COLORS.primary : COLORS.brown}/>
@@ -93,6 +89,7 @@ const {user } = route.params;
       <Tab.Screen
         name="Search"
         component={Search} 
+        initialParams={{ user: user }}
         options={{
           tabBarIcon: ({focused}) => (
             <FontAwesome5 name='search' size={24} color={focused ? COLORS.primary : COLORS.brown}/>
