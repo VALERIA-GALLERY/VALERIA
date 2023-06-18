@@ -17,15 +17,18 @@ import { useNavigation } from "@react-navigation/native";
 import Comments from "./Comments";
 import link from "../link";
 
-export default function DetailsPost({ data, index }) {
+export default function DetailsPost({ data, CurrentUserID, index}) {
+const current=CurrentUserID
   const navigation = useNavigation();
   const [likes, setLikes] = useState(data.likes);
   const [isLiked, setIsLiked] = useState(false);
   const [comments, setComments] = useState(data.comments);
   const [profilePic, setProfilePic] = useState("");
   const [username, setUsername] = useState("");
-
+const [foreign, setForeign]=useState({})
+const [testing,setTesting] = useState( CurrentUserID)
   const { userid } = data;
+  // console.log(userid,CurrentUserID)
 
   const handleLike = () => {
     if (isLiked) {
@@ -49,9 +52,10 @@ export default function DetailsPost({ data, index }) {
     const fetchUser = async () => {
       try {
         const res = await axios.get(`${link}/user/${userid}`) 
-        console.log(res.data, "user data");
+        // console.log(res.data, "user data");
         setProfilePic(res.data.profilepic);
         setUsername(res.data.username);
+        setForeign(res.data)
       } catch(err) {
         console.log(err)
       }
@@ -59,13 +63,14 @@ export default function DetailsPost({ data, index }) {
     fetchUser();
   }, [userid]); 
 
-  
+var currentt=CurrentUserID
+  console.log(CurrentUserID, "details")
   return (
     <View style={styles.container}>
       <Pressable
         key={index}
         style={styles.post}
-        onPress={() => navigation.navigate("OnePost", { data })}
+        onPress={() => navigation.navigate("OnePost",  { data })}
         
       >
         <ImageBackground
@@ -74,11 +79,15 @@ export default function DetailsPost({ data, index }) {
           resizeMode="stretch" 
         >
           <View style={styles.postHeader}  >
-            <Image source={{ uri: profilePic }} style={styles.profileImage} />
+          <Image
+  source={{ uri: profilePic }}
+  style={styles.profileImage}
+  onPress={() => navigation.navigate("OneProfile", { data, foreign })}
+/>
 
             <View style={styles.user} >
             <Text style={styles.name} onPress={()=>
-          navigation.navigate("OneProfile",{userid:data})
+          navigation.navigate("OneProfile",{data, foreign})
         }>{username}</Text>
               <Text style={styles.date}>{data.date_time}</Text>
             </View>

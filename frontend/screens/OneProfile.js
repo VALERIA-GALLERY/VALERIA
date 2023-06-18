@@ -1,99 +1,151 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity,Button, FlatList, Dimensions, Pressable } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Button, FlatList, Dimensions, Pressable, ImageBackground } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import link from '../link';
 import axios from 'axios';
+import { useRoute } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const OneProfile = ({ route }) => {
-  const userid = route.params;
-  const { user } = route.params;
-
-  const profilepic = route.params.userid.users.profilepic;
-  const username = route.params.userid.users.username;
+const OneProfile = () => {
+  const [currentU, setCurrentU] = useState("");
+  const [followers, setFollowers] = useState([]);
+  const [followersn, setFollowersn] = useState(followers.length);
+  const [following, setFollowing] = useState([]);
+  const [followingn, setFollowingn] = useState(following.length);
+  const [isFollowed, setIsFollowed] = useState(false);
   const [posts, setPosts] = useState([]);
-  const [follow, setFollow] = useState({current_user_ids: [], foreign_user_ids: []})
-  const [isFollowed, setFollowed] = useState(false);
-  console.log(route.params, 85555555)
-  console.log("ena user");
+
+  const getData = async (key) => {
+    try {
+      const value = await AsyncStorage.getItem(key);
+      if (value !== null) {
+        setCurrentU(value);
+      } else {
+        console.log('No data found for the key:', key);
+      }
+    } catch (error) {
+      console.log('Error retrieving data:', error);
+    }
+  };
+
+  const getFollowers = () => {
+    axios.post(`${link}/follow/foreign`, { id: foreign.id })
+      .then((res) => {
+        setFollowers(res.data);
+        setFollowersn(res.data.length)
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const getFollowing = () => {
+    axios.post(`${link}/follow/current`, { id: foreign.id })
+      .then((res) => {
+        setFollowing(res.data)
+        setFollowingn(res.data.length)})
+      .catch((err) => console.log(err));
+  };
+
+  const route = useRoute();
+  const { foreign } = route.params;
+  const profilepic = foreign.profilepic;
+  const username = foreign.username;
+
+  const handleFollow = async () => {
+
+    setIsFollowed(true);
+    setFollowersn(followersn+1)
+    try {
+      const res = await axios.post(`${link}/follow/addfollow`, {
+        current_user_ids: currentU,
+        foreign_user_ids: foreign.id
+      });
+      // Handle the response or perform any necessary actions
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleUnfollow=()=>{
+    console.log("unfollow")
+    setFollowersn(followersn-1)
+    setIsFollowed(false);
+  }
 
   useEffect(() => {
-    axios
-      .get(`${link}/post/${userid}`)
+    getData("current");
+    getFollowers();
+    getFollowing();
+    axios.get(`${link}/userposts/user/${foreign.id}`)
       .then((res) => {
-        console.log(res.data, "res.data");
         setPosts(res.data);
+        
       })
       .catch((err) => console.log(err));
   }, []);
+
+  useEffect(() => {
+    let isUserFollowed = false;
+    for (const follower of followers) {
+      const currentUserIds = follower.current_user_ids;
+      if (currentUserIds.includes(currentU)) {
+        isUserFollowed = true;
+        break; // Terminate the loop early if the user is found
+      }
+    }
+    setIsFollowed(isUserFollowed);
+  }, [followers, currentU]);
 
   const renderPost = ({ item }) => (
     <Image source={{ uri: item.pic[0] }} style={styles.postImage} />
   );
 
-  const handlefollow=async()=>{
-   try {
-    const res= await axios.post(`${link}/follow/addfollow`,
-    setFollow({
-      current_user_ids: res.follow.current_user_ids,
-      foreign_user_ids: res.follow.foreign_user_ids
-    })
-    )
-    if (isFollowed) {
-      setFollow(follow - 1);
-      setFollowed(false);
-    } else {
-      setFollow(follow + 1);
-      setFollowed(true);
-    }
-    setFollow(res.follow)
-
-   }catch(err) {
-    console.log(err)
-  }
-  }
-console.log(follow.current_user_ids)
-
   return (
+    <ImageBackground source={{ uri: profilepic }} resizeMode="cover" style={styles.backgroundImage} blurRadius={70} >
     <View style={styles.container}>
       <View style={styles.profileContainer}>
         <View style={styles.profileImageContainer}>
           <Image source={{ uri: profilepic }} style={styles.profileImage} />
         </View>
-
+  
         <Text style={styles.username}>{username}</Text>
-
+  
         <View style={styles.infoContainer}>
           <View style={styles.infoItem}>
             <Text style={styles.infoLabel}>Posts</Text>
             <Text style={styles.infoText}>{posts.length}</Text>
           </View>
           <View style={styles.infoItem}>
-            <Text style={styles.infoLabel} >Followers</Text>
-            <Text style={styles.infoText}>{follow.current_user_ids.length} </Text>
+            <Text style={styles.infoLabel}>Followers</Text>
+            <Text style={styles.infoText}>{followersn}</Text>
+          </View>
+          <View style={styles.infoItem}>
+            <Text style={styles.infoLabel}>Following</Text>
+            <Text style={styles.infoText}>{followingn}</Text>
+          </View>
+        </View>
   
-          </View>
-          <View style={styles.infoItem} >
-            <Pressable  >
-              <Text style={styles.infoLabel} >Following</Text>
-              <Text style={styles.infoText}>{follow.foreign_user_ids.length} </Text>
-
-            </Pressable>
-          </View>
-        </View>
-        <View>
-        <TouchableOpacity
-        style={[styles.buttonfollow, isFollowed ? styles.followedButton : styles.unfollowedButton]}
-         onPress={handlefollow}>
-        <Text style={styles.infoText}>{isFollowed ? 'Unfollow' : 'Follow'}</Text>
-      </TouchableOpacity>
-        </View>
-
+        {isFollowed ? (
+          <TouchableOpacity
+            style={[styles.buttonFollow, styles.followedButton]}
+            onPress={handleUnfollow}
+          >
+            <Text style={styles.infoText}>Unfollow</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            style={[styles.buttonFollow, styles.unfollowedButton]}
+            onPress={handleFollow}
+          >
+            <Text style={styles.infoText}>Follow</Text>
+          </TouchableOpacity>
+        )}
+  
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button}>
             <Feather name="menu" size={22} color="black" />
           </TouchableOpacity>
         </View>
-
+  
         <FlatList
           data={posts}
           numColumns={3}
@@ -103,18 +155,26 @@ console.log(follow.current_user_ids)
         />
       </View>
     </View>
+    </ImageBackground>
   );
-};
+}
 
 const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get("window").height;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f0ede4',
+    backgroundColor: 'transparent',
+  },
+  backgroundImage: {
+    flex: 1,
   },
   profileContainer: {
     padding: 16,
+  },
+  headerStyle: {
+    backgroundColor: 'transparent',
   },
   profileImageContainer: {
     width: 100,
@@ -145,15 +205,17 @@ const styles = StyleSheet.create({
   },
   infoItem: {
     alignItems: 'center',
+    left:10
   },
   infoText: {
     fontSize: 16,
     fontWeight: '600',
     marginTop: 4,
+    
   },
   infoLabel: {
     fontSize: 12,
-    color: 'gray',
+    color: 'rgba(240, 237, 228, 0.5)',
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -161,7 +223,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   button: {
-    backgroundColor: '#f0ede4',
+    backgroundColor: 'rgba(240, 237, 228, 0.5)', // Transparent background color
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 4,
@@ -170,6 +232,7 @@ const styles = StyleSheet.create({
     top: -200,
     left: 330,
   },
+  
   editProfileButton: {
     backgroundColor: '#fff',
     borderWidth: 1,
@@ -190,22 +253,23 @@ const styles = StyleSheet.create({
     height: (windowWidth - 4) / 3,
     resizeMode: 'cover',
     margin: 1,
+    borderRadius:15,
   },
-  buttonfollow: {
-    backgroundColor: '#d6c898',
+  buttonFollow: {
+    backgroundColor: 'rgba(240, 237, 228, 0.5)',
     borderRadius: 5,
     height: 45,
     width: 200,
     justifyContent: 'center',
     alignItems: 'center',
     margin: 10,
-    left:85,
+    left: 85,
   },
   followedButton: {
-    backgroundColor: '#b4966a', 
+    backgroundColor: 'rgba(240, 237, 228, 0.5)',
   },
   unfollowedButton: {
-    backgroundColor: '#d6c898', 
+    backgroundColor: 'rgba(240, 237, 228, 0.5)',
   },
 });
 
