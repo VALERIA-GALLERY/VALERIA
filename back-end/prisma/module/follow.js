@@ -21,6 +21,7 @@ async function addFollow(data) {
 }
    
 
+
 async function getAllCurrent() {
   try {
     const currentFollow = await prisma.follows.findMany({

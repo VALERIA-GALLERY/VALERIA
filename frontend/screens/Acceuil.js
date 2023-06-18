@@ -20,6 +20,7 @@ export default function Home() {
   const image = { uri: 'https://i.pinimg.com/originals/50/b3/f3/50b3f3520f8c37cc54e7dd245b5ecf6d.jpg' };
   const [data, setData] = useState([]);
 
+
   const fetchData = () => {
     axios
       .get(`${link}/post/`)
@@ -29,11 +30,12 @@ export default function Home() {
       .catch((err) => console.log(err));
   };
 
+
   useEffect(() => {
     fetchData();
   }, []);
 
-  const renderItem = ({ item }) => <DetailsPost data={item} />;
+  const renderItem = ({ item }) => <DetailsPost data={item}  />;
 
   return (
     <View style={styles.container}>
