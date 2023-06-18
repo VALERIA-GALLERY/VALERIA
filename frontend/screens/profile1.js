@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Alert, ScrollView, FlatList, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Alert, ScrollView, FlatList, Dimensions, ImageBackground } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import link from '../link';
 import axios from 'axios';
+import Subscription from './Subscription';
+import { MaterialIcons } from '@expo/vector-icons';
+
 
 const Profile = ({ route }) => {
   const { user } = route.params;
@@ -11,22 +14,37 @@ const Profile = ({ route }) => {
   const [posts, setPosts] = useState([]);
   const [current,setCurrent]=useState([])
 
+  const [premiem, setPremiem]= useState(0)
+
+
+  const changePremium=()=>{
+    user.premium=true
+    setPremiem(Math.random() * 3)
+    console.log(user.premium,'pass')
+  }
+
+
+const changePremium=()=>{
+  user.premium=true
+  setPremiem(Math.random() * 3)
+  console.log(user.premium,'pass')
+}
   useEffect(() => {
     axios
-      .get(`${link}/userposts/user/q5O9DkOzVqXXmurC9lWJCgfiPkH2`)
+      .get(`${link}/userposts/user/${user.id}`)
       .then((res) => {
         console.log(res.data, "res.data");
         setPosts(res.data);
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [premiem]);
 
   const handlePress = () => {
     Alert.alert('Button Pressed!');
   };
 
   const renderPost = ({ item }) => (
-    <Image source={{ uri: item.pic[0] }} style={styles.postImage} />
+    <Image source={{ uri: item.pic[0] }} style={styles.postImage}  />
   );
   const handlecurrent=()=>{
     axios.get(`${link}/follow/current`)
@@ -39,13 +57,36 @@ const Profile = ({ route }) => {
   }
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.profileContainer}>
-        <View style={styles.profileImageContainer}>
-          <Image source={{ uri: user.profilepic }} style={styles.profileImage} />
-        </View>
+    <ImageBackground source={{ uri: user.profilepic }} resizeMode="cover" style={styles.backgroundImage} blurRadius={70} >
+      <ScrollView style={styles.container}>
+        <View style={styles.profileContainer}>
+          <View style={styles.profileImageContainer}>
+            <Image source={{ uri: user.profilepic }} style={styles.profileImage} />
+          </View>
 
-        <Text style={styles.username}>{user.username}</Text>
+          <Text style={styles.username}>{user.username}</Text>
+
+
+          {user.premium === false ? (
+            <Subscription premium={changePremium} id={user.id} />
+          ) : (
+            <MaterialIcons style={styles.icon} name="verified" size={24} color="#d4af37" />
+          )}
+
+          <View style={styles.infoContainer}>
+            <View style={styles.infoItem}>
+              <Text style={styles.infoLabel}>Posts</Text>
+              <Text style={styles.infoText}>{posts.length}</Text>
+            </View>
+            <View style={styles.infoItem}>
+              <Text style={styles.infoLabel}>Followers</Text>
+              <Text style={styles.infoText}>{user.followers.length}</Text>
+            </View>
+            <View style={styles.infoItem}>
+              <Text style={styles.infoLabel}>Following</Text>
+              <Text style={styles.infoText}>{user.follows.length}</Text>
+            </View>
+
 
         <View style={styles.infoContainer}>
           <View style={styles.infoItem}>
@@ -55,38 +96,39 @@ const Profile = ({ route }) => {
           <View style={styles.infoItem}>
             <Text style={styles.infoLabel} onPress={handlecurrent}>Followers</Text>
             <Text style={styles.infoText}>{user.followers.length}</Text>
-          </View>
-          <View style={styles.infoItem}>
-            <Text style={styles.infoLabel}>Following</Text>
-            <Text style={styles.infoText}>{user.follows.length}</Text>
-          </View>
-        </View>
 
-        <View style={styles.buttonContainer}>
-         
-          <TouchableOpacity onPress={handlePress} style={styles.button}>
-            <Feather name="menu" size={22} color="black" />
-          </TouchableOpacity>
-        </View>
+          </View>
 
-        <FlatList
-          data={posts}
-          numColumns={3}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={renderPost}
-          contentContainerStyle={styles.postContainer}
-        />
-      </View>
-    </ScrollView>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity onPress={handlePress} style={styles.button}>
+              <Feather name="menu" size={22} color="black" />
+            </TouchableOpacity>
+          </View>
+
+
+          <FlatList
+            data={posts}
+            numColumns={3}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={renderPost}
+            contentContainerStyle={styles.postContainer}
+          />
+
+        </View>
+      </ScrollView>
+    </ImageBackground>
   );
 };
 
 const windowWidth = Dimensions.get('window').width;
-
+const windowHeight = Dimensions.get("window").height;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f0ede4',
+    backgroundColor: 'transparent',
+  },
+  backgroundImage: {
+    flex: 1,
   },
   profileContainer: {
     padding: 16,
@@ -142,8 +184,8 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     alignItems: 'center',
     justifyContent: 'center',
-    top:-200,
-    left:330
+    top: -200,
+    left: 330,
   },
   editProfileButton: {
     backgroundColor: '#fff',
@@ -166,6 +208,17 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     margin: 1,
   },
+
+  icon: {
+    left: 180,
+    top: -10,
+  },
+  image: {
+    flex: 1,
+    width: windowWidth,
+    height: windowHeight,
+  },
+
 });
 
 export default Profile;
