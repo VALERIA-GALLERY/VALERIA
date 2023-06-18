@@ -39,6 +39,8 @@ export default function OnePost({ route }) {
     );
   }
 
+
+
   return (
     <View style={styles.container}>
       <Image source={{ uri: data.pic[0] }} style={styles.image} resizeMode="cover" />

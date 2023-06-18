@@ -12,6 +12,7 @@ const Profile = ({ route }) => {
 
   const [userData, setUserData] = useState({});
   const [posts, setPosts] = useState([]);
+  const [current,setCurrent]=useState([])
 
   const [premiem, setPremiem]= useState(0)
 
@@ -45,6 +46,15 @@ const changePremium=()=>{
   const renderPost = ({ item }) => (
     <Image source={{ uri: item.pic[0] }} style={styles.postImage}  />
   );
+  const handlecurrent=()=>{
+    axios.get(`${link}/follow/current`)
+    .then((res) => {
+      console.log(res.data, "res.data");
+      setCurrent(res.data);
+    })
+    .catch((err) => console.log(err));
+
+  }
 
   return (
     <ImageBackground source={{ uri: user.profilepic }} resizeMode="cover" style={styles.backgroundImage} blurRadius={70} >
@@ -76,6 +86,16 @@ const changePremium=()=>{
               <Text style={styles.infoLabel}>Following</Text>
               <Text style={styles.infoText}>{user.follows.length}</Text>
             </View>
+
+
+        <View style={styles.infoContainer}>
+          <View style={styles.infoItem}>
+            <Text style={styles.infoLabel}>Posts</Text>
+            <Text style={styles.infoText}>{posts.length}</Text>
+          </View>
+          <View style={styles.infoItem}>
+            <Text style={styles.infoLabel} onPress={handlecurrent}>Followers</Text>
+            <Text style={styles.infoText}>{user.followers.length}</Text>
 
           </View>
 
