@@ -83,6 +83,14 @@ async function addComment(postId, userId, comment) {
     post,
   };
 }
+async function getPostsById(userid) {
+  const posts = await prisma.posts.findMany({
+    where: {
+      userid: userid,
+    }
+  });
+  return posts
+}
 
 
-module.exports = { createPost, getAllPosts, getCommentsByUser, addComment };
+module.exports = { createPost, getAllPosts, getCommentsByUser, addComment ,getPostsById };

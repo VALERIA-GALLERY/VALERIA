@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect } from "react";
 import {
   ImageBackground,
   SafeAreaView,
@@ -11,15 +11,21 @@ import {
   TouchableOpacity,
   Pressable,
 } from "react-native";
+import axios from 'axios'
 import Icon from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
 import Comments from "./Comments";
+import link from "../link";
 
 export default function DetailsPost({ data, index }) {
   const navigation = useNavigation();
   const [likes, setLikes] = useState(data.likes);
   const [isLiked, setIsLiked] = useState(false);
   const [comments, setComments] = useState(data.comments);
+  const [profilePic, setProfilePic] = useState("");
+  const [username, setUsername] = useState("");
+
+  const { userid } = data;
 
   const handleLike = () => {
     if (isLiked) {
@@ -38,22 +44,42 @@ export default function DetailsPost({ data, index }) {
 
     navigation.navigate("Comments", { postId: data.id });
   };
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await axios.get(`${link}/user/${userid}`) 
+        console.log(res.data, "user data");
+        setProfilePic(res.data.profilepic);
+        setUsername(res.data.username);
+      } catch(err) {
+        console.log(err)
+      }
+    }
+    fetchUser();
+  }, [userid]); 
+
+  
   return (
     <View style={styles.container}>
       <Pressable
         key={index}
         style={styles.post}
         onPress={() => navigation.navigate("OnePost", { data })}
+        
       >
         <ImageBackground
           source={{ uri: data.pic[0] }}
           style={styles.image}
-          resizeMode="stretch"
+          resizeMode="stretch" 
         >
-          <View style={styles.postHeader}>
-            <Icon name="person-circle-outline" size={30} color="#fff" />
-            <View style={styles.user}>
-              <Text style={styles.name}>{data.name}</Text>
+          <View style={styles.postHeader}  >
+            <Image source={{ uri: profilePic }} style={styles.profileImage} />
+
+            <View style={styles.user} >
+            <Text style={styles.name} onPress={()=>
+          navigation.navigate("OneProfile",{userid:data})
+        }>{username}</Text>
               <Text style={styles.date}>{data.date_time}</Text>
             </View>
             <Icon size={30} color="#fff" />
@@ -111,17 +137,24 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   user: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: "column",
+    alignItems: "flex-start",
   },
   name: {
     color: "#fff",
     fontWeight: "bold",
     marginLeft: 10,
+    left:-79,
+  },
+  profileImage: {
+    width: 30,
+    height: 30,
+    borderRadius: 15, // half of width and height to make it a circle
   },
   date: {
     color: "#fff",
     marginLeft: 10,
+    left:-79,
   },
   postFooter: {
     position: "absolute",
