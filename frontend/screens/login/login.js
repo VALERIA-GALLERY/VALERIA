@@ -9,6 +9,8 @@ import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import axios from 'axios';
 import Spinner from 'react-native-loading-spinner-overlay';
 import link from '../../link';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 export default function Login() {
     const navigation = useNavigation();
@@ -18,6 +20,16 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [userData, setUserData]=useState({})
   const auth = getAuth();
+
+  const storeData = async (key, value) => {
+    try {
+      await AsyncStorage.setItem(key, value);
+      console.log('Data stored successfully!');
+    } catch (error) {
+      console.log('Error storing data:', error);
+    }
+  };
+  
 
   const toggleCheckbox = () => {
     setSelection(!isSelected);
@@ -29,7 +41,8 @@ console.log("link",link)
 axios.get(`${link}/users/login/${id}`) //check the ip address run cmd ipconfig or contact yassin
 .then(res=>{
   setLoading(false)
-  console.log(res.data)
+  storeData("current",id)
+  
   navigation.navigate('TabNav',{user : res.data})
   setUserData(res.data)})
 .catch(err=>{

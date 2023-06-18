@@ -12,8 +12,6 @@ const Profile = ({ route }) => {
 
   const [userData, setUserData] = useState({});
   const [posts, setPosts] = useState([]);
-  const [current,setCurrent]=useState([])
-
   const [premiem, setPremiem]= useState(0)
 
 
@@ -23,12 +21,6 @@ const Profile = ({ route }) => {
     console.log(user.premium,'pass')
   }
 
-
-const changePremium=()=>{
-  user.premium=true
-  setPremiem(Math.random() * 3)
-  console.log(user.premium,'pass')
-}
   useEffect(() => {
     axios
       .get(`${link}/userposts/user/${user.id}`)
@@ -46,15 +38,6 @@ const changePremium=()=>{
   const renderPost = ({ item }) => (
     <Image source={{ uri: item.pic[0] }} style={styles.postImage}  />
   );
-  const handlecurrent=()=>{
-    axios.get(`${link}/follow/current`)
-    .then((res) => {
-      console.log(res.data, "res.data");
-      setCurrent(res.data);
-    })
-    .catch((err) => console.log(err));
-
-  }
 
   return (
     <ImageBackground source={{ uri: user.profilepic }} resizeMode="cover" style={styles.backgroundImage} blurRadius={70} >
@@ -65,7 +48,6 @@ const changePremium=()=>{
           </View>
 
           <Text style={styles.username}>{user.username}</Text>
-
 
           {user.premium === false ? (
             <Subscription premium={changePremium} id={user.id} />
@@ -86,17 +68,6 @@ const changePremium=()=>{
               <Text style={styles.infoLabel}>Following</Text>
               <Text style={styles.infoText}>{user.follows.length}</Text>
             </View>
-
-
-        <View style={styles.infoContainer}>
-          <View style={styles.infoItem}>
-            <Text style={styles.infoLabel}>Posts</Text>
-            <Text style={styles.infoText}>{posts.length}</Text>
-          </View>
-          <View style={styles.infoItem}>
-            <Text style={styles.infoLabel} onPress={handlecurrent}>Followers</Text>
-            <Text style={styles.infoText}>{user.followers.length}</Text>
-
           </View>
 
           <View style={styles.buttonContainer}>
@@ -105,7 +76,6 @@ const changePremium=()=>{
             </TouchableOpacity>
           </View>
 
-
           <FlatList
             data={posts}
             numColumns={3}
@@ -113,7 +83,6 @@ const changePremium=()=>{
             renderItem={renderPost}
             contentContainerStyle={styles.postContainer}
           />
-
         </View>
       </ScrollView>
     </ImageBackground>
@@ -167,10 +136,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     marginTop: 4,
+    left:10
   },
   infoLabel: {
-    fontSize: 12,
-    color: 'gray',
+    fontSize: 13,
+    color: 'rgba(240, 237, 228, 0.5)',
+    left:10
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -178,7 +149,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   button: {
-    backgroundColor: '#f0ede4',
+    backgroundColor: 'rgba(240, 237, 228, 0.5)',
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 4,
@@ -207,10 +178,10 @@ const styles = StyleSheet.create({
     height: (windowWidth - 4) / 3,
     resizeMode: 'cover',
     margin: 1,
+    borderRadius:15,
   },
-
   icon: {
-    left: 180,
+    left: 177,
     top: -10,
   },
   image: {
@@ -218,7 +189,6 @@ const styles = StyleSheet.create({
     width: windowWidth,
     height: windowHeight,
   },
-
 });
 
 export default Profile;

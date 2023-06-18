@@ -15,7 +15,9 @@ import DetailsPost from './DetailsPost';
 import Icon from 'react-native-vector-icons/Ionicons';
 import link from '../link';
 
-export default function Home() {
+export default function Home({ route }) {
+  const { user } = route.params;
+  console.log(user.id)
   console.log('Welcome to home');
   const image = { uri: 'https://i.pinimg.com/originals/50/b3/f3/50b3f3520f8c37cc54e7dd245b5ecf6d.jpg' };
   const [data, setData] = useState([]);
@@ -26,6 +28,7 @@ export default function Home() {
       .get(`${link}/post/`)
       .then((res) => {
         setData(res.data);
+        console.log(res.data)
       })
       .catch((err) => console.log(err));
   };
@@ -35,7 +38,7 @@ export default function Home() {
     fetchData();
   }, []);
 
-  const renderItem = ({ item }) => <DetailsPost data={item}  />;
+  const renderItem = ({ item }) => <DetailsPost CurrentuserID={user.id} data={item}  />;
 
   return (
     <View style={styles.container}>

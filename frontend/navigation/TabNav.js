@@ -40,11 +40,12 @@ const screenOptions = {
 const Tabs = () => {
    
 const route = useRoute();
-const {user } = route.params;
+const {user} = route.params;
   return (
     <Tab.Navigator screenOptions={screenOptions}>
       <Tab.Screen
         name="Acceuil"
+        initialParams={{ user: user }}
         component={Acceuil} 
         options={{
           tabBarIcon: ({focused}) => (
