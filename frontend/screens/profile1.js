@@ -12,6 +12,7 @@ const Profile = ({ route }) => {
 
   const [userData, setUserData] = useState({});
   const [posts, setPosts] = useState([]);
+
   const [premiem, setPremiem]= useState(0)
 
 
@@ -21,6 +22,12 @@ const Profile = ({ route }) => {
     console.log(user.premium,'pass')
   }
 
+
+const changePremium=()=>{
+  user.premium=true
+  setPremiem(Math.random() * 3)
+  console.log(user.premium,'pass')
+}
   useEffect(() => {
     axios
       .get(`${link}/userposts/user/${user.id}`)
@@ -49,6 +56,7 @@ const Profile = ({ route }) => {
 
           <Text style={styles.username}>{user.username}</Text>
 
+
           {user.premium === false ? (
             <Subscription premium={changePremium} id={user.id} />
           ) : (
@@ -68,6 +76,7 @@ const Profile = ({ route }) => {
               <Text style={styles.infoLabel}>Following</Text>
               <Text style={styles.infoText}>{user.follows.length}</Text>
             </View>
+
           </View>
 
           <View style={styles.buttonContainer}>
@@ -76,6 +85,7 @@ const Profile = ({ route }) => {
             </TouchableOpacity>
           </View>
 
+
           <FlatList
             data={posts}
             numColumns={3}
@@ -83,6 +93,7 @@ const Profile = ({ route }) => {
             renderItem={renderPost}
             contentContainerStyle={styles.postContainer}
           />
+
         </View>
       </ScrollView>
     </ImageBackground>
@@ -177,6 +188,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     margin: 1,
   },
+
   icon: {
     left: 180,
     top: -10,
@@ -186,6 +198,7 @@ const styles = StyleSheet.create({
     width: windowWidth,
     height: windowHeight,
   },
+
 });
 
 export default Profile;
