@@ -14,13 +14,19 @@ import axios from "axios";
 import link from "../link";
 import Spinner from "react-native-loading-spinner-overlay";
 import { useNavigation } from "@react-navigation/native";
-
+import { CheckBox } from 'react-native-elements';
 export default function CreatePost({ route }) {
   const { user } = route.params;
   const [description, setDescription] = useState("");
   const [photos, setPhotos] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSelected, setSelection] = useState(false);
   const navigation = useNavigation();
+
+
+  const toggleCheckbox = () => {
+    setSelection(!isSelected);
+  };
 
   const selectPhoto = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -61,7 +67,7 @@ export default function CreatePost({ route }) {
           pic: photos,
           likes: [],
           comments: [],
-          premiem: false,
+          premiem: isSelected,
           userid: user.id,
         },
         {
@@ -101,6 +107,16 @@ export default function CreatePost({ route }) {
           <Image key={index} source={{ uri: photo }} style={styles.photo} />
         ))}
       </ScrollView>
+
+      <TouchableOpacity style={styles.checkboxContainer} onPress={toggleCheckbox}>
+        <CheckBox
+          checked={isSelected}
+          onPress={toggleCheckbox}
+          checkedColor="#A47E53"
+          containerStyle={styles.checkbox}
+        />
+        <Text style={styles.checkboxText}>Premium</Text>
+      </TouchableOpacity>
 
       <TouchableOpacity style={styles.button} onPress={selectPhoto}>
         <Text style={styles.buttonText2}>+</Text>
@@ -175,5 +191,22 @@ const styles = StyleSheet.create({
   },
   spinnerTextStyle: {
     color: "#FFF",
+  },
+  checkboxContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 10,
+    top: 0,
+    // right: 10,
+  },
+  checkbox: {
+    backgroundColor: 'transparent',
+    borderWidth: 0,
+    padding: 0,
+    marginLeft: 0,
+    marginRight: 0,
+  },
+  checkboxText: {
+    marginLeft: 8,
   },
 });

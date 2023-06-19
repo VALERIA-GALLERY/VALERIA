@@ -1,43 +1,89 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   ImageBackground,
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
   Text,
-  Image,
   View,
   TouchableOpacity,
   Pressable,
+  StyleSheet,
+  Modal,
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
-import Comments from "./Comments";
+import axios from "axios";
+import link from "../link";
+import { auth } from "../fireBase";
 
 export default function DetailsPost({ data, index }) {
   const navigation = useNavigation();
   const [likes, setLikes] = useState(data.likes);
   const [isLiked, setIsLiked] = useState(false);
   const [comments, setComments] = useState(data.comments);
+  const [likedBy, setLikedBy] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
 
-  const handleLike = () => {
-    if (isLiked) {
-      // If already liked, then decrement the likes and change isLiked state to false
-      setLikes(likes - 1);
-      setIsLiked(false);
-    } else {
-      // Increment the number of likes by 1 and change isLiked state to true
-      setLikes(likes + 1);
-      setIsLiked(true);
+  const handleLike = async () => {
+    try {
+      if (isLiked) {
+        await axios.delete(`${link}/post/${data.id}/likes`, { data: { user: auth.currentUser.uid } });
+        setIsLiked(false);
+        setLikes(likes => likes - 1);
+        setLikedBy(likedBy => likedBy.filter(user => user.id !== auth.currentUser.uid));
+      } else {
+        await axios.post(`${link}/post/${data.id}/likes`, { user: auth.currentUser.uid });
+        setIsLiked(true);
+        setLikes(likes => likes + 1);
+  
+        // fetch the new likes data after the user likes the post
+        const response = await axios.get(`${link}/post/${data.id}/likes`);
+        const likesData = response.data;
+        
+        const uniqueUsernames = Array.from(new Set(likesData.map(like => like.user.username)));
+        const uniqueUsers = uniqueUsernames.map(username => {
+          return likesData.find(like => like.user.username === username).user;
+        });
+  
+        setLikedBy(uniqueUsers);
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
+
+  const fetchLikes = async () => {
+    try {
+      const response = await axios.get(`${link}/post/${data.id}/likes`);
+      const likesData = response.data;
+      const liked = likesData.some(like => like.user.id === auth.currentUser.uid);
+      setIsLiked(liked);
+      setLikes(likesData.length);
+  
+      // use a Set to store usernames, which automatically removes duplicates
+      const uniqueUsernames = Array.from(new Set(likesData.map(like => like.user.username)));
+      
+      // reconstruct the user objects with unique usernames
+      const uniqueUsers = uniqueUsernames.map(username => {
+        return likesData.find(like => like.user.username === username).user;
+      });
+  
+      setLikedBy(uniqueUsers);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
+  useEffect(() => {
+    fetchLikes();
+  }, []);
 
   const handleComment = () => {
     navigation.navigate("Comments", { postId: data.id, user: data.userid });
   };
-  
-  
+
+  const handleOpenLikesModal = () => {
+    setModalVisible(true);
+  };
+
   return (
     <View style={styles.container}>
       <Pressable
@@ -74,15 +120,44 @@ export default function DetailsPost({ data, index }) {
           <TouchableOpacity style={styles.com} onPress={handleComment}>
             <Icon name="chatbox-outline" size={30} color="#A47E53" />
             <Text style={styles.desc}>{comments}</Text>
-            {/* <Icon
-                name='bookmarks-outline'
-                size={27}
-                color={"#A47E53"}
-                style={(margin = "5")}
-              /> */}
           </TouchableOpacity>
         </View>
+        {likedBy.length > 0 && (
+          <View style={styles.likedByContainer}>
+            {likedBy.length === 1 ? (
+              <Text style={styles.likedByText}>Liked by {likedBy[0].username}</Text>
+            ) : (
+              <Text style={styles.likedByText} onPress={handleOpenLikesModal}>
+                Liked by {likedBy[0].username} and {likedBy.length - 1} others
+              </Text>
+            )}
+          </View>
+        )}
       </Pressable>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            {likedBy.slice(1).map((user, index) => (
+              <Text key={index} style={styles.likedByUsername}>
+                {user.username}
+              </Text>
+            ))}
+            <TouchableOpacity
+              style={{ marginTop: 20 }}
+              onPress={() => setModalVisible(!modalVisible)}
+            >
+              <Text style={styles.textStyle}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -95,7 +170,8 @@ const styles = StyleSheet.create({
     width: "95%",
     alignSelf: "center",
     borderRadius: 10,
-  },post: {
+  },
+  post: {
     marginBottom: 10,
   },
   image: {
@@ -146,5 +222,50 @@ const styles = StyleSheet.create({
   com: {
     flexDirection: "row",
     alignItems: "center",
+  },
+  likedByContainer: {
+    marginTop: 10,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  likedByText: {
+    marginRight: 5,
+    fontSize: 12,
+    color: "#A47E53",
+  },
+  likedByUsername: {
+    fontSize: 12,
+    color: "#A47E53",
+    fontWeight: "bold",
+    marginRight: 5,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+    backgroundColor: "#B4966A",
+    borderRadius: 20,
+    padding: 10,
   },
 });
