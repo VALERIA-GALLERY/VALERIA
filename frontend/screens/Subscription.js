@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Text, Button, Alert, TouchableOpacity } from 'react-native';
+import { View, Text, Button, Alert } from 'react-native';
 import { StripeProvider, usePaymentSheet } from '@stripe/stripe-react-native';
 import axios from 'axios';
 import link from '../link';
@@ -61,20 +61,7 @@ useEffect(()=>{
       <View>
        <StripeProvider publishableKey={PublishableKey}>
 
-       <TouchableOpacity
-  style={{
-    backgroundColor: 'rgba(240, 237, 228, 0.5)', // Transparent background color
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 4,
-    alignItems: 'center',
-    justifyContent: 'center',
-  marginBottom:20
-  }}
-  onPress={payementIntent}
->
-  <Text style={{ color: 'white' }}>Subscribe</Text>
-</TouchableOpacity>
+        <Button title='Subscribe' onPress={payementIntent}/> 
         </StripeProvider>
       </View>
     );

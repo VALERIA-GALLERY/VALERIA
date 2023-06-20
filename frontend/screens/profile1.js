@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Alert, ScrollView, FlatList, Dimensions, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Alert, ScrollView, FlatList, Dimensions } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import link from '../link';
 import axios from 'axios';
@@ -12,15 +12,13 @@ const Profile = ({ route }) => {
 
   const [userData, setUserData] = useState({});
   const [posts, setPosts] = useState([]);
-  const [premiem, setPremiem]= useState(0)
+const [premiem, setPremiem]= useState(0)
 
-
-  const changePremium=()=>{
-    user.premium=true
-    setPremiem(Math.random() * 3)
-    console.log(user.premium,'pass')
-  }
-
+const changePremium=()=>{
+  user.premium=true
+  setPremiem(Math.random() * 3)
+  console.log(user.premium,'pass')
+}
   useEffect(() => {
     axios
       .get(`${link}/userposts/user/${user.id}`)
@@ -36,68 +34,63 @@ const Profile = ({ route }) => {
   };
 
   const renderPost = ({ item }) => (
-    <Image source={{ uri: item.pic[0] }} style={styles.postImage}  />
+    <Image source={{ uri: item.pic[0] }} style={styles.postImage} />
   );
 
   return (
-    <ImageBackground source={{ uri: user.profilepic }} resizeMode="cover" style={styles.backgroundImage} blurRadius={70} >
-      <ScrollView style={styles.container}>
-        <View style={styles.profileContainer}>
-          <View style={styles.profileImageContainer}>
-            <Image source={{ uri: user.profilepic }} style={styles.profileImage} />
-          </View>
-
-          <Text style={styles.username}>{user.username}</Text>
-
-          {user.premium === false ? (
-            <Subscription premium={changePremium} id={user.id} />
-          ) : (
-            <MaterialIcons style={styles.icon} name="verified" size={24} color="#d4af37" />
-          )}
-
-          <View style={styles.infoContainer}>
-            <View style={styles.infoItem}>
-              <Text style={styles.infoLabel}>Posts</Text>
-              <Text style={styles.infoText}>{posts.length}</Text>
-            </View>
-            <View style={styles.infoItem}>
-              <Text style={styles.infoLabel}>Followers</Text>
-              <Text style={styles.infoText}>{user.followers.length}</Text>
-            </View>
-            <View style={styles.infoItem}>
-              <Text style={styles.infoLabel}>Following</Text>
-              <Text style={styles.infoText}>{user.follows.length}</Text>
-            </View>
-          </View>
-
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={handlePress} style={styles.button}>
-              <Feather name="menu" size={22} color="black" />
-            </TouchableOpacity>
-          </View>
-
-          <FlatList
-            data={posts}
-            numColumns={3}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={renderPost}
-            contentContainerStyle={styles.postContainer}
-          />
+    <ScrollView style={styles.container}>
+      <View style={styles.profileContainer}>
+        <View style={styles.profileImageContainer}>
+          <Image source={{ uri: user.profilepic }} style={styles.profileImage} />
         </View>
-      </ScrollView>
-    </ImageBackground>
+
+        <Text style={styles.username}>{user.username}</Text>
+
+        {user.premium === false ? (
+          <Subscription premium={changePremium} id={user.id} />
+        ) : (
+          <MaterialIcons style={styles.icon} name="verified" size={24} color="#d4af37" />
+        )}
+
+        <View style={styles.infoContainer}>
+          <View style={styles.infoItem}>
+            <Text style={styles.infoLabel}>Posts</Text>
+            <Text style={styles.infoText}>{posts.length}</Text>
+          </View>
+          <View style={styles.infoItem}>
+            <Text style={styles.infoLabel}>Followers</Text>
+            <Text style={styles.infoText}>{user.followers.length}</Text>
+          </View>
+          <View style={styles.infoItem}>
+            <Text style={styles.infoLabel}>Following</Text>
+            <Text style={styles.infoText}>{user.follows.length}</Text>
+          </View>
+        </View>
+
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity onPress={handlePress} style={styles.button}>
+            <Feather name="menu" size={22} color="black" />
+          </TouchableOpacity>
+        </View>
+
+        <FlatList
+          data={posts}
+          numColumns={3}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={renderPost}
+          contentContainerStyle={styles.postContainer}
+        />
+      </View>
+    </ScrollView>
   );
 };
 
 const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get("window").height;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'transparent',
-  },
-  backgroundImage: {
-    flex: 1,
+    backgroundColor: '#f0ede4',
   },
   profileContainer: {
     padding: 16,
@@ -136,12 +129,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     marginTop: 4,
-    left:10
   },
   infoLabel: {
-    fontSize: 13,
-    color: 'rgba(240, 237, 228, 0.5)',
-    left:10
+    fontSize: 12,
+    color: 'gray',
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -149,7 +140,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   button: {
-    backgroundColor: 'rgba(240, 237, 228, 0.5)',
+    backgroundColor: '#f0ede4',
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 4,
@@ -178,17 +169,11 @@ const styles = StyleSheet.create({
     height: (windowWidth - 4) / 3,
     resizeMode: 'cover',
     margin: 1,
-    borderRadius:15,
   },
-  icon: {
-    left: 177,
-    top: -10,
-  },
-  image: {
-    flex: 1,
-    width: windowWidth,
-    height: windowHeight,
-  },
+  icon:{
+left:180,
+top:-10
+  }
 });
 
 export default Profile;

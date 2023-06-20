@@ -3,7 +3,7 @@ var router = express.Router();
 const {addNewFollow,CurrentFollow ,ForeignFollow} =require("../controller/follow")
 
 router.post("/addfollow",addNewFollow)
-router.post("/current",CurrentFollow)
-router.post("/foreign",ForeignFollow)
+router.get("/current",CurrentFollow)
+router.get("/foreign",ForeignFollow)
 
 module.exports = router;

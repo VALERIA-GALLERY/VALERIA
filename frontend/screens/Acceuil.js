@@ -15,30 +15,25 @@ import DetailsPost from './DetailsPost';
 import Icon from 'react-native-vector-icons/Ionicons';
 import link from '../link';
 
-export default function Home({ route }) {
-  const { user } = route.params;
-  console.log(user.id)
+export default function Home() {
   console.log('Welcome to home');
   const image = { uri: 'https://i.pinimg.com/originals/50/b3/f3/50b3f3520f8c37cc54e7dd245b5ecf6d.jpg' };
   const [data, setData] = useState([]);
-
 
   const fetchData = () => {
     axios
       .get(`${link}/post/`)
       .then((res) => {
         setData(res.data);
-        console.log(res.data)
       })
       .catch((err) => console.log(err));
   };
-
 
   useEffect(() => {
     fetchData();
   }, []);
 
-  const renderItem = ({ item }) => <DetailsPost CurrentuserID={user.id} data={item}  />;
+  const renderItem = ({ item }) => <DetailsPost data={item} />;
 
   return (
     <View style={styles.container}>
@@ -74,8 +69,8 @@ const styles = StyleSheet.create({
     borderBottomColor: '#ddd',
     borderBottomWidth: 1,
     flexDirection: 'row',
-   },
-    title: {
+  },
+  title: {
     color: '#A47E53',
     fontSize: 20,
     fontWeight: 'bold',

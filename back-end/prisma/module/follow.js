@@ -5,13 +5,13 @@ const prisma = new PrismaClient();
 
 async function addFollow(data) {
   const { current_user_id, foreign_user_ids } = data;
-  console.log(data,"MODULE")
+  console.log(data)
   try {
     const follow = await prisma.follows.create({
-      data: {
-        current_user_ids: data.current_user_ids,
-        foreign_user_ids: data.foreign_user_ids,
-      },
+        data: {
+          current_user_ids: current_user_id,
+          foreign_user_ids: foreign_user_ids,
+          }
         });
         console.log(follow);
         return follow
@@ -21,32 +21,27 @@ async function addFollow(data) {
 }
    
 
-
-async function getAllCurrent(id) {
+async function getAllCurrent() {
   try {
     const currentFollow = await prisma.follows.findMany({
-      where: {
-        current_user_ids: {
-          equals: id.id,
-        },
+      select: {
+        current_user_ids: true,
       },
     });
-    return currentFollow
+    return currentFollow.flatMap(userFollow => userFollow.current_user_ids);
   } catch (error) {
     console.error(error);
   }
 }
 
-async function getAllForeign(id) {
+async function getAllForeign() {
   try {
     const foreignUsers = await prisma.follows.findMany({
-      where: {
-        foreign_user_ids: {
-          equals: id.id,
-        },
+      select: {
+        foreign_user_ids: true,
       },
     });
-    return foreignUsers
+    return foreignUsers.flatMap(userFollow => userFollow.foreign_user_ids);
   } catch (error) {
     console.error(error); 
   }

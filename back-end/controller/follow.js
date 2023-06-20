@@ -52,19 +52,17 @@ const prisma = new PrismaClient();
    
 
 exports.CurrentFollow=async(req,res)=> {
-  const id = req.body;
   try {
-    const currentFollowUsers = await getAllCurrent(id);
-    res.status(200).json(currentFollowUsers);
+    const currentFollowUsers = await getAllCurrent();
+    res.status(200).json(currentFollowUsers );
   } catch (error) {
     console.log(error)
-    res.status(500).json({ message: 'you have a error ' });
+    res.status(500).json({ message: 'you have a error si zebi ' });
   }
 }
 exports.ForeignFollow=async(req,res)=> {
-  const id = req.body;
   try {
-    const foreignFollow = await getAllForeign(id);
+    const foreignFollow = await getAllForeign();
     res.status(200).json(foreignFollow );
     console.log(foreignFollow)
   } catch (error) {
