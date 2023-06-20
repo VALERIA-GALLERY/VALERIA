@@ -99,6 +99,8 @@ export default function OnePost({ route }) {
     setModalVisible(false);
   };
 
+
+
   return (
     <View style={styles.container}>
       <Image source={{ uri: data.pic[currentImageIndex] }} style={styles.image} resizeMode="cover" />

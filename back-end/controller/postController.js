@@ -1,5 +1,6 @@
 const cloudinary = require("cloudinary").v2;
-const { createPost, getAllPosts, getCommentsByPost, addComment, addLikes, getLikes, removeLike} = require("../prisma/module/postModel");
+
+const { createPost, getAllPosts, getCommentsByPost, addComment, addLikes, getLikes, removeLikem ,getPostsById} = require("../prisma/module/postModel");
 
 cloudinary.config({
   cloud_name: "di9jvr1du",
@@ -68,6 +69,7 @@ exports.addComment = async (req, res) => {
   }
 };
 
+
 exports.likePost = async (req, res, next) => {
   try {
     const likeData = {
@@ -103,3 +105,15 @@ exports.unlikePost = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.getPostsId = async (req, res) => {
+  try {
+    const allPostsById = await getPostsById();
+    console.log(allPostsById)
+    res.send(allPostsById);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('An error occurred');
+  }
+};
+

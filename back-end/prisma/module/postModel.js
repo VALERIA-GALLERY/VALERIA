@@ -98,6 +98,15 @@ async function getLikes(postId) {
 
   return likesWithUsers;
 }
+async function getPostsById(userid) {
+  const posts = await prisma.posts.findMany({
+    where: {
+      userid: userid,
+    }
+  });
+  return posts
+}
+
 
 
 async function removeLike(likeData) {
@@ -119,6 +128,5 @@ async function removeLike(likeData) {
 }
 
 
-module.exports = { createPost, getAllPosts, getCommentsByPost, addComment, addLikes, getLikes, removeLike };
-
+module.exports = { createPost, getAllPosts, getCommentsByPost, addComment, addLikes, getLikes, removeLike, getPostsById };
 

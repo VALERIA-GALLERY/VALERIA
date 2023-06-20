@@ -17,6 +17,7 @@ import W3 from './screens/welcomeScreens/Welcome3';
 import Conversations from './screens/conversations';
 import Chat from './screens/Chat';
 import OnePost from './screens/Onepost';
+import OneProfile from './screens/OneProfile'
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -40,6 +41,16 @@ export default function App() {
         <Stack.Screen name="Comments" component={Comments} />
         <Stack.Screen name="Chat" component={Chat} options={{ title: 'name',headerShown: true }} />
         <Stack.Screen name="OnePost" component={OnePost} options={{ title: '',headerShown: true , }} />
+        <Stack.Screen
+  name="OneProfile"
+  component={OneProfile}
+  options={{
+    title: '',
+    headerShown: true,
+    headerTransparent: true, // Set header background color to transparent
+  }}
+/>
+
       </Stack.Navigator>
     </NavigationContainer>
   );
