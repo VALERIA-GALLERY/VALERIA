@@ -1,14 +1,14 @@
 import React from 'react';
-import { View, Text,Image } from 'react-native';
+import { View, Text, Image } from 'react-native';
 import { Feather, Ionicons, FontAwesome, FontAwesome5 } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useRoute } from '@react-navigation/native';
 
 // Import your components
- import Acceuil from '../screens/Acceuil';
- import Chat from '../screens/Chat';
- import Create from '../screens/Create';
+import Acceuil from '../screens/Acceuil';
+import Chat from '../screens/Chat';
+import Create from '../screens/Create';
 import Search from '../screens/Search';
 import Profile from '../screens/profile1';
 import Conversations from '../screens/conversations';
@@ -16,9 +16,9 @@ import Conversations from '../screens/conversations';
 const Tab = createBottomTabNavigator();
 
 const COLORS = {
-  primary: '#A47E53', 
-  brown: '#A47E53', 
-  white: '#ffffff' 
+  primary: '#A47E53',
+  brown: '#A47E53',
+  white: '#ffffff'
 };
 
 const screenOptions = {
@@ -31,93 +31,112 @@ const screenOptions = {
     right: 0,
     left: 0,
     elevation: 0,
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(240, 237, 228, 0.2)',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
   }
-};  
+};
 
 const Tabs = () => {
-   
-const route = useRoute();
-const {user} = route.params;
+
+  const route = useRoute();
+  const { user } = route.params;
+  
   return (
     <Tab.Navigator screenOptions={screenOptions}>
       <Tab.Screen
         name="Acceuil"
         initialParams={{ user: user }}
-        component={Acceuil} 
+        component={Acceuil}
         options={{
-          tabBarIcon: ({focused}) => (
-            <Feather name='home' size={24} color={focused ? COLORS.primary : COLORS.brown}/>
+          headerStyle: {
+            backgroundColor: 'transparent',
+            elevation: 0,
+            shadowOpacity: 0,
+          },
+          tabBarIcon: ({ focused }) => (
+            <Feather name='home' size={24} color={focused ? COLORS.primary : COLORS.brown} />
           ),
         }}
       />
       <Tab.Screen
         name="Conversations"
         initialParams={{ user: user }}
-        component={Conversations} 
+        component={Conversations}
         options={{
-          tabBarIcon: ({focused}) => (
-            <Ionicons name='chatbox-outline' size={24} color={focused ? COLORS.primary : COLORS.brown}/>
-            ),
-          }}
-          // <Image source={require("../assets/plus.JPG")} size={24} color={focused ? COLORS.primary : COLORS.brown}/>
+          headerStyle: {
+            backgroundColor: 'transparent',
+            elevation: 0,
+            shadowOpacity: 0,
+          },
+          tabBarIcon: ({ focused }) => (
+            <Ionicons name='chatbox-outline' size={24} color={focused ? COLORS.primary : COLORS.brown} />
+          ),
+        }}
       />
       <Tab.Screen
         name="Create"
-        component={Create}
         initialParams={{ user: user }}
+        component={Create}
         options={{
-          tabBarIcon: ({focused}) => (
-            <LinearGradient colors={['#A47E53','#c5af81']} 
+          headerStyle: {
+            backgroundColor: 'transparent',
+            elevation: 0,
+            shadowOpacity: 0,
+          },
+          tabBarIcon: ({ focused }) => (
+            <LinearGradient colors={['#A47E53', '#c5af81']}
               style={{
-                alignItems:'center',
-                justifyContent:'center',
+                alignItems: 'center',
+                justifyContent: 'center',
                 width: 50,
                 height: 50,
-                top:-10,
-                borderRadius:15,
-                borderColor:'#fff',
-                borderWidth:4
+                top: -10,
+                borderRadius: 15,
+                borderColor: '#fff',
+                borderWidth: 4
               }}
             >
               <Feather name="plus" size={45} color={COLORS.white} />
             </LinearGradient>
           ),
-        }} 
+        }}
       />
       <Tab.Screen
         name="Search"
-        component={Search} 
         initialParams={{ user: user }}
+        component={Search}
         options={{
-          tabBarIcon: ({focused}) => (
-            <FontAwesome5 name='search' size={24} color={focused ? COLORS.primary : COLORS.brown}/>
+          headerStyle: {
+            backgroundColor: 'transparent',
+            elevation: 0,
+            shadowOpacity: 0,
+          },
+          tabBarIcon: ({ focused }) => (
+            <FontAwesome5 name='search' size={24} color={focused ? COLORS.primary : COLORS.brown} />
           ),
         }}
       />
       <Tab.Screen
         name="Profile"
         initialParams={{ user: user }}
-        component={Profile} 
-        // options={{
-        //   tabBarIcon: ({focused}) => (
-        //     <FontAwesome name='user-circle' size={24} color={focused ? COLORS.primary : COLORS.brown}/>
-        //   ),
-        // }}
+        component={Profile}
         options={{
+          headerStyle: {
+            backgroundColor: 'transparent',
+            elevation: 0,
+            shadowOpacity: 0,
+          },
           tabBarIcon: ({ focused }) => (
             <Image
-            source={{ uri: user.profilepic }}
-              style={{ width: 27, height: 27,   borderRadius: 50}}
+              source={{ uri: user.profilepic }}
+              style={{ width: 27, height: 27, borderRadius: 50 }}
             />
           ),
         }}
-        
       />
     </Tab.Navigator>
   )
 };
 
-export default Tabs
+export default Tabs;
