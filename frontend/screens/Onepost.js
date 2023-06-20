@@ -1,91 +1,191 @@
-import React, { useState } from "react";
-import { View, Text, Image, StyleSheet, TouchableOpacity, TextInput } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, Image, StyleSheet, TouchableOpacity, TextInput, FlatList, Modal } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
+import axios from "axios";
+import link from "../link";
+import { useNavigation } from "@react-navigation/native";
+import { auth } from "../fireBase";
 
 export default function OnePost({ route }) {
   const { data } = route.params;
-  console.log("data", data);
+  const navigation = useNavigation();
+  const [newComment, setNewComment] = useState("");
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [comments, setComments] = useState(data.comments || []);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [likes, setLikes] = useState([]);
+  const [likedBy, setLikedBy] = useState("");
+  const [modalLikedBy, setModalLikedBy] = useState([]);
 
-  const [likes, setLikes] = useState(data.likes);
-  const [isLiked, setIsLiked] = useState(false);
-  const [commentsVisible, setCommentsVisible] = useState(false);
-  const [commentInput, setCommentInput] = useState("");
-  const [commentInputVisible, setCommentInputVisible] = useState(false);
 
-  const toggleCommentInput = () => {
-    setCommentInputVisible(!commentInputVisible);
-  };
+  useEffect(() => {
+    fetchComments();
+    fetchLikes();
+  }, [data.id]);
 
-  const handleLike = () => {
-    if (isLiked) {
-      setLikes(likes - 1);
-      setIsLiked(false);
-    } else {
-      setLikes(likes + 1);
-      setIsLiked(true);
+  const userCommented = auth;
+
+  const fetchComments = async () => {
+    try {
+      const timestamp = Date.now();
+      const response = await axios.get(
+        `${link}/post/${data.id}/comments/?timestamp=${timestamp}`
+      );
+      setComments(response.data);
+    } catch (error) {
+      console.error(error);
     }
   };
 
-  const handleComment = () => {
-    toggleCommentInput();
-    setCommentInput("");
+  const fetchLikes = async () => {
+    try {
+      const timestamp = Date.now();
+      const response = await axios.get(
+        `${link}/post/${data.id}/likes/?timestamp=${timestamp}`
+      );
+      setLikes(response.data);
+
+      const uniqueLikedUsernames = Array.from(new Set(response.data.map(like => like.user.username)));
+      if (uniqueLikedUsernames.length > 0) {
+        if (uniqueLikedUsernames.length === 1) {
+          setLikedBy(uniqueLikedUsernames[0]);
+        } else {
+          const othersCount = uniqueLikedUsernames.length - 1;
+          setLikedBy(`${uniqueLikedUsernames[0]} and ${othersCount} others`);
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  if (data === undefined) {
-    return (
-      <View>
-        <Text>data undefined</Text>
-      </View>
-    );
-  }
+  const handleAddComment = async () => {
+    if (newComment.trim() === "") {
+      return;
+    }
+
+    const addedComment = {
+      user: userCommented.currentUser.uid,
+      post: data.id,
+      comment: newComment,
+    };
+
+    try {
+      const response = await axios.post(
+        `${link}/post/${data.id}/comments/`,
+        addedComment
+      );
+      const newCommentData = response.data;
+      setComments((prevComments) => [...prevComments, newCommentData]);
+      setNewComment("");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleNextImage = () => {
+    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % data.pic.length);
+    navigation.navigate("OnePost", { data });
+  };
+
+  const handleOpenLikesModal = () => {
+    const uniqueUsernames = Array.from(new Set(likes.map(like => like.user.username)));
+    setModalLikedBy(uniqueUsernames);
+    setModalVisible(true);
+  };
+  
+
+  const handleCloseLikesModal = () => {
+    setModalVisible(false);
+  };
 
 
 
   return (
     <View style={styles.container}>
-      <Image source={{ uri: data.pic[0] }} style={styles.image} resizeMode="cover" />
+      <Image source={{ uri: data.pic[currentImageIndex] }} style={styles.image} resizeMode="cover" />
       <View style={styles.postHeader}>
+        <TouchableOpacity style={styles.nextButton} onPress={handleNextImage}>
+          <Text style={styles.buttonText}>Next Image</Text>
+        </TouchableOpacity>
         <Text style={styles.name}>{data.name}</Text>
         <Text style={styles.date}>{data.date_time}</Text>
       </View>
       <View style={styles.postFooter}>
         <Text style={styles.desc}>{data.description}</Text>
       </View>
-      {commentsVisible && (
-        <View style={styles.commentsContainer}>
-          {data.comments.map((comment, index) => (
-            <Text key={index} style={styles.comment}>
-              {comment}
-            </Text>
-          ))}
-        </View>
-      )}
-      
-      <View style={styles.likecom}>
-        <TouchableOpacity style={styles.like} onPress={handleLike}>
-          <Icon
-            name={isLiked ? "heart" : "heart-outline"}
-            size={30}
-            color={isLiked ? "#A47E53" : "#A47E53"}
-          />
-          <Text style={styles.desc}>{likes}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.com} onPress={handleComment}>
-          <Icon name="chatbox-outline" size={30} color="#A47E53" />
-         
-          <Text style={styles.desc}>{data.comments.length}</Text>
 
-          
-        </TouchableOpacity>
-      </View>
-      {commentInputVisible && (
+      <FlatList
+        data={comments}
+        renderItem={({ item, index }) => (
+          <View key={index}>
+            <View style={styles.userContainer}>
+              <Image
+                style={{
+                  width: 25,
+                  height: 25,
+                  borderRadius: 12.5,
+                }}
+                source={{ uri: item.user?.profilepic }}
+              />
+              <Text style={styles.userName}>{item.user?.firstname}</Text>
+            </View>
+            <View style={styles.singleCommentContainer}>
+              <Text style={styles.singleCommentText}>{item.comment}</Text>
+            </View>
+          </View>
+        )}
+        keyExtractor={(item, index) => index.toString()}
+      />
+
+      <View style={styles.commentContainer}>
         <TextInput
           style={styles.commentInput}
-          placeholder="Write a comment..."
-          value={commentInput}
-          onChangeText={text => setCommentInput(text)}
+          placeholder="Add a comment"
+          value={newComment}
+          onChangeText={setNewComment}
         />
-      )}
+        <TouchableOpacity
+          style={styles.commentButton}
+          onPress={handleAddComment}
+        >
+          <Text style={styles.commentText}>Comment</Text>
+        </TouchableOpacity>
+      </View>
+
+      <TouchableOpacity style={styles.like} onPress={handleOpenLikesModal}>
+        <Icon
+          name="heart"
+          size={30}
+          color={likes.length > 0 ? "#A47E53" : "#A47E53"}
+        />
+        {likedBy !== "" && (
+          <Text style={styles.likedByText}>Liked By: {likedBy}</Text>
+        )}
+      </TouchableOpacity>
+
+      <Modal
+  animationType="slide"
+  transparent={true}
+  visible={modalVisible}
+  onRequestClose={handleCloseLikesModal}
+>
+  <View style={styles.centeredView}>
+    <View style={styles.modalView}>
+      {modalLikedBy.map((username, index) => (
+        <Text key={index} style={styles.likedByUsername}>
+          {username}
+        </Text>
+      ))}
+      <TouchableOpacity
+        style={styles.closeModalButton}
+        onPress={handleCloseLikesModal}
+      >
+        <Text style={styles.closeModalButtonText}>Close</Text>
+      </TouchableOpacity>
+    </View>
+  </View>
+</Modal>
 
     </View>
   );
@@ -94,68 +194,142 @@ export default function OnePost({ route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-  },image: {
+  },
+  image: {
     width: "100%",
-    height: 400,
-    borderRadius: 20,
+    height: 250,
   },
   postHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
-    padding: 10,
+    paddingHorizontal: 15,
+    paddingTop: 10,
   },
   name: {
     fontWeight: "bold",
-    fontSize: 16,
+    fontSize: 20,
   },
   date: {
-    fontSize: 12,
-    color: "#888",
+    color: "gray",
   },
   postFooter: {
-    backgroundColor: "#fff",
-    padding: 10,
-    width: "100%",
+    paddingHorizontal: 15,
+    paddingTop: 10,
   },
   desc: {
-    fontSize: 14,
-    color: "#000",
-  },
-  commentsContainer: {
     marginTop: 10,
-    paddingHorizontal: 10,
+    lineHeight: 20,
   },
-  comment: {
-    fontSize: 14,
-    marginBottom: 5,
-    color: "#555",
-  },
-  likecom: {
+  userContainer: {
     flexDirection: "row",
-    justifyContent: "space-around",
+    alignItems: "center",
+    margin: 5,
+    marginBottom: 5,
+  },
+  userName: {
+    fontSize: 15,
+    color: "#B4966A",
+    marginLeft: 5,
+  },
+  singleCommentContainer: {
+    backgroundColor: "#FFFFFF",
     padding: 10,
-    backgroundColor: "#f8f8f8",
-    top: -10,
+    borderRadius: 8,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  singleCommentText: {
+    marginLeft: 15,
+  },
+  commentContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingHorizontal: 15,
+    paddingTop: 10,
+  },
+  commentInput: {
+    width: "70%",
+    borderColor: "gray",
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingLeft: 10,
+  },
+  commentButton: {
+    backgroundColor: "#B4966A",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 10,
+    borderRadius: 10,
+    width: "25%",
+  },
+  commentText: {
+    color: "#FFFFFF",
   },
   like: {
     flexDirection: "row",
     alignItems: "center",
+    paddingHorizontal: 15,
+    paddingTop: 10,
   },
-  com: {
-    flexDirection: "row",
+  nextButton: {
+    backgroundColor: "#B4966A",
+    justifyContent: "center",
     alignItems: "center",
-  },
-  commentInput: {
-    borderWidth: 1,
-    borderColor: "#A47E53",
-    borderRadius: 10,
     padding: 10,
-    marginTop: 10,
-    marginBottom: 5,
-    fontSize: 14,
-    color: "#555",
+    borderRadius: 10,
+    width: "30%",
+  },
+  buttonText: {
+    color: "#FFFFFF",
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  likedByText: {
+    fontSize: 12,
+    color: "#A47E53",
+    fontWeight: "bold",
+    marginRight: 5,
+  },
+  likedByUsername: {
+    fontSize: 12,
+    color: "#A47E53",
+    fontWeight: "bold",
+    marginRight: 5,
+  },
+  closeModalButton: {
+    marginTop: 20,
+    backgroundColor: "#B4966A",
+    borderRadius: 20,
+    padding: 10,
+  },
+  closeModalButtonText: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });

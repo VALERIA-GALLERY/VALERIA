@@ -29,59 +29,74 @@ async function getAllPosts() {
 
   return posts;
 }
-
-
-async function getCommentsByUser(userId) {
+async function getCommentsByPost(postId) {
   const comments = await prisma.comments.findMany({
-    where: {
-      userid: userId,
-    },
+    where: { postid: postId },
   });
 
-  const commentsWithPost = [];
+  const userIds = comments
+    .map((comment) => comment.userid)
+    .filter((userid) => userid !== null); // Filter out null values
 
-  for (const comment of comments) {
-    const post = await prisma.posts.findUnique({
-      where: {
-        id: comment.postid,
-      },
-      include: {
-        users: true,
-      },
-    });
+  const users = await prisma.users.findMany({
+    where: { id: { in: userIds } },
+  });
 
-    commentsWithPost.push({
-      ...comment,
-      post,
-    });
-  }
+  const commentsWithUsers = comments.map((comment) => {
+    const user = users.find((user) => user.id === comment.userid);
+    return { ...comment, user }; // Add user data to the comment
+  });
 
-  return commentsWithPost;
+  return commentsWithUsers;
 }
 
 
-async function addComment(postId, userId, comment) {
+async function addComment(commentData) {
   const newComment = await prisma.comments.create({
     data: {
-      comment,
-      userid: userId,
-      postid: postId,
+      userid: commentData.user,
+      postid: commentData.post,
+      comment: commentData.comment,
     },
   });
 
-  const post = await prisma.posts.findUnique({
-    where: {
-      id: postId,
-    },
-    include: {
-      users: true,
+  return newComment;
+}
+
+async function addLikes(likeData) {
+  const newLike = await prisma.likes.create({
+    data: {
+      userid: likeData.user,
+      postid: likeData.post,
     },
   });
 
-  return {
-    ...newComment,
-    post,
-  };
+  const user = await prisma.users.findUnique({
+    where: { id: likeData.user },
+  });
+
+  return { ...newLike, user };
+}
+
+async function getLikes(postId) {
+  const likes = await prisma.likes.findMany({
+    where: { postid: postId },
+  });
+
+  const users = await Promise.all(
+    likes.map((like) =>
+      prisma.users.findUnique({
+        where: { id: like.userid },
+      })
+    )
+  );
+
+  const likesWithUsers = likes.map((like, index) => ({
+    ...like,
+    user: users[index],
+  }));
+
+  return likesWithUsers;
 }
 async function getPostsById(userid) {
   const posts = await prisma.posts.findMany({
@@ -93,4 +108,25 @@ async function getPostsById(userid) {
 }
 
 
-module.exports = { createPost, getAllPosts, getCommentsByUser, addComment ,getPostsById };
+
+async function removeLike(likeData) {
+  // Ensure that likeData and likeData.id are not undefined or null
+  if (likeData && likeData.id) {
+    try {
+      const removedLike = await prisma.likes.delete({
+        where: {
+          id: likeData.id,
+        },
+      });
+      return removedLike;
+    } catch (error) {
+      console.error('Error while deleting like:', error);
+    }
+  } else {
+    console.error('Invalid likeData:', likeData);
+  }
+}
+
+
+module.exports = { createPost, getAllPosts, getCommentsByPost, addComment, addLikes, getLikes, removeLike, getPostsById };
+

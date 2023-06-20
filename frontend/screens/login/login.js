@@ -37,7 +37,6 @@ export default function Login() {
 
 
   const userlogin=(id)=>{
-console.log("link",link)
 axios.get(`${link}/users/login/${id}`) //check the ip address run cmd ipconfig or contact yassin
 .then(res=>{
   setLoading(false)
