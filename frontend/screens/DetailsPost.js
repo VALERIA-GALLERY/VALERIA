@@ -7,12 +7,14 @@ import {
   Pressable,
   StyleSheet,
   Modal,
+   Image,
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import link from "../link";
 import { auth } from "../fireBase";
+
 
 export default function DetailsPost({ data, index }) {
   const navigation = useNavigation();
@@ -21,9 +23,30 @@ export default function DetailsPost({ data, index }) {
   const [comments, setComments] = useState(data.comments);
   const [likedBy, setLikedBy] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [foreign, setForeign]=useState({})
+  const [profilePic, setProfilePic] = useState("");
+  const [username, setUsername] = useState("");
+   const { userid } = data;
+
+   useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        console.log(userid);
+        const res = await axios.get(`${link}/user/${userid}`) 
+        // console.log(res.data, "user data");
+        setProfilePic(res.data.profilepic);
+        setUsername(res.data.username);
+        setForeign(res.data)
+      } catch(err) {
+        console.log(err,"error")
+      }
+    }
+    fetchUser();
+  }, [userid]); 
 
   const handleLike = async () => {
     try {
+      console.log(auth,'c')
       if (isLiked) {
         await axios.delete(`${link}/post/${data.id}/likes`, { data: { user: auth.currentUser.uid } });
         setIsLiked(false);
@@ -46,7 +69,7 @@ export default function DetailsPost({ data, index }) {
         setLikedBy(uniqueUsers);
       }
     } catch (error) {
-      console.error(error);
+      console.error(error,"err");
     }
   };
 
@@ -68,7 +91,7 @@ export default function DetailsPost({ data, index }) {
   
       setLikedBy(uniqueUsers);
     } catch (error) {
-      console.error(error);
+      console.error(error,"err");
     }
   };
   
@@ -85,6 +108,7 @@ export default function DetailsPost({ data, index }) {
   };
 
   return (
+  
     <View style={styles.container}>
       <Pressable
         key={index}
@@ -97,9 +121,15 @@ export default function DetailsPost({ data, index }) {
           resizeMode="stretch"
         >
           <View style={styles.postHeader}>
-            <Icon name="person-circle-outline" size={30} color="#fff" />
+         <Image
+  source={{ uri: profilePic }}
+  style={styles.profileImage}
+  onPress={() => navigation.navigate("OneProfile", { data, foreign })}
+/>
             <View style={styles.user}>
-              <Text style={styles.name}>{data.name}</Text>
+           <Text style={styles.name} onPress={()=>
+          navigation.navigate("OneProfile",{data, foreign})
+        }>{username}</Text>
               <Text style={styles.date}>{data.date_time}</Text>
             </View>
             <Icon size={30} color="#fff" />
@@ -159,6 +189,7 @@ export default function DetailsPost({ data, index }) {
         </View>
       </Modal>
     </View>
+
   );
 }
 
@@ -169,10 +200,12 @@ const styles = StyleSheet.create({
     marginVertical: "2%",
     width: "95%",
     alignSelf: "center",
-    borderRadius: 10,
+    borderRadius: 20,
+    backgroundColor: "rgba(240, 237, 228, 0.5)",
   },
   post: {
     marginBottom: 10,
+    
   },
   image: {
     width: "100%",
@@ -185,6 +218,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     padding: 10,
+    backgroundColor: "rgba(240, 237, 228, 0.2)",
   },
   user: {
     flexDirection: "row",
@@ -194,26 +228,28 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
     marginLeft: 10,
+    right:70
   },
   date: {
     color: "#fff",
     marginLeft: 10,
+left:70
   },
   postFooter: {
     position: "absolute",
     bottom: 0,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    backgroundColor: "rgba(240, 237, 228, 0.2)",
     padding: 10,
     width: "100%",
   },
   desc: {
-    color: "#fff",
+    color: "white",
   },
   likecom: {
     flexDirection: "row",
     justifyContent: "space-around",
     padding: 10,
-    backgroundColor: "#f8f8f8",
+    backgroundColor: "rgba(240, 237, 228, 0.5)",
   },
   like: {
     flexDirection: "row",
@@ -224,14 +260,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   likedByContainer: {
-    marginTop: 10,
+    marginTop: 0,
     flexDirection: "row",
     alignItems: "center",
+    // backgroundColor: "rgba(240, 237, 228, 0.5)",
+
   },
   likedByText: {
     marginRight: 5,
     fontSize: 12,
-    color: "#A47E53",
+    color: "white",
+    left:20
+    
   },
   likedByUsername: {
     fontSize: 12,
@@ -267,5 +307,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#B4966A",
     borderRadius: 20,
     padding: 10,
+  },
+  profileImage: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
   },
 });

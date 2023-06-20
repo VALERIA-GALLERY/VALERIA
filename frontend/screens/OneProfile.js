@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Button, FlatList, Dimensions, Pressable, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Button, FlatList, Dimensions, Pressable, ImageBackground, TouchableWithoutFeedback  } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import link from '../link';
 import axios from 'axios';
 import { useRoute } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from "@react-navigation/native";
 
-const OneProfile = () => {
+const OneProfile =  () => {
+  const navigation = useNavigation();
   const [currentU, setCurrentU] = useState("");
+  const [currentUserData, setCurrentUserData] = useState({});
   const [followers, setFollowers] = useState([]);
   const [followersn, setFollowersn] = useState(followers.length);
   const [following, setFollowing] = useState([]);
@@ -15,11 +18,13 @@ const OneProfile = () => {
   const [isFollowed, setIsFollowed] = useState(false);
   const [posts, setPosts] = useState([]);
 
-  const getData = async (key) => {
+  const getData =  async (key) => {
     try {
       const value = await AsyncStorage.getItem(key);
       if (value !== null) {
         setCurrentU(value);
+        getCurrentUser(value)
+        
       } else {
         console.log('No data found for the key:', key);
       }
@@ -71,10 +76,24 @@ const OneProfile = () => {
     setIsFollowed(false);
   }
 
+const getCurrentUser=(value)=>{
+  console.log(value)
+  axios.get(`${link}/user/${value}`)
+.then(res=>setCurrentUserData(res.data))
+.catch(err=>console.log(err,"err"))
+}
+
   useEffect(() => {
-    getData("current");
+   try  {
+     getData("current");
     getFollowers();
     getFollowing();
+   
+
+}
+catch(err){
+  console.log(err)
+}
     axios.get(`${link}/userposts/user/${foreign.id}`)
       .then((res) => {
         setPosts(res.data);
@@ -95,9 +114,29 @@ const OneProfile = () => {
     setIsFollowed(isUserFollowed);
   }, [followers, currentU]);
 
-  const renderPost = ({ item }) => (
-    <Image source={{ uri: item.pic[0] }} style={styles.postImage} />
-  );
+  const renderPost = ({ item }) =>{ 
+   console.log(item.premiem,"post")
+   console.log(currentUserData.premium,"user")
+   if(item.premiem&&currentUserData.premium){
+    
+    return(<TouchableWithoutFeedback onPress={() => navigation.navigate("OnePost", { data:item })}>
+     <Image source={{ uri: item.pic[0] }} borderColor={'#d4af37'} style={styles.postImage} />
+    </TouchableWithoutFeedback>)
+   }
+   if(item.premiem&&!currentUserData.premium){
+    return  ( <View>
+      <Image source={{ uri: item.pic[0] }} style={styles.postImage} borderColor= {'#d4af37'} blurRadius={70}  />
+      <Text style={styles.imageText}>Premium</Text>
+    </View>)
+   }
+   if(!item.premiem){
+    return(
+      <TouchableWithoutFeedback onPress={() => navigation.navigate("OnePost", { data:item })}>
+      <Image source={{ uri: item.pic[0] }} style={styles.postImage} />
+      </TouchableWithoutFeedback>
+    )
+   }
+   }
 
   return (
     <ImageBackground source={{ uri: profilepic }} resizeMode="cover" style={styles.backgroundImage} blurRadius={70} >
@@ -148,7 +187,7 @@ const OneProfile = () => {
   
         <FlatList
           data={posts}
-          numColumns={3}
+          numColumns={2}
           keyExtractor={(item, index) => index.toString()}
           renderItem={renderPost}
           contentContainerStyle={styles.postContainer}
@@ -249,11 +288,13 @@ const styles = StyleSheet.create({
     paddingBottom: 24,
   },
   postImage: {
-    width: (windowWidth - 4) / 3,
-    height: (windowWidth - 4) / 3,
+    width: 180,
+    height: 180,
     resizeMode: 'cover',
     margin: 1,
     borderRadius:15,
+    borderWidth: 2,
+    borderColor:'rgba(240, 237, 228, 0.5)',
   },
   buttonFollow: {
     backgroundColor: 'rgba(240, 237, 228, 0.5)',
@@ -271,6 +312,14 @@ const styles = StyleSheet.create({
   unfollowedButton: {
     backgroundColor: 'rgba(240, 237, 228, 0.5)',
   },
+  premium:{
+    borderColor:"gold"
+  },
+  imageText:{
+    top:-100,
+    left:60,
+    color:'#d4af37'
+  }
 });
 
 export default OneProfile;
