@@ -15,32 +15,33 @@ import DetailsPost from './DetailsPost';
 import Icon from 'react-native-vector-icons/Ionicons';
 import link from '../link';
 
-export default function Home() {
+export default function Home({ route }) {
+  const { user } = route.params;
+  console.log(user.id)
   console.log('Welcome to home');
-  const image = { uri: 'https://i.pinimg.com/originals/50/b3/f3/50b3f3520f8c37cc54e7dd245b5ecf6d.jpg' };
+  const image = require('../assets/1686060014784.png');
   const [data, setData] = useState([]);
-
 
   const fetchData = () => {
     axios
       .get(`${link}/post/`)
       .then((res) => {
         setData(res.data);
+        console.log(res.data)
       })
       .catch((err) => console.log(err));
   };
-
 
   useEffect(() => {
     fetchData();
   }, []);
 
-  const renderItem = ({ item }) => <DetailsPost data={item}  />;
+  const renderItem = ({ item }) => <DetailsPost CurrentuserID={user.id} data={item}  />;
 
   return (
     <View style={styles.container}>
-      <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-        <SafeAreaView>
+      <ImageBackground source={require('../assets/HD-wallpaper-iphoney-929-apple-blur-color-cool-iphone-live-new.jpg')} resizeMode="cover" style={styles.image} blurRadius={70} >
+        <SafeAreaView style={styles.safeArea}>
           <StatusBar barStyle="dark-content" />
           <View style={styles.header}>
             <Text style={styles.title}>VALERIA</Text>
@@ -55,6 +56,7 @@ export default function Home() {
             keyExtractor={(item) => item.id.toString()}
           />
         </SafeAreaView>
+        <View style={styles.bottomBar} />
       </ImageBackground>
     </View>
   );
@@ -63,16 +65,28 @@ export default function Home() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+
+  },
+  safeArea: {
+    flex: 1, 
+    top:60
+  },
+  bottomBar: {
+    height: 60, 
+    backgroundColor: 'transparent', 
   },
   header: {
     height: 50,
-    alignItems: 'center',
+    alignItems: 'flex-start', // Align items to the top
     justifyContent: 'center',
     borderBottomColor: '#ddd',
     borderBottomWidth: 1,
     flexDirection: 'row',
-   },
-    title: {
+    padding: 10, // Add some padding at the top if needed
+    backgroundColor: 'transparent', // Make the header background transparent
+
+  },
+  title: {
     color: '#A47E53',
     fontSize: 20,
     fontWeight: 'bold',
@@ -85,6 +99,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     lineHeight: 24,
     marginLeft: 25,
+    left:150
   },
   notificationIcon: {
     marginLeft: 'auto',
@@ -92,7 +107,7 @@ const styles = StyleSheet.create({
   },
   image: {
     flex: 1,
-    borderRadius: 20,
+    borderRadius: 0,
     overflow: 'hidden',
   },
 });

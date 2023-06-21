@@ -71,3 +71,9 @@ model search_history {
   search_history_id String? @db.VarChar(255)
   user_id           String? @db.VarChar(255)
 }
+
+model likes {
+  id     String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userid String? @db.VarChar
+  postid String? @db.VarChar
+}

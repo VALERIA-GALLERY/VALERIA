@@ -1,5 +1,5 @@
 const cloudinary = require("cloudinary").v2;
-const { createPost, getAllPosts, getCommentsByUser, addComment ,getPostsById } = require("../prisma/module/postModel");
+const { createPost, getAllPosts, getCommentsByPost, addComment, addLikes, getLikes, removeLike} = require("../prisma/module/postModel");
 
 cloudinary.config({
   cloud_name: "di9jvr1du",
@@ -43,37 +43,63 @@ exports.getAll = async (req, res) => {
   }
 };
 
-exports.getCommentsByUser = async (req, res) => {
-  const { userId } = req.params;
+
+exports.getCommentsByPost = async (req, res) => {
+  const { postId } = req.params;
 
   try {
-    const comments = await getCommentsByUser(userId);
+    const comments = await getCommentsByPost(postId);
     res.send(comments);
   } catch (error) {
     console.error(error);
-    res.status(500).send('An error occurred');
+    res.status(500).send("An error occurred");
   }
 };
 
 exports.addComment = async (req, res) => {
-  const { postId } = req.params;
-  const { userId, comment } = req.body;
+  const commentData = req.body;
 
   try {
-    const newComment = await addComment(postId, userId, comment);
+    const newComment = await addComment(commentData);
     res.send(newComment);
   } catch (error) {
     console.error(error);
-    res.status(500).send('An error occurred');
+    res.status(500).send("An error occurred");
   }
 };
-exports.getPostsId = async (req, res) => {
+
+exports.likePost = async (req, res, next) => {
   try {
-    const allPostsById = await getPostsById();
-    console.log(allPostsById)
-    res.send(allPostsById);
+    const likeData = {
+      user: req.body.user,
+      post: req.params.postId
+    };
+    const newLike = await addLikes(likeData);
+    res.status(201).json(newLike);
   } catch (error) {
-    console.error(error);
-    res.status(500).send('An error occurred');
+    next(error);
+  }
+};
+
+exports.getPostLikes = async (req, res, next) => {
+  try {
+    const postId = req.params.postId;
+    const likes = await getLikes(postId);
+    res.status(200).json(likes);
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.unlikePost = async (req, res, next) => {
+  try {
+    const likeData = {
+      user: req.body.user,
+      post: req.params.postId,
+    };
+    const removedLike = await removeLike(likeData);
+    res.status(200).json(removedLike);
+  } catch (error) {
+    next(error);
   }
 };
