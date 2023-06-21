@@ -35,7 +35,7 @@ exports.addSearch = async (req, res) => {
   };
   
 exports.getSearch=async (req, res)=>{
-    const { id } = req.params; // Extract id from req.params
+    const { id } = req.params; 
     console.log(id)
     try {
       const userSearch = await getSearchById(id)
