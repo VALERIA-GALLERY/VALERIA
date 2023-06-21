@@ -23,4 +23,13 @@ async function deleteSearch(id) {
     const searches = await prisma.search_history.findMany();
     return searches;
   }
-module.exports = {addsearch , deleteSearch ,getAllSearches}
+  async function getSearchById(id) {
+    const userSearch = await prisma.search_history.findMany({  
+       where: {
+         user_id: id
+       }
+    })
+    return userSearch;
+}
+
+module.exports = {addsearch , deleteSearch ,getAllSearches,getSearchById}

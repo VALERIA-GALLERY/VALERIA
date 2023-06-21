@@ -1,4 +1,4 @@
-const { addsearch , deleteSearch ,getAllSearches} = require("../prisma/module/search");
+const { addsearch , deleteSearch ,getAllSearches ,getSearchById} = require("../prisma/module/search");
 const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
@@ -33,3 +33,17 @@ exports.addSearch = async (req, res) => {
       res.status(500).send({ message: error.message });
     }
   };
+  
+exports.getSearch=async (req, res)=>{
+    const { id } = req.params; // Extract id from req.params
+    console.log(id)
+    try {
+      const userSearch = await getSearchById(id)
+      res.send(userSearch)
+      console.log(userSearch)
+    } catch (error){
+      console.error(error);
+      res.status(500).send(' Server Error');
+    }
+}
+

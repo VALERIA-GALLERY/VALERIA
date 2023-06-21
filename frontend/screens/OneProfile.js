@@ -32,7 +32,7 @@ const OneProfile = ({ route }) => {
 
   const handlefollow=async()=>{
    try {
-    const res= await axios.post(`${link}/follow/addfollow`,
+    const res=await axios.post(`${link}/follow/addfollow`,
     setFollow({
       current_user_ids: res.follow.current_user_ids,
       foreign_user_ids: res.follow.foreign_user_ids
@@ -69,7 +69,7 @@ console.log(follow.current_user_ids)
           </View>
           <View style={styles.infoItem}>
             <Text style={styles.infoLabel} >Followers</Text>
-            <Text style={styles.infoText}>{follow.current_user_ids.length} </Text>
+            <Text style={styles.infoText}>{follow.current_user_ids.length}  </Text>
   
           </View>
           <View style={styles.infoItem} >
