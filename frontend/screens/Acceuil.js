@@ -21,7 +21,15 @@ export default function Home({ route }) {
   console.log('Welcome to home');
   const image = require('../assets/1686060014784.png');
   const [data, setData] = useState([]);
+  const [currentUserData, setCurrentUserData] = useState({});
+  const getCurrentUser=()=>{
 
+    axios.get(`${link}/user/${user.id}`)
+  .then(res=>{
+    console.log(res.data)
+    setCurrentUserData(res.data)})
+  .catch(err=>console.log(err,"err"))
+  }
   const fetchData = () => {
     axios
       .get(`${link}/post/`)
@@ -34,13 +42,14 @@ export default function Home({ route }) {
 
   useEffect(() => {
     fetchData();
+    getCurrentUser()
   }, []);
 
-  const renderItem = ({ item }) => <DetailsPost CurrentuserID={user.id} data={item}  />;
+  const renderItem = ({ item }) => <DetailsPost currentUserData={currentUserData} CurrentuserID={user.id} data={item}  />;
 
   return (
     <View style={styles.container}>
-      <ImageBackground source={require('../assets/HD-wallpaper-iphoney-929-apple-blur-color-cool-iphone-live-new.jpg')} resizeMode="cover" style={styles.image} blurRadius={70} >
+      <ImageBackground source={require('../assets/HD-wallpaper-iphoney-929-apple-blur-color-cool-iphone-live-new.jpg')} resizeMode="cover" style={styles.image} blurRadius={10} >
         <SafeAreaView style={styles.safeArea}>
           <StatusBar barStyle="dark-content" />
           <View style={styles.header}>
@@ -77,13 +86,13 @@ const styles = StyleSheet.create({
   },
   header: {
     height: 50,
-    alignItems: 'flex-start', // Align items to the top
+    alignItems: 'flex-start', 
     justifyContent: 'center',
     borderBottomColor: '#ddd',
     borderBottomWidth: 1,
     flexDirection: 'row',
-    padding: 10, // Add some padding at the top if needed
-    backgroundColor: 'transparent', // Make the header background transparent
+    padding: 10, 
+    backgroundColor: 'transparent', 
 
   },
   title: {

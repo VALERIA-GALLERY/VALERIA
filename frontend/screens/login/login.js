@@ -87,7 +87,7 @@ axios.get(`${link}/users/login/${id}`) //check the ip address run cmd ipconfig o
         selectedButtonStyle={styles.selectedButton} // Set the selected button color
       />
       <TextInput style={styles.input} onChangeText={setEmail} placeholder="email-address" keyboardType="email-address" />
-      <TextInput style={styles.input} onChangeText={setPass} placeholder="password" keyboardType="visible-password" />
+      <TextInput style={styles.input} onChangeText={setPass} placeholder="password" keyboardType="default" secureTextEntry={true} />
       <TouchableOpacity style={styles.checkboxContainer} onPress={toggleCheckbox}>
         <CheckBox
           checked={isSelected}

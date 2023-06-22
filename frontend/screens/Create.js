@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  ImageBackground
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
@@ -89,13 +90,18 @@ export default function CreatePost({ route }) {
   };
 
   return (
+    <ImageBackground
+    source={require('../assets/HD-wallpaper-iphoney-929-apple-blur-color-cool-iphone-live-new.jpg')}
+    style={styles.backgroundImage}
+    blurRadius={40}
+  >
     <View style={styles.container}>
       <Spinner
         visible={isLoading}
         textContent={"Loading..."}
         textStyle={styles.spinnerTextStyle}
       />
-      <Image source={require("../assets/qq.png")} style={styles.logo} />
+      <Image source={require("../assets/Capture d'écran 2023-06-22 150048.png")} style={styles.logo} />
       <TextInput
         placeholder='Description'
         value={description}
@@ -125,13 +131,14 @@ export default function CreatePost({ route }) {
         <Text style={styles.buttonText}>Post</Text>
       </TouchableOpacity>
     </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F0EDE4",
+    // backgroundColor: "#F0EDE4",
     alignItems: "center",
     justifyContent: "flex-start", // Align items at the top
     paddingTop: 50, // Add padding at the top for the logo
@@ -150,10 +157,11 @@ const styles = StyleSheet.create({
     width: 270,
     height: 50,
     borderBottomWidth: 0.5,
-    borderBottomColor: "#A47E53",
+    borderBottomColor: "rgba(240, 237, 228, 0.5)",
     textAlign: "center",
     margin: 5,
     marginBottom: 10,
+    color:"rgba(240, 237, 228, 0.5)"
   },
   photo: {
     width: 70,
@@ -162,7 +170,7 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   button: {
-    backgroundColor: "#B4966A",
+    backgroundColor: 'rgba(240, 237, 228, 0.5)',
     borderRadius: 100,
     width: 65,
     height: 65,
@@ -177,7 +185,7 @@ const styles = StyleSheet.create({
     color: "#F0EDE4",
   },
   button2: {
-    backgroundColor: "#B4966A",
+    backgroundColor:'rgba(240, 237, 228, 0.5)',
     padding: 10,
     borderRadius: 55,
     width: 100,
@@ -208,5 +216,9 @@ const styles = StyleSheet.create({
   },
   checkboxText: {
     marginLeft: 8,
+  },
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover', // Adjust the resizeMode based on your preference
   },
 });

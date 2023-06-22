@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Image, StyleSheet, TouchableOpacity, TextInput, FlatList, Modal } from "react-native";
+import { View, Text, Image, StyleSheet, TouchableOpacity, TextInput, FlatList, Modal, ImageBackground } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import axios from "axios";
 import link from "../link";
@@ -102,6 +102,7 @@ export default function OnePost({ route }) {
 
 
   return (
+    <ImageBackground source={{ uri:data.pic[currentImageIndex] }} resizeMode="cover" style={styles.backgroundImage} blurRadius={70} >
     <View style={styles.container}>
       <Image source={{ uri: data.pic[currentImageIndex] }} style={styles.image} resizeMode="cover" />
       <View style={styles.postHeader}>
@@ -181,23 +182,26 @@ export default function OnePost({ route }) {
         style={styles.closeModalButton}
         onPress={handleCloseLikesModal}
       >
-        <Text style={styles.closeModalButtonText}>Close</Text>
+        <Text style={styles.closeModalButtonText}>X</Text>
       </TouchableOpacity>
     </View>
   </View>
 </Modal>
 
     </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    
+
   },
   image: {
     width: "100%",
-    height: 250,
+    height: "50%",
   },
   postHeader: {
     flexDirection: "row",
@@ -210,7 +214,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   date: {
-    color: "gray",
+    color: 'rgba(240, 237, 228, 0.8)',
   },
   postFooter: {
     paddingHorizontal: 15,
@@ -219,6 +223,7 @@ const styles = StyleSheet.create({
   desc: {
     marginTop: 10,
     lineHeight: 20,
+    color: 'rgba(240, 237, 228, 0.8)',
   },
   userContainer: {
     flexDirection: "row",
@@ -232,7 +237,7 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   singleCommentContainer: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "rgba(240, 237, 228, 0.8)",
     padding: 10,
     borderRadius: 8,
     shadowColor: "#000",
@@ -252,6 +257,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: 15,
     paddingTop: 10,
+   
   },
   commentInput: {
     width: "70%",
@@ -259,6 +265,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     paddingLeft: 10,
+    color: 'rgba(240, 237, 228, 0.8)'
   },
   commentButton: {
     backgroundColor: "#B4966A",
@@ -269,7 +276,7 @@ const styles = StyleSheet.create({
     width: "25%",
   },
   commentText: {
-    color: "#FFFFFF",
+    color: 'rgba(240, 237, 228, 0.8)',
   },
   like: {
     flexDirection: "row",
@@ -322,14 +329,19 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   closeModalButton: {
-    marginTop: 20,
+    height: 30,
     backgroundColor: "#B4966A",
-    borderRadius: 20,
-    padding: 10,
+    borderRadius: 50,
+    // padding: 10,
+    width:30
   },
   closeModalButtonText: {
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
+    top:5
+  },
+  backgroundImage: {
+    flex: 1,
   },
 });

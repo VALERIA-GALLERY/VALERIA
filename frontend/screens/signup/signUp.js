@@ -87,7 +87,7 @@ export default function SignUp() {
       <TextInput style={styles.input} onChangeText={setName} placeholder="First name" keyboardType="email-address" />
       <TextInput style={styles.input} onChangeText={setLastname} placeholder="Last name" keyboardType="email-address" />
       <TextInput style={styles.input} onChangeText={setEmail} placeholder="email-address" keyboardType="email-address" />
-      <TextInput style={styles.input} onChangeText={setPass} placeholder="password" keyboardType="visible-password" />
+      <TextInput style={styles.input} onChangeText={setPass} placeholder="password" keyboardType="default" secureTextEntry={true} />
       
 
       <TouchableOpacity style={styles.button} onPress={handleSignUp}>

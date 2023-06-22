@@ -1,161 +1,211 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import {ImageBackground,
+import { useDebounce } from 'use-debounce';
+import {
   FlatList,
-     ScrollView,
-      StatusBar,
-       StyleSheet, 
-       Text,TextInput,
-        Image,
-         View,
-         TouchableOpacity} from 'react-native';
-
- import { Feather, Ionicons,AntDesign, FontAwesome5 } from '@expo/vector-icons';
+  StyleSheet,
+  Text, TextInput,
+  View,
+  Image,
+  TouchableOpacity,
+  ImageBackground 
+} from 'react-native';
+import { useNavigation } from "@react-navigation/native";
+import { Card, Chip ,Avatar, IconButton } from 'react-native-paper';
+import { Feather} from '@expo/vector-icons';
 import link from '../link';
- function Search({route}) {
+function Search({ route }) {
+  console.log("searchi ")
+  const navigation = useNavigation();
   const { user } = route.params;
-
-  const [searchTerm, setSearchTerm] = useState("");
+  console.log(user.id)
+  const [foreign, setForeign]=useState({})
+  const [inputValue, setInputValue] = useState("");
+  const [searchTerm] = useDebounce(inputValue, 500);
+  const [originalUsers, setOriginalUsers] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
-  const [reload, setReload] = useState(Date.now()); // Add this line
+  const [searchHis, setSearchHis] = useState([]);
+  const [show, setShow] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
+  console.log(searchResults,'hhh')
 
-  const fetchData = () => {
+ useEffect(() => {
     axios.get(`${link}/userss`)
-      .then((res) => {
-        setSearchResults(res.data);
+      .then(res => {
+        setOriginalUsers(res.data);
+        setSearchResults(res.data);  
       })
-      .catch((err) => console.log(err));
-      axios.get(`${link}/search/getall`)
-      .then((res) => {
-        setSearchResults(res.data);
-        console.log("geted")
-      })
-      .catch((err) => console.log(err));
-  };
+      .catch(err => console.error(err));
+     }, []);
+
+  const handlePostHis=()=>{
+    axios.post(`${link}/search/addsearch`,{
+      search_history_id:inputValue,
+      user_id:`${user.id}`
+    }).then(res => {
+      setSearchHis(res.data)
+    })
+    .catch(err => console.error(err));
+  }
+    
+useEffect(()=>{
+axios.get(`${link}/search/get/${user.id}`)
+.then(res => {
+  setSearchHis(res.data)
+    console.log("syee")
+})
+.catch(err => console.error(err,"lee")
+
+); 
+
+}, []);
+
 
   useEffect(() => {
-    fetchData();
-  }, [reload]);
+    const filteredUsers = originalUsers.filter((user) =>
+      user.username.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setSearchResults(filteredUsers);
+  }, [searchTerm]);
 
-  const handleSearch = (text) => {
-    // setSearchTerm(text);
-    // const filteredUsers = searchResults.filter((user) =>
-    //   user.username.toLowerCase().includes(text.toLowerCase())
-    // );
-    // setSearchResults(filteredUsers);
-  };
-  const forceReload = () => { // Add this function
-    setReload(Date.now());
-  };
-
-  const handlePost=()=>{
-   axios.post(`${link}/search/addsearch`,{
-    search_history_id:searchTerm,
-    user_id:user.id
-  }).then((res) => {
-    setSearchResults(res.data);
-    console.log("syee")
-  })
-  .catch((err) => console.log(err));
-  }
-  const handledelet=()=>{
-    axios.delete(`${link}/delete/${user.id}`)
-    .then((res) => {
-      setSearchResults(res.data);
-      console.log("fasakh nayek")
-    })
-    .catch((err) => console.log(err));
+  const handledelet = (id) => {
+    axios.delete(`${link}/search/delete/${id}`)
+      .then((res) => {
+        setSearchHis(res.data);
+        console.log(res.data)
+        console.log("fasakh ")
+      })
+      .catch((err) => console.log(err,"lee mtfasakhsh"));
   }
   return (
-   <View style={styles.container}>
-    {/* <Text>search here </Text> */}
-    <TextInput
+    <ImageBackground
+    source={require('../assets/HD-wallpaper-iphoney-929-apple-blur-color-cool-iphone-live-new.jpg')}
+    style={styles.backgroundImage}
+    blurRadius={40}
+  >
+    <View style={styles.container}>
+      <TextInput
+        type='search'    
         style={styles.input}
         placeholder='Search what do you want'
-        value={searchTerm}
-        onChangeText={handleSearch}
+        value={inputValue}
+        onChangeText={text => setInputValue(text)}
       />
-      
-   <TouchableOpacity onPress={() => handleSearch(searchTerm)}>
-        <View style={styles.search} >
-          <Feather name='search' size={33} color='#A47E53' onPress={handlePost} />
+      <TouchableOpacity onPress={handlePostHis}>
+        <View style={styles.search}  >
+          <Feather name='search' size={30} color='#A47E53' />
         </View>
       </TouchableOpacity>
-      <TouchableOpacity  onPress={forceReload}>
-
-      <View style={styles.reload}>
-        {/* <AntDesign name='reload1' size={33} color='#A47E53'/> */}
-        <Text>Cancel</Text>
+      <TouchableOpacity>
+        <View >
+          <Text style={styles.text}
+            onPress={() => navigation.navigate("Acceuil")}
+          >Cancel</Text>
         </View>
-        </TouchableOpacity>
-     {/* <FlatList
-        data={searchResults}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <View >
-            <Text style={styles.username}>{item.username}</Text>
-          </View>
-        )}
-      /> */}
-         {/* <FlatList
-        data={searchResults}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <View >
-            <Text style={styles.hist}>{item.search_history_id}<Feather name='x-circle' size={30} onPress={handledelet}/></Text>
-          </View>
-        )}
-      /> */}
-   </View>
-  )
-}''
+      </TouchableOpacity>
+     
 
-const styles = StyleSheet.create({
+      {searchResults?.length > 0 ? (
+  searchResults.map((item, index) => (
+    <Card key={item?.id || index} style={styles.container1}>
+      <Card.Title
+        title={item?.username || "Unknown"}
+        subtitle="Artist"
+        left={(props) => <Avatar.Image source={{uri: item?.profilepic}} size={50} />}
+        right={(props) => <IconButton {...props} icon="eye" onPress={() => {navigation.navigate("OneProfile", {  foreign:searchResults[0] })}} />}
+      />
+    </Card>
+  ))
+) : null}
+<View>
+      <FlatList
+        data={searchHis}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <View style={styles.container2} >
+            <Text style={styles.hist}>{item.search_history_id}<Feather name='x' size={30} onPress={() => handledelet(item.id)}/></Text>
+            
+          </View>
+        )}
+      />
+      </View>
+    </View>
+      </ImageBackground>
+  )
+        }        
+
+const styles = StyleSheet.create ({
   container: {
     flex: 1,
-    backgroundColor: '#F0EDE4',
+    // backgroundColor: 'grey',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start', 
+    padding: 20, 
   },
-  input :{
-    width:370,
-    height:50,
-    left:-5,
-    // top:-220,
-    top:140,
-    paddingBottom:5,
-    borderBottomWidth:0.5,
-    borderBottomColor:"#A47E53",
-    backgroundColor:'#fff',
-    borderRadius: 20, // You can change this value as per your need
-     overflow: 'hidden',
+  container1: {
+    width: '100%', 
+    marginVertical: 10,
+    top:120,
+    color:'blue'
   },
-  listItem: {
+
+   historicalChip: {
+    backgroundColor: '#A47E53',
+    borderRadius: 20,
+  },
+ 
+  input: {
+    width: '91%', 
+    height: 50,
+    marginBottom: 20,
+    borderBottomWidth: 0.5,
+    borderBottomColor: "#A47E53",
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    paddingHorizontal: 10, 
+    top:28,
+    left:17,
+  },
+  list: {
+    flexDirection: 'row', 
+    alignItems: 'center', 
     paddingVertical: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#A47E53',
+    borderBottomColor: '#A47E53'
+  },
+  image: {
+    width: 50, 
+    height: 50, 
+    borderRadius: 25, 
+    marginRight: 10, 
   },
   username: {
     fontSize: 16,
     fontWeight: 'bold',
-    top:130,
     color: '#A47E53',
   },
-  hist:{
+  hist: {
     fontSize: 16,
     fontWeight: 'bold',
-    top:130,
+    top:12,
     color: '#A47E53',
   },
-
-
-  search:{
-    top:95,
-    left:157,
-    color:"#A47E53"
+  text: {
+     right: 178,
+    top: -26,
+    color: '#A47E53',
+    textAlign: 'left',
+    marginBottom: 10,
   },
-  reload:{
-    left:157,
+  search: {
+    top: -33,
+    position: 'absolute', 
+    left: 155,
   },
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover', // Adjust the resizeMode based on your preference
+  },
+  
 })
 export default Search

@@ -16,9 +16,11 @@ import link from "../link";
 import { auth } from "../fireBase";
 
 
-export default function DetailsPost({ data, index }) {
+export default function DetailsPost({ data, index, currentUserData }) {
+  console.log(currentUserData,"currentUserData")
   const navigation = useNavigation();
   const [likes, setLikes] = useState(data.likes);
+  // const [currentUserData, setCurrentUserData] = useState({});
   const [isLiked, setIsLiked] = useState(false);
   const [comments, setComments] = useState(data.comments);
   const [likedBy, setLikedBy] = useState([]);
@@ -27,7 +29,8 @@ export default function DetailsPost({ data, index }) {
   const [profilePic, setProfilePic] = useState("");
   const [username, setUsername] = useState("");
    const { userid } = data;
-
+const currentUser=auth.currentUser.uid
+console.log(currentUser);
    useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -46,7 +49,7 @@ export default function DetailsPost({ data, index }) {
 
   const handleLike = async () => {
     try {
-      console.log(auth,'c')
+     
       if (isLiked) {
         await axios.delete(`${link}/post/${data.id}/likes`, { data: { user: auth.currentUser.uid } });
         setIsLiked(false);
@@ -94,9 +97,18 @@ export default function DetailsPost({ data, index }) {
       console.error(error,"err");
     }
   };
-  
+  // const getCurrentUser=()=>{
+
+  //   axios.get(`${link}/user/${currentUser}`)
+  // .then(res=>{
+  //   console.log(res.data)
+  //   setCurrentUserData(res.data)})
+  // .catch(err=>console.log(err,"err"))
+  // }
   useEffect(() => {
     fetchLikes();
+    // getCurrentUser()
+    
   }, []);
 
   const handleComment = () => {
@@ -106,38 +118,113 @@ export default function DetailsPost({ data, index }) {
   const handleOpenLikesModal = () => {
     setModalVisible(true);
   };
-
+ console.log()
   return (
   
     <View style={styles.container}>
-      <Pressable
-        key={index}
-        style={styles.post}
-        onPress={() => navigation.navigate("OnePost", { data })}
+     
+     {
+  !currentUserData.premium && data.premiem ? (
+    <ImageBackground
+      source={{ uri: data.pic[0] }}
+      style={styles.image}
+      resizeMode="cover"
+      blurRadius={30}
+      borderColor={'#d4af37'}
+    >
+      <View style={styles.postHeader}>
+        <Image
+          source={{ uri: profilePic }}
+          style={styles.profileImage}
+          onPress={() => navigation.navigate("OneProfile", { data, foreign })}
+        />
+        <View style={styles.user}>
+          <Text
+            style={styles.name}
+            onPress={() => navigation.navigate("OneProfile", { data, foreign })}
+          >
+            {username}
+          </Text>
+          <Text style={styles.date}>{data.date_time}</Text>
+        </View>
+        <Icon size={30} color="#fff" />
+      </View>
+      <View style={styles.imageTextContainer}>
+        <Text style={styles.imageText}>Premium</Text>
+      </View>
+      <View style={styles.postFooter}>
+        <Text style={styles.desc}>{data.description}</Text>
+      </View>
+    </ImageBackground>
+  ) : currentUserData.premium && data.premiem ? (
+    <Pressable
+      key={index}
+      style={styles.post}
+      onPress={() => navigation.navigate("OnePost", { data })}
+    >
+      <ImageBackground
+        source={{ uri: data.pic[0] }}
+        style={styles.image}
+        resizeMode="cover"
       >
-        <ImageBackground
-          source={{ uri: data.pic[0] }}
-          style={styles.image}
-          resizeMode="stretch"
-        >
-          <View style={styles.postHeader}>
-         <Image
-  source={{ uri: profilePic }}
-  style={styles.profileImage}
-  onPress={() => navigation.navigate("OneProfile", { data, foreign })}
-/>
-            <View style={styles.user}>
-           <Text style={styles.name} onPress={()=>
-          navigation.navigate("OneProfile",{data, foreign})
-        }>{username}</Text>
-              <Text style={styles.date}>{data.date_time}</Text>
-            </View>
-            <Icon size={30} color="#fff" />
+        <View style={styles.postHeader}>
+          <Image
+            source={{ uri: profilePic }}
+            style={styles.profileImage}
+            onPress={() => navigation.navigate("OneProfile", { data, foreign })}
+          />
+          <View style={styles.user}>
+            <Text
+              style={styles.name}
+              onPress={() => navigation.navigate("OneProfile", { data, foreign })}
+            >
+              {username}
+            </Text>
+            <Text style={styles.date}>{data.date_time}</Text>
           </View>
-          <View style={styles.postFooter}>
-            <Text style={styles.desc}>{data.description}</Text>
+          <Icon size={30} color="#fff" />
+        </View>
+        <View style={styles.postFooter}>
+          <Text style={styles.desc}>{data.description}</Text>
+        </View>
+      </ImageBackground>
+    </Pressable>
+  ) : !data.premiem ? (
+    <Pressable
+      key={index}
+      style={styles.post}
+      onPress={() => navigation.navigate("OnePost", { data })}
+    >
+      <ImageBackground
+        source={{ uri: data.pic[0] }}
+        style={styles.image}
+        resizeMode="cover"
+      >
+        <View style={styles.postHeader}>
+          <Image
+            source={{ uri: profilePic }}
+            style={styles.profileImage}
+            onPress={() => navigation.navigate("OneProfile", { data, foreign })}
+          />
+          <View style={styles.user}>
+            <Text
+              style={styles.name}
+              onPress={() => navigation.navigate("OneProfile", { data, foreign })}
+            >
+              {username}
+            </Text>
+            <Text style={styles.date}>{data.date_time}</Text>
           </View>
-        </ImageBackground>
+          <Icon size={30} color="#fff" />
+        </View>
+        <View style={styles.postFooter}>
+          <Text style={styles.desc}>{data.description}</Text>
+        </View>
+      </ImageBackground>
+    </Pressable>
+  ) : null
+}
+
         <View style={styles.likecom}>
           <TouchableOpacity style={styles.like} onPress={handleLike}>
             <Icon
@@ -163,7 +250,7 @@ export default function DetailsPost({ data, index }) {
             )}
           </View>
         )}
-      </Pressable>
+   
       <Modal
         animationType="slide"
         transparent={true}
@@ -312,5 +399,16 @@ left:70
     width: 30,
     height: 30,
     borderRadius: 15,
+  },
+  imageText:{
+    top:70,
+    left:0,
+    color:'#d4af37',
+    fontSize:40
+  },
+  imageTextContainer: {
+    position: 'absolute',
+    top: 100,
+    left: 100,
   },
 });

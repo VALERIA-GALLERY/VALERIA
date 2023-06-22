@@ -93,11 +93,11 @@ const Tabs = () => {
                 height: 50,
                 top: -10,
                 borderRadius: 15,
-                borderColor: '#fff',
+                borderColor: "rgba(240, 237, 228, 0.5)",
                 borderWidth: 4
               }}
             >
-              <Feather name="plus" size={45} color={COLORS.white} />
+              <Feather name="plus" size={45} color="rgba(240, 237, 228, 0.9)"/>
             </LinearGradient>
           ),
         }}

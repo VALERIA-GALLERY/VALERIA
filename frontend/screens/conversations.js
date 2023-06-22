@@ -19,8 +19,7 @@ function Conversations({ route }) {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [conversations, setConversations] = useState([]);
-  const backgroundImage ={uri:'https://i.pinimg.com/originals/50/b3/f3/50b3f3520f8c37cc54e7dd245b5ecf6d.jpg'}
-
+  const backgroundImage =require('../assets/HD-wallpaper-iphoney-929-apple-blur-color-cool-iphone-live-new.jpg')
   const getUsers = () => {
     axios
       .get(`${link}/userss`)
@@ -106,7 +105,7 @@ function Conversations({ route }) {
   return (
     <NativeBaseProvider>
       <View style={styles.container}>
-        <ImageBackground source={backgroundImage} resizeMode="cover" style={styles.image}>
+        <ImageBackground source={backgroundImage} resizeMode="cover" style={styles.images} blurRadius={50}>
           <FlatList
             data={users}
             keyExtractor={(item) => item.id.toString()}
@@ -138,6 +137,7 @@ export default Conversations;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  
   },
   spinnerText: {
     color: "#FFF",
@@ -172,5 +172,10 @@ const styles = StyleSheet.create({
     flex: 1,
     width: windowWidth,
     height: windowHeight,
+  },
+  images: {
+    flex: 1,
+    width: windowWidth,
+    height: "100%",
   },
 });

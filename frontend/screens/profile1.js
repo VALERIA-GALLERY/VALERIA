@@ -13,7 +13,47 @@ const Profile = ({ route }) => {
   const [userData, setUserData] = useState({});
   const [posts, setPosts] = useState([]);
   const [premiem, setPremiem]= useState(0)
+  const [followers, setFollowers] = useState([]);
+  const [followersn, setFollowersn] = useState(followers.length);
+  const [following, setFollowing] = useState([]);
+  const [followingn, setFollowingn] = useState(following.length);
+  const [isFollowed, setIsFollowed] = useState(false);
 
+  const getFollowers = () => {
+    axios.post(`${link}/follow/foreign`, { id: user.id })
+      .then((res) => {
+        setFollowers(res.data);
+        setFollowersn(res.data.length)
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const getFollowing = () => {
+    axios.post(`${link}/follow/current`, { id: user.id })
+      .then((res) => {
+        setFollowing(res.data)
+        setFollowingn(res.data.length)})
+      .catch((err) => console.log(err));
+  };
+
+  useEffect(() => {
+    try  {
+      
+     getFollowers();
+     getFollowing();
+    
+ 
+ }
+ catch(err){
+   console.log(err)
+ }
+     axios.get(`${link}/userposts/user/${user.id}`)
+       .then((res) => {
+         setPosts(res.data);
+         
+       })
+       .catch((err) => console.log(err));
+   }, []);
 
   const changePremium=()=>{
     user.premium=true
@@ -62,11 +102,11 @@ const Profile = ({ route }) => {
             </View>
             <View style={styles.infoItem}>
               <Text style={styles.infoLabel}>Followers</Text>
-              <Text style={styles.infoText}>{user.followers.length}</Text>
+              <Text style={styles.infoText}>{followersn}</Text>
             </View>
             <View style={styles.infoItem}>
               <Text style={styles.infoLabel}>Following</Text>
-              <Text style={styles.infoText}>{user.follows.length}</Text>
+              <Text style={styles.infoText}>{followingn}</Text>
             </View>
           </View>
 
