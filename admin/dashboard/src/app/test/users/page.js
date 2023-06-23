@@ -1,19 +1,46 @@
 'use client'
-import React from 'react'
-// import {Col, Row, User, Text, Tooltip} from '@nextui-org/react';
+import React ,{useEffect , useState}from 'react'
+import axios from 'axios';
+import link from '../../../../link';
 import Image from 'next/image';
 import app1 from '../../../../assets/logo.png'
-// import {EditIcon} from '../icons/table/edit-icon';
-// import {EyeIcon} from '../icons/table/eye-icon';
-// import {users} from './data';
-// import {IconButton, StyledBadge} from './table.styled';
+import { BsFillPersonFill } from "react-icons/bs";
+import { MdDashboard ,MdPayments ,MdDelete} from 'react-icons/md';
+import { IoSettingsSharp ,IoEyeSharp } from 'react-icons/io5';
+import { FaBan } from "react-icons/fa";
+
 
  const Guerfal = () => {
-  const users = [
-    { id: 1, firstname: "John", lastname: "Doe", email: "john@example.com" },
-    { id: 2, firstname: "Jane", lastname: "Doe", email: "jane@example.com" }
-    // add more users here
-  ];
+const [dataUser,setDataUser]=useState([])
+
+useEffect(()=>{
+axios.get(`${link}/users/users`)
+.then((res)=>{
+  console.log(res.dataUser);
+  setDataUser(res.data)
+}).catch((err) => console.log(err));
+},[])
+
+const handleDelete=(id)=>{
+  axios.delete(`${link}/users/user/${id}`)
+  .then((res)=>{
+    console.log(res.dataUser);
+    setDataUser(res.data)
+    console.log("deleted")
+    window.location.reload();
+  }).catch((err) => console.log(err));
+}
+
+const handleBan = (id) => {
+  const updatedData = dataUser.map((user) => {
+    if (user.id === id) {
+      return { ...user, banned: !user.banned };
+    }
+    return user;
+  });
+  setDataUser(updatedData);
+};
+
   return (
     <div style={styles.container}>
     <div style={styles.header}>
@@ -22,37 +49,62 @@ import app1 from '../../../../assets/logo.png'
         </div>
         <div style={{ borderTop: "5px solid ", width: "100%", color: "#A4783F" }}></div>
       </div>
+
+
+      <div style={styles1.sidebar}>
+        {/* Sidebar content */}
+        <a style={styles1.link} href="/test"> <MdDashboard style={{ fontSize: "30px" }} />Dashboard</a>
+        <hr style={styles1.hr} />
+        <a style={styles1.link} href="/test/users"> <BsFillPersonFill style={{ fontSize: "30px" }} /> Users</a>
+        <hr style={styles1.hr} />
+        <a style={styles1.link} href="#"><MdPayments style={{ fontSize: "30px" }} />Balances</a>
+        <hr style={styles1.hr} />
+        <a style={styles1.link} href="#"><IoSettingsSharp style={{ fontSize: "30px" }} />Settings</a>
+      </div>
+
+
+
+
       <div id="aa" style={styles.container1}>
       <div>
         <h3 style={{ 
             color: 'black',
     fontWeight: 'bold',
-    fontSize: '50px'}}>All users</h3>
+    fontSize: '60px'}}>All users</h3>
         <table>
           <thead>
-            <tr>
+            <tr style={styles.th}>
               <th>Id</th>
+              <th>Profile Pic</th>
               <th>Firstname</th>
               <th>Lastname</th>
               <th>Username</th>
               <th>Email</th>
-              <th>Actions</th>
-              <th>Actions</th>
+              <th></th>
+              <th></th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
-              <tr key={user.id}>
-                <td>{user.id}</td>
-                <td>{user.firstname}</td>
-                <td>{user.lastname}</td>
-                <td>{user.lastname}</td>
-                <td>{user.email}</td>
+            {dataUser.map((users) => (
+              <tr key={users.id} style={users.banned ? { textDecoration: 'line-through', color: 'red' } : {}}>
+                <td>{users.id} </td>
+                <td><img src={users.profilepic} alt={users.firstname + " " + users.lastname} style={{height: '50px', width: '50px'}} /></td>
+                <td>{users.firstname}</td>
+                <td>{users.lastname}</td>
+                <td>{users.lastname}</td>
+                <td>{users.email}</td>
                 <td>
-                  <button style={{backgroundColor: "red", color:"white"  , borderRadius: '10px'}} >Delete</button>
+                  <MdDelete style={{ fontSize: "30px" }} onClick={() => handleDelete(users.id)}/>
                 </td>
                 <td>
-                  <button style={{backgroundColor: "red", color:"white",    borderRadius: '10px'}} >Ban user</button>
+                  <FaBan style={{ fontSize: "30px" }} onClick={() => handleBan(users.id)}/>
+
+                </td> 
+                <td>
+                
+                  <a href='/test/userDetails'><IoEyeSharp style={{ fontSize: "30px" }}/></a>
+             
                 </td>
               </tr>
             ))}
@@ -115,13 +167,45 @@ const styles = {
 
   },
   image: {
-    width: '30vw',
-    height: '30vh',
+    width: '15vw',
+    height: '15vh',
 
   },
   imagesContainer: {
     display: 'flex',
     flexDirection: 'row',
+  },
+  th:{
+    color: 'black',
+    fontWeight: 'bold',
+    fontSize: '25px'
+  }
+}
+const styles1 = {
+  sidebar: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '250px',
+    height: '85vh',
+    backgroundColor: '#f4f4f4',
+    padding: '20px',
+    borderRadius: '50px',
+    marginTop: '120px',
+    marginLeft: '-365px'
+
+  },
+  link: {
+    margin: '80px 0',
+    textDecoration: 'none',
+    color: 'black',
+    fontWeight: 'bold',
+    fontSize: '25px'
+  },
+  hr: {
+    width: '100%',
+    borderColor: '#ddd',
+    fontSize: '25px'
+
   },
 }
 export default Guerfal;

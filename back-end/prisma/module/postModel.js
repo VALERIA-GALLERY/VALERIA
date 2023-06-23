@@ -118,7 +118,16 @@ async function removeLike(likeData) {
   }
 }
 
+async function getAllLikes() {
+  const likes = await prisma.likes.findMany();
 
-module.exports = { createPost, getAllPosts, getCommentsByPost, addComment, addLikes, getLikes, removeLike };
+  return likes;
+}
+async function getAllComments() {
+  const comments = await prisma.comments.findMany();
+
+  return comments;
+}
+module.exports = { createPost, getAllPosts, getCommentsByPost, addComment, addLikes, getLikes, removeLike ,getAllLikes ,getAllComments};
 
 

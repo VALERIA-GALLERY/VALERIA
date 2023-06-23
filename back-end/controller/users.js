@@ -1,4 +1,4 @@
-const {addUser, getUserById} = require("../prisma/module/users")
+const {addUser, getUserById ,getAllUsers ,deleteUser} = require("../prisma/module/users")
 const cloudinary = require("../configs/cloudinary-config")
 
 
@@ -37,4 +37,24 @@ try {
 
 
 }
+
+exports.getAllUsers = async (req, res) => {
+  try {
+    const users = await getAllUsers();
+    res.send(users);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+};
+exports.deleteUser = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const deletedUser = await deleteUser(id);
+    res.send(deletedUser);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+};
 exports.get

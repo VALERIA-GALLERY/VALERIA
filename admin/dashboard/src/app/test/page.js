@@ -1,5 +1,6 @@
 "use client"
-import React from 'react';
+import React ,{useEffect,useState}from 'react';
+import axios from 'axios';
 import { BsFillPersonFill } from "react-icons/bs";
 import { MdDashboard ,MdPayments} from 'react-icons/md';
 import { IoSettingsSharp  } from 'react-icons/io5';
@@ -11,8 +12,27 @@ import comments from '../../../assets/comments.jpg'
 import likes from '../../../assets/likes.jpg'
 import follow from '../../../assets/follows.jpg'
 import act from '../../../assets/BlueModern .jpg'
+import link from '../../../link';
 
 export default function Test() {
+  const [like,setLike]=useState([])
+  const [com,setCom]=useState([])
+
+  useEffect(()=>{
+    axios.get(`${link}/post/likes`)
+.then((res)=>{
+  console.log(res.like);
+  setLike(res.data)
+}).catch((err) => console.log(err));
+  },[])
+
+  useEffect(()=>{
+    axios.get(`${link}/post/comment`)
+.then((res)=>{
+  console.log(res.com);
+  setCom(res.data)
+}).catch((err) => console.log(err));
+  },[])
   return (
     
     <div style={styles.container}>
@@ -45,12 +65,8 @@ export default function Test() {
           {/* Card content */}
         <div style={styles4.card}>
           <h3 style={styles4.cardTitle}>Likes </h3>
-          {/* <p style={styles4.statistic}>Total Users: {totalUsers}</p> */}
-          <p style={styles4.statistic}>Total Likes: </p>
-          {/* <p style={styles4.statistic}>Artist Users: {artistUsers}</p> */}
-          <p style={styles4.statistic}>Artist Users: </p>
-          {/* <p style={styles4.statistic}>Artists: {artistPercentage.toFixed(4)}%</p> */}
-          {/* <p style={styles4.statistic}>Artists: 12%</p> */}
+          <p style={styles4.statistic}>Total Likes: {like.length}</p>
+          <p style={styles4.statistic}>Artist Users: {like.length-6} </p>
           <Image src={likes}  /> 
 
         </div>
@@ -60,11 +76,8 @@ export default function Test() {
         <div style={styles2.contentContainer}>
           <div style={styles3.card}>
             <h3 style={styles3.cardTitle}>Comments </h3>
-            {/* <p style={styles3.statistic}>Total Users: {totalUsers}</p> */}
-            <p style={styles3.statistic}>Total Users: </p>
-            {/* <p style={styles3.statistic}>Artist Users: {artistUsers}</p> */}
-            <p style={styles3.statistic}>Artist Users: </p>
-            {/* <p style={styles3.statistic}>Artists: {artistPercentage.toFixed(2)}%</p> */}
+            <p style={styles3.statistic}>Total Comments: {com.length}</p>
+            <p style={styles3.statistic}>Artist Users: {com.length}</p>
             <Image src={comments}  /> 
           </div>
         </div>
@@ -173,6 +186,8 @@ const styles2 = {
   statistic: {
     fontSize: '16px',
     margin: '5px 0',
+    fontWeight: 'bold',
+
   },
 };
 const styles3 = {

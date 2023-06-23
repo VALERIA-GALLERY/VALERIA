@@ -10,6 +10,6 @@ router.post("/:postId/comments", post.addComment);
 router.post("/:postId/likes", post.likePost);
 router.get("/:postId/likes", post.getPostLikes);
 router.delete("/:postId/likes", post.unlikePost);
-
-
+router.get('/likes', post.getAllLikes); 
+router.get('/comments', post.getAllComments);
 module.exports = router;

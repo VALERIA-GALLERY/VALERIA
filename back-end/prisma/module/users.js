@@ -33,5 +33,19 @@ async function getUserById(id) {
   return user;
 }
 
+async function getAllUsers() {
+  const allUsers = await prisma.users.findMany();
 
-module.exports = {addUser, getUserById}
+  return allUsers;
+}
+async function deleteUser(id) {
+  const deletedUser = await prisma.users.delete({
+    where: {
+      id: id,
+    }, 
+  });
+
+  return deletedUser;
+}
+
+module.exports = {addUser, getUserById ,getAllUsers ,deleteUser}
