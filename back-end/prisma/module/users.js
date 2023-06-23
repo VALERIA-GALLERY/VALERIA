@@ -27,7 +27,7 @@ async function getUserById(id) {
   const user = await prisma.users.findUnique({
     where: {
       id: id,
-    },
+    }, 
   });
 
   return user;
