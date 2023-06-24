@@ -20,7 +20,7 @@ function WelcomePage() {
             <h5 style={styles.h5}>Password</h5>
             <input style={styles.input} placeholder='your password' type='password' />
            <div>
-            <button style={styles.button}>Submit</button>
+           <a href='/test'>  <button style={styles.button}>Submit</button></a>
             </div> 
           </div>
         </div>

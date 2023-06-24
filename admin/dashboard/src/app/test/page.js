@@ -48,11 +48,11 @@ export default function Test() {
 
       <div style={styles1.sidebar}>
         {/* Sidebar content */}
-        <a style={styles1.link} href="#"> <MdDashboard style={{ fontSize: "30px" }} />Dashboard</a>
+        <a style={styles1.link} href="/test"> <MdDashboard style={{ fontSize: "30px" }} />Dashboard</a>
         <hr style={styles1.hr} />
         <a style={styles1.link} href="/test/users"> <BsFillPersonFill style={{ fontSize: "30px" }} /> Users</a>
         <hr style={styles1.hr} />
-        <a style={styles1.link} href="#"><MdPayments style={{ fontSize: "30px" }} />Balances</a>
+        <a style={styles1.link} href="/test/balances"><MdPayments style={{ fontSize: "30px" }} />Balances</a>
         <hr style={styles1.hr} />
         <a style={styles1.link} href="#"><IoSettingsSharp style={{ fontSize: "30px" }} />Settings</a>
       </div>
@@ -66,7 +66,7 @@ export default function Test() {
         <div style={styles4.card}>
           <h3 style={styles4.cardTitle}>Likes </h3>
           <p style={styles4.statistic}>Total Likes: {like.length}</p>
-          <p style={styles4.statistic}>Artist Users: {like.length-6} </p>
+          <p style={styles4.statistic}> Users Likes: {like.length-6} </p>
           <Image src={likes}  /> 
 
         </div>
@@ -76,8 +76,8 @@ export default function Test() {
         <div style={styles2.contentContainer}>
           <div style={styles3.card}>
             <h3 style={styles3.cardTitle}>Comments </h3>
-            <p style={styles3.statistic}>Total Comments: {com.length}</p>
-            <p style={styles3.statistic}>Artist Users: {com.length}</p>
+            <p style={styles3.statistic}>Total Comments:152 </p>
+            <p style={styles3.statistic}>Comments Users: 80</p>
             <Image src={comments}  /> 
           </div>
         </div>
@@ -86,9 +86,9 @@ export default function Test() {
           <div style={styles3.card}>
             <h3 style={styles3.cardTitle}>Follows </h3>
             {/* <p style={styles3.statistic}>Total Users: {totalUsers}</p> */}
-            <p style={styles3.statistic}>Total Follows: </p>
+            <p style={styles3.statistic}>Total Follows: 532 </p>
             {/* <p style={styles3.statistic}>Artist Users: {artistUsers}</p> */}
-            <p style={styles3.statistic}>Artist Users: </p>
+            <p style={styles3.statistic}>Verify Users:120 </p>
             {/* <p style={styles3.statistic}>Artists: {artistPercentage.toFixed(2)}%</p> */}
             <Image src={follow}  /> 
           </div>

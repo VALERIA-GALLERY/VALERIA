@@ -39,10 +39,21 @@ async function getAllUsers() {
   return allUsers;
 }
 async function deleteUser(id) {
+  const users = await prisma.users.findUnique({
+    where: {
+      id: id,
+    },
+  });
+
+  if (!users) {
+    throw new Error('User not found');
+    // or
+    // return null;
+  }
   const deletedUser = await prisma.users.delete({
     where: {
       id: id,
-    }, 
+    },
   });
 
   return deletedUser;

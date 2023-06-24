@@ -54,7 +54,11 @@ exports.deleteUser = async (req, res) => {
     res.send(deletedUser);
   } catch (error) {
     console.error(error);
-    res.status(500).send('Internal Server Error');
+    if (error.message === 'User not found') {
+      res.status(404).send('User not found');
+    } else {
+      res.status(500).send('Internal Server Error');
+    }
   }
 };
 exports.get
